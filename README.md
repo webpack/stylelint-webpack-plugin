@@ -40,7 +40,7 @@ See [stylelint options](http://stylelint.io/user-guide/node-api/#options), for t
 
 * `configFile`: You can change the config file location. Default: (`.stylelintrc`)
 * `context`: String indicating the root of your SCSS files. Default inherits from webpack config.
-* `files`: Change the glob pattern for finding files. Default: (`['**/*.s?(a|c)ss']`)
+* `files`: Change the glob pattern for finding files. Default: (`['**/*.{c,sc,sa,le}ss']`)
 * `syntax`: Use `'scss'` to lint .scss files. Default (`undefined`)
 * `formatter`: Use a custom formatter to print errors to the console. Default: (`require('stylelint/dist/formatters/stringFormatter').default`)
 * `failOnError`: Have Webpack's build process die on error. Default: `false`
@@ -54,7 +54,7 @@ module.exports = {
     new StyleLintPlugin({
       configFile: '.stylelintrc',
       context: 'inherits from webpack',
-      files: '**/*.s?(a|c)ss',
+      files: '**/*.{c,sc,sa,le}ss',
       failOnError: false,
     })
   ]

@@ -120,6 +120,20 @@ describe('sasslint-loader', function () {
     });
   });
 
+  it('should work with CSS, SCSS, SASS and LESS files by default', function (done) {
+    var config = {
+      context: './test/fixtures/test8',
+      entry: './index'
+    };
+
+    pack(assign({}, baseConfig, config), function (err, stats) {
+      expect(err).to.not.exist;
+      expect(stats.compilation.errors.length).to.equal(4);
+      expect(stats.compilation.warnings.length).to.equal(0);
+      done(err);
+    });
+  });
+
   // it('should work with multiple context', function(done) {
   //   var config = {
   //     context: './test/fixtures/test5',

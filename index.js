@@ -39,6 +39,6 @@ function buildOptions(options) {
   }, options, {
     // Default Glob is any directory level of scss and/or sass file,
     // under webpack's context and specificity changed via globbing patterns
-    files: arrify(options.files || '**/*.s?(c|a)ss')
+    files: arrify(options.files || '**/*.{c,sc,sa,le}ss')
   });
 }
