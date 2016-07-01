@@ -46,17 +46,15 @@ function apply(options, compiler) {
     });
 
     compilation.plugin && compilation.plugin('compilation', function(compilation) {
-        if (options.failOnError) {
-          errors.forEach(function(err) {
+        errors.forEach(function(err) {
+          if (options.failOnError && errors.length) {
             compilation.errors.push(err);
-          });
-        }
+          }
+        });
     });
   }
 
-  if (!options.watchModeOnly) {
-    compiler.plugin('run', runCompilation);
-  }
+  compiler.plugin('run', runCompilation);
   compiler.plugin('watch-run', runCompilation);
 }
 
@@ -68,11 +66,9 @@ module.exports = function(options) {
   // under webpack's context and specificity changed via globbing patterns
   options.files = options.files || '**/*.s?(c|a)ss';
   !Array.isArray(options.files) && (options.files = [options.files]);
-  options.failOnError = options.failOnError || true
   options.configFile = options.configFile || '.stylelintrc';
   options.formatter = options.formatter || formatter;
   options.quiet = options.quiet || false;
-  options.watchModeOnly = options.watchModeOnly || false;
 
   return {
     apply: apply.bind(this, options)
