@@ -112,16 +112,11 @@ describe('sasslint-loader', function () {
     });
   });
 
-  // it('should work with multiple files', function(done) {
-  //   var config = {
-  //     context: './test/testfiles/test7',
-  //     entry: './index',
-  //     plugins: [ new styleLintPlugin({
-  //       configFile: configFilePath,
-  //       quiet: true,
-  //       failOnError: true
-  //     })]
-  //   };
+  it('should work with multiple files', function(done) {
+    var config = {
+      context: './test/testfiles/test7',
+      entry: './index'
+    };
 
   //   pack(assign({}, baseConfig, config), function (err, stats) {
   //     expect(err).to.not.exist;
