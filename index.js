@@ -47,7 +47,9 @@ function apply(options, compiler) {
 
     compilation.plugin && compilation.plugin('compilation', function(compilation) {
         errors.forEach(function(err) {
-          compilation.errors.push(err);
+          if (options.failOnError && errors.length) {
+            compilation.errors.push(err);
+          }
         });
     });
   }

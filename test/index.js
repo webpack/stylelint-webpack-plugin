@@ -63,7 +63,8 @@ describe('sasslint-loader', function () {
       entry: './index',
       plugins: [ new styleLintPlugin({
         quiet: true,
-        configFile: configFilePath
+        configFile: configFilePath,
+        failOnError: true
       })]
     };
 
