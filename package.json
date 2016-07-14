@@ -27,7 +27,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "loader-utils": "~0.2.10",
     "object-assign": "~4.0.1",
-    "stylelint": "^6.0.1",
+    "stylelint": "^7.0.1",
     "webpack": "^1.12.10"
   },
   "devDependencies": {
