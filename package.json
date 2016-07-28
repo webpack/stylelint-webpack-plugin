@@ -36,9 +36,6 @@
     "memory-fs": "^0.3.0",
     "mocha": "^2.3.4"
   },
-  "peerDependencies": {
-    "stylelint": "^7.0.1"
-  },
   "scripts": {
     "test": "mocha --harmony --full-trace --check-leaks",
     "preversion": "npm run test",
