@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/vieron/stylelint-webpack-plugin#readme",
   "dependencies": {
+    "arrify": "^1.0.1",
     "chalk": "^1.1.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "loader-utils": "~0.2.10",
@@ -33,12 +34,33 @@
   "devDependencies": {
     "chai": "^3.4.1",
     "chai-as-promised": "^5.2.0",
+    "coveralls": "^2.11.12",
     "memory-fs": "^0.3.0",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "nyc": "^7.1.0",
+    "xo": "^0.16.0"
   },
   "scripts": {
-    "test": "mocha --harmony --full-trace --check-leaks",
+    "pretest": "xo",
+    "test": "nyc mocha",
     "preversion": "npm run test",
     "version": "git add -A ."
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
+  },
+  "xo": {
+    "space": true,
+    "envs": [
+      "node",
+      "mocha"
+    ],
+    "globals": [
+      "getPath",
+      "expect"
+    ]
   }
 }

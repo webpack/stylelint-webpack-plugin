@@ -1,0 +1,4 @@
+--require ./test/helpers/setup.js
+--harmony
+--full-trace
+--check-leaks

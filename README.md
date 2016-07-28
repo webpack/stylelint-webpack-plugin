@@ -18,13 +18,13 @@ $ npm install stylelint-webpack-plugin
 In your webpack configuration
 
 ```js
-var styleLintPlugin = require('stylelint-webpack-plugin');
+var StyleLintPlugin = require('stylelint-webpack-plugin');
 
 
 module.exports = {
   // ...
   plugins: [
-    new styleLintPlugin(),
+    new StyleLintPlugin(),
   ],
   // ...
 }
@@ -47,7 +47,7 @@ See [stylelint options](http://stylelint.io/user-guide/node-api/#options), for t
 // Default settings
 module.exports = {
   plugins: [
-    new styleLintPlugin({
+    new StyleLintPlugin({
       configFile: '.stylelintrc',
       context: 'inherits from webpack',
       files: '**/*.s?(a|c)ss',

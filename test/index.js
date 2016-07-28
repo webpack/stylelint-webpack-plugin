@@ -1,28 +1,24 @@
-/* global __dirname, describe, it */
-var chai = require('chai');
-var expect = chai.expect;
-var chaiAsPromised = require('chai-as-promised');
+/* eslint no-unused-expressions: 0 */
+
+'use strict';
+
 var assign = require('object-assign');
 var webpack = require('webpack');
 var MemoryFileSystem = require('memory-fs');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var path = require('path');
-
-chai.use(chaiAsPromised);
 
 // _dirname is the test directory
-var styleLintPlugin = require(path.join(__dirname, '../index'));
+var StyleLintPlugin = require(getPath('../index'));
 
 var outputFileSystem = new MemoryFileSystem();
 
-var configFilePath = path.join(__dirname, './.stylelintrc');
+var configFilePath = getPath('./.stylelintrc');
 var baseConfig = {
   debug: false,
   output: {
-    path: path.join(__dirname, 'output')
+    path: getPath('output')
   },
   plugins: [
-    new styleLintPlugin({
+    new StyleLintPlugin({
       quiet: true,
       configFile: configFilePath
     })
@@ -38,20 +34,15 @@ function pack(testConfig, callback) {
   compiler.run(callback);
 }
 
-
-/**
- * Test Suite
- */
 describe('sasslint-loader', function () {
   it('works with a simple file', function (done) {
     var config = {
-      context: './test/testfiles/test1',
+      context: './test/fixtures/test1',
       entry: './index'
     };
 
     pack(assign({}, baseConfig, config), function (err, stats) {
       expect(err).to.not.exist;
-      console.log(stats.compilation.errors);
       expect(stats.compilation.errors).to.have.length(0);
       expect(stats.compilation.warnings).to.have.length(0);
       done(err);
@@ -60,9 +51,9 @@ describe('sasslint-loader', function () {
 
   it('sends errors properly', function (done) {
     var config = {
-      context: './test/testfiles/test3',
+      context: './test/fixtures/test3',
       entry: './index',
-      plugins: [ new styleLintPlugin({
+      plugins: [new StyleLintPlugin({
         quiet: true,
         configFile: configFilePath
       })]
@@ -77,10 +68,10 @@ describe('sasslint-loader', function () {
 
   it('fails on errors', function () {
     var config = {
-      context: './test/testfiles/test3',
+      context: './test/fixtures/test3',
       entry: './index',
       plugins: [
-        new styleLintPlugin({
+        new StyleLintPlugin({
           configFile: configFilePath,
           quiet: true,
           failOnError: true
@@ -88,10 +79,10 @@ describe('sasslint-loader', function () {
       ]
     };
 
-    return expect(new Promise(function(resolve, reject) {
+    return expect(new Promise(function (resolve, reject) {
       var compiler = webpack(assign({}, baseConfig, config));
       compiler.outputFileSystem = outputFileSystem;
-      compiler.run(function(err) {
+      compiler.run(function (err) {
         reject(err);
       });
     })).to.eventually.be.rejectedWith('Error: Failed because of a stylelint error.\n');
@@ -99,12 +90,14 @@ describe('sasslint-loader', function () {
 
   it('can specify a JSON config file via config', function (done) {
     var config = {
-      context: './test/testfiles/test5',
+      context: './test/fixtures/test5',
       entry: './index',
-      plugins: [ new styleLintPlugin({
-        configFile: configFilePath,
-        quiet: true
-      })]
+      plugins: [
+        new StyleLintPlugin({
+          configFile: configFilePath,
+          quiet: true
+        })
+      ]
     };
 
     pack(assign({}, baseConfig, config), function (err, stats) {
@@ -114,9 +107,9 @@ describe('sasslint-loader', function () {
     });
   });
 
-  it('should work with multiple files', function(done) {
+  it('should work with multiple files', function (done) {
     var config = {
-      context: './test/testfiles/test7',
+      context: './test/fixtures/test7',
       entry: './index'
     };
 
@@ -129,9 +122,9 @@ describe('sasslint-loader', function () {
 
   // it('should work with multiple context', function(done) {
   //   var config = {
-  //     context: './test/testfiles/test5',
+  //     context: './test/fixtures/test5',
   //     entry: './index',
-  //     plugins: [ new styleLintPlugin({
+  //     plugins: [ new StyleLintPlugin({
   //       configFile: configFilePath,
   //       context: ['./test/testFiles/test5', './test/testFiles/test7']
   //     })]
