@@ -51,8 +51,9 @@ describe('sasslint-loader', function () {
 
     pack(assign({}, baseConfig, config), function (err, stats) {
       expect(err).to.not.exist;
-      expect(stats.compilation.errors.length).to.equal(0);
-      expect(stats.compilation.warnings.length).to.equal(0);
+      console.log(stats.compilation.errors);
+      expect(stats.compilation.errors).to.have.length(0);
+      expect(stats.compilation.warnings).to.have.length(0);
       done(err);
     });
   });
@@ -69,7 +70,7 @@ describe('sasslint-loader', function () {
 
     pack(assign({}, baseConfig, config), function (err, stats) {
       expect(err).to.not.exist;
-      expect(stats.compilation.errors.length).to.equal(1);
+      expect(stats.compilation.errors).to.have.length(1);
       done(err);
     });
   });
@@ -78,11 +79,13 @@ describe('sasslint-loader', function () {
     var config = {
       context: './test/testfiles/test3',
       entry: './index',
-      plugins: [ new styleLintPlugin({
-        configFile: configFilePath,
-        quiet: true,
-        failOnError: true
-      })]
+      plugins: [
+        new styleLintPlugin({
+          configFile: configFilePath,
+          quiet: true,
+          failOnError: true
+        })
+      ]
     };
 
     return expect(new Promise(function(resolve, reject) {
