@@ -1,5 +1,7 @@
 # Stylelint Plugin for Webpack
 [![Build Status](https://travis-ci.org/vieron/stylelint-webpack-plugin.svg?branch=master)](https://travis-ci.org/vieron/stylelint-webpack-plugin)
+[![Coverage Status](https://coveralls.io/repos/github/vieron/stylelint-webpack-plugin/badge.svg?branch=master)](https://coveralls.io/github/vieron/stylelint-webpack-plugin?branch=master)
+[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 
 ### Why you might want to use this plugin instead of [stylelint-loader](https://github.com/adrianhall/stylelint-loader)
 
