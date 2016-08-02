@@ -28,7 +28,10 @@ function apply(options, compiler) {
           return f.source; // send error instead
         });
 
-        (options.quiet !== true) && console.log(chalk.yellow(options.formatter(lint.results)));
+        if (options.quiet !== true) {
+          var lintResults = options.formatter(lint.results);
+          console.log(options.pluginColors ? chalk.yellow(lintResults) : lintResults);
+        }
       }
 
       if (options.failOnError && errors.length) {
@@ -66,6 +69,7 @@ module.exports = function(options) {
   !Array.isArray(options.files) && (options.files = [options.files]);
   options.configFile = options.configFile || '.stylelintrc';
   options.formatter = options.formatter || formatter;
+  options.pluginColors = options.pluginColors !== undefined ? options.pluginColors : true;
   options.quiet = options.quiet || false;
 
   return {
