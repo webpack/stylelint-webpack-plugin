@@ -22,6 +22,9 @@
     "url": "https://github.com/vieron/stylelint-webpack-plugin/issues"
   },
   "homepage": "https://github.com/vieron/stylelint-webpack-plugin#readme",
+  "peerDependencies": {
+    "stylelint": "^7.0.1"
+  },
   "dependencies": {
     "arrify": "^1.0.1",
     "chalk": "^1.1.1",
