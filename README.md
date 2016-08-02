@@ -1,4 +1,5 @@
-# Stylelint Plugin for webpack
+# Stylelint Plugin for Webpack
+[![Build Status](https://travis-ci.org/vieron/stylelint-webpack-plugin.svg?branch=master)](https://travis-ci.org/vieron/stylelint-webpack-plugin)
 
 ### Why you might want to use this plugin instead of [stylelint-loader](https://github.com/adrianhall/stylelint-loader)
 
