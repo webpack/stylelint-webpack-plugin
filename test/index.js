@@ -55,7 +55,8 @@ describe('sasslint-loader', function () {
       entry: './index',
       plugins: [new StyleLintPlugin({
         quiet: true,
-        configFile: configFilePath
+        configFile: configFilePath,
+        failOnError: true
       })]
     };
 
@@ -110,7 +111,14 @@ describe('sasslint-loader', function () {
   it('should work with multiple files', function (done) {
     var config = {
       context: './test/fixtures/test7',
-      entry: './index'
+      entry: './index',
+      plugins: [
+        new StyleLintPlugin({
+          configFile: configFilePath,
+          quiet: true,
+          failOnError: true
+        })
+      ]
     };
 
     pack(assign({}, baseConfig, config), function (err, stats) {
