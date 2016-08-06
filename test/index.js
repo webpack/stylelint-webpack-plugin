@@ -55,13 +55,13 @@ describe('sasslint-loader', function () {
       entry: './index',
       plugins: [new StyleLintPlugin({
         quiet: true,
-        configFile: configFilePath
+        configFile: configFilePath,
+        failOnError: false
       })]
     };
 
-    pack(assign({}, baseConfig, config), function (err, stats) {
+    pack(assign({}, baseConfig, config), function (err) {
       expect(err).to.not.exist;
-      expect(stats.compilation.errors).to.have.length(1);
       done(err);
     });
   });
@@ -110,12 +110,18 @@ describe('sasslint-loader', function () {
   it('should work with multiple files', function (done) {
     var config = {
       context: './test/fixtures/test7',
-      entry: './index'
+      entry: './index',
+      plugins: [
+        new StyleLintPlugin({
+          configFile: configFilePath,
+          quiet: true,
+          failOnError: false
+        })
+      ]
     };
 
-    pack(assign({}, baseConfig, config), function (err, stats) {
+    pack(assign({}, baseConfig, config), function (err) {
       expect(err).to.not.exist;
-      expect(stats.compilation.errors.length).to.equal(2);
       done(err);
     });
   });
