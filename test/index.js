@@ -6,9 +6,7 @@ var assign = require('object-assign');
 var webpack = require('webpack');
 var MemoryFileSystem = require('memory-fs');
 
-// _dirname is the test directory
 var StyleLintPlugin = require(getPath('../index'));
-
 var outputFileSystem = new MemoryFileSystem();
 
 var configFilePath = getPath('./.stylelintrc');
@@ -25,16 +23,14 @@ var baseConfig = {
   ]
 };
 
-/**
- * This is the basic in-memory compiler
- */
+// This is the basic in-memory compiler
 function pack(testConfig, callback) {
   var compiler = webpack(testConfig);
   compiler.outputFileSystem = outputFileSystem;
   compiler.run(callback);
 }
 
-describe('sasslint-loader', function () {
+describe('stylelint-webpack-plugin', function () {
   it('works with a simple file', function (done) {
     var config = {
       context: './test/fixtures/test1',
@@ -53,10 +49,12 @@ describe('sasslint-loader', function () {
     var config = {
       context: './test/fixtures/test3',
       entry: './index',
-      plugins: [new StyleLintPlugin({
-        quiet: true,
-        configFile: configFilePath
-      })]
+      plugins: [
+        new StyleLintPlugin({
+          quiet: true,
+          configFile: configFilePath
+        })
+      ]
     };
 
     pack(assign({}, baseConfig, config), function (err, stats) {
@@ -102,12 +100,12 @@ describe('sasslint-loader', function () {
 
     pack(assign({}, baseConfig, config), function (err, stats) {
       expect(err).to.not.exist;
-      expect(stats.compilation.errors.length).to.equal(0);
+      expect(stats.compilation.errors).to.have.length(0);
       done(err);
     });
   });
 
-  it('should work with multiple files', function (done) {
+  it('works with multiple source files', function (done) {
     var config = {
       context: './test/fixtures/test7',
       entry: './index'
@@ -115,7 +113,7 @@ describe('sasslint-loader', function () {
 
     pack(assign({}, baseConfig, config), function (err, stats) {
       expect(err).to.not.exist;
-      expect(stats.compilation.errors.length).to.equal(2);
+      expect(stats.compilation.errors).to.have.length(2);
       done(err);
     });
   });

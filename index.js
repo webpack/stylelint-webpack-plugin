@@ -20,7 +20,6 @@ function apply(options, compiler) {
     // Default Glob is any directory level of scss and/or sass file,
     // under webpack's context and specificity changed via globbing patterns
     files: arrify(options.files || '**/*.s?(c|a)ss').map(function (file) {
-      // TODO: make it work with arrays
       return path.join(context, '/', file);
     }),
     context: context
@@ -36,7 +35,7 @@ function apply(options, compiler) {
  * Pass options to the plugin that get checked and updated before running
  * ref: https://webpack.github.io/docs/plugins.html#the-compiler-instance
  * @param options - from webpack config, see defaults in `apply` function.
- * @returns object with the bound apply function
+ * @return {Object} the bound apply function
  */
 module.exports = function stylelintWebpackPlugin(options) {
   return {
