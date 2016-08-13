@@ -1,6 +1,7 @@
 'use strict';
 
 var assign = require('object-assign');
+var webpack = require('webpack');
 
 var StyleLintPlugin = require('../');
 var pack = require('./helpers/pack');
@@ -91,7 +92,7 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
-  it('works without StyleLintPlugin configuration but posts warnign .stylelintrc file not found', function () {
+  it('works without StyleLintPlugin configuration but posts warning .stylelintrc file not found', function () {
     var config = {
       context: './test/fixtures/test9',
       entry: './index',
@@ -105,5 +106,46 @@ describe('stylelint-webpack-plugin', function () {
         expect(stats.compilation.errors).to.have.length(0);
         expect(stats.compilation.warnings).to.have.length(0);
       });
+  });
+
+  context('interop with NoErrorsPlugin', function () {
+    it('works when failOnError is false', function () {
+      var config = {
+        context: './test/fixtures/test3',
+        entry: './index',
+        plugins: [
+          new StyleLintPlugin({
+            configFile: configFilePath,
+            quiet: true
+          }),
+          new webpack.NoErrorsPlugin()
+        ]
+      };
+
+      return pack(assign({}, baseConfig, config))
+        .then(function (stats) {
+          expect(stats.compilation.errors).to.have.length(1);
+        });
+    });
+
+    it('throws when failOnError is true', function () {
+      var config = {
+        context: './test/fixtures/test3',
+        entry: './index',
+        plugins: [
+          new StyleLintPlugin({
+            configFile: configFilePath,
+            quiet: true,
+            failOnError: true
+          }),
+          new webpack.NoErrorsPlugin()
+        ]
+      };
+
+      return pack(assign({}, baseConfig, config))
+        .catch(function (err) {
+          expect(err).to.be.instanceof(Error);
+        });
+    });
   });
 });
