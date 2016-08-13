@@ -40,7 +40,6 @@ describe('stylelint-webpack-plugin', function () {
     pack(assign({}, baseConfig, config), function (err, stats) {
       expect(err).to.not.exist;
       expect(stats.compilation.errors).to.have.length(0);
-      expect(stats.compilation.warnings).to.have.length(0);
       done(err);
     });
   });
@@ -114,6 +113,25 @@ describe('stylelint-webpack-plugin', function () {
     pack(assign({}, baseConfig, config), function (err, stats) {
       expect(err).to.not.exist;
       expect(stats.compilation.errors).to.have.length(2);
+      done(err);
+    });
+  });
+
+  it('sends warnings properly', function (done) {
+    var config = {
+      context: './test/fixtures/test8',
+      entry: './index',
+      plugins: [
+        new StyleLintPlugin({
+          quiet: true,
+          configFile: configFilePath
+        })
+      ]
+    };
+
+    pack(assign({}, baseConfig, config), function (err, stats) {
+      expect(err).to.not.exist;
+      expect(stats.compilation.warnings).to.have.length(1);
       done(err);
     });
   });
