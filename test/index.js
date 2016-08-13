@@ -1,13 +1,9 @@
-/* eslint no-unused-expressions: 0 */
-
 'use strict';
 
 var assign = require('object-assign');
-var webpack = require('webpack');
-var MemoryFileSystem = require('memory-fs');
 
-var StyleLintPlugin = require(getPath('../index'));
-var outputFileSystem = new MemoryFileSystem();
+var StyleLintPlugin = require('../');
+var pack = require('./helpers/pack');
 
 var configFilePath = getPath('./.stylelintrc');
 var baseConfig = {
@@ -23,48 +19,33 @@ var baseConfig = {
   ]
 };
 
-// This is the basic in-memory compiler
-function pack(testConfig, callback) {
-  var compiler = webpack(testConfig);
-  compiler.outputFileSystem = outputFileSystem;
-  compiler.run(callback);
-}
-
 describe('stylelint-webpack-plugin', function () {
-  it('works with a simple file', function (done) {
+  it('works with a simple file', function () {
     var config = {
       context: './test/fixtures/test1',
       entry: './index'
     };
 
-    pack(assign({}, baseConfig, config), function (err, stats) {
-      expect(err).to.not.exist;
-      expect(stats.compilation.errors).to.have.length(0);
-      expect(stats.compilation.warnings).to.have.length(0);
-      done(err);
-    });
+    return pack(assign({}, baseConfig, config))
+      .then(function (stats) {
+        expect(stats.compilation.errors).to.have.length(0);
+        expect(stats.compilation.warnings).to.have.length(0);
+      });
   });
 
-  it('sends errors properly', function (done) {
+  it('sends errors properly', function () {
     var config = {
       context: './test/fixtures/test3',
-      entry: './index',
-      plugins: [
-        new StyleLintPlugin({
-          quiet: true,
-          configFile: configFilePath
-        })
-      ]
+      entry: './index'
     };
 
-    pack(assign({}, baseConfig, config), function (err, stats) {
-      expect(err).to.not.exist;
-      expect(stats.compilation.errors).to.have.length(1);
-      done(err);
-    });
+    return pack(assign({}, baseConfig, config))
+      .then(function (stats) {
+        expect(stats.compilation.errors).to.have.length(1);
+      });
   });
 
-  it('fails on errors', function () {
+  it('fails on errors when asked to', function () {
     var config = {
       context: './test/fixtures/test3',
       entry: './index',
@@ -77,62 +58,19 @@ describe('stylelint-webpack-plugin', function () {
       ]
     };
 
-    return expect(new Promise(function (resolve, reject) {
-      var compiler = webpack(assign({}, baseConfig, config));
-      compiler.outputFileSystem = outputFileSystem;
-      compiler.run(function (err) {
-        reject(err);
-      });
-    })).to.eventually.be.rejectedWith('Error: Failed because of a stylelint error.\n');
+    expect(pack(assign({}, baseConfig, config)))
+      .to.eventually.be.rejectedWith('Error: Failed because of a stylelint error.\n');
   });
 
-  it('can specify a JSON config file via config', function (done) {
-    var config = {
-      context: './test/fixtures/test5',
-      entry: './index',
-      plugins: [
-        new StyleLintPlugin({
-          configFile: configFilePath,
-          quiet: true
-        })
-      ]
-    };
-
-    pack(assign({}, baseConfig, config), function (err, stats) {
-      expect(err).to.not.exist;
-      expect(stats.compilation.errors).to.have.length(0);
-      done(err);
-    });
-  });
-
-  it('works with multiple source files', function (done) {
+  it('works with multiple source files', function () {
     var config = {
       context: './test/fixtures/test7',
       entry: './index'
     };
 
-    pack(assign({}, baseConfig, config), function (err, stats) {
-      expect(err).to.not.exist;
-      expect(stats.compilation.errors).to.have.length(2);
-      done(err);
-    });
+    return pack(assign({}, baseConfig, config))
+      .then(function (stats) {
+        expect(stats.compilation.errors).to.have.length(2);
+      });
   });
-
-  // it('should work with multiple context', function(done) {
-  //   var config = {
-  //     context: './test/fixtures/test5',
-  //     entry: './index',
-  //     plugins: [ new StyleLintPlugin({
-  //       configFile: configFilePath,
-  //       context: ['./test/testFiles/test5', './test/testFiles/test7']
-  //     })]
-  //   };
-
-  //   pack(assign({}, baseConfig, config), function (err, stats) {
-  //     expect(err).to.not.exist;
-  //     expect(stats.compilation.errors.length).to.equal(0);
-  //     expect(stats.compilation.warnings.length).not.to.equal(0);
-  //     done(err);
-  //   });
-  // });
 });
