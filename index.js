@@ -2,9 +2,9 @@
 
 // Dependencies
 var path = require('path');
+var arrify = require('arrify');
 var assign = require('object-assign');
 var formatter = require('stylelint/dist/formatters/stringFormatter').default;
-var arrify = require('arrify');
 
 // Modules
 var runCompilation = require('./lib/run-compilation');
@@ -12,33 +12,33 @@ var runCompilation = require('./lib/run-compilation');
 function apply(options, compiler) {
   var context = options.context || compiler.context;
 
-  options = Object.assign({}, options, {
-    // TODO: make it work with arrays
-    files: options.files.map(function (file) {
-      return path.join(context, '/', file);
-    })
-  });
-
-  compiler.plugin('run', runCompilation.bind(this, options));
-  compiler.plugin('watch-run', runCompilation.bind(this, options));
-}
-
-// makes it easier to pass and check options to the plugin thank you webpack doc
-// [https://webpack.github.io/docs/plugins.html#the-compiler-instance]
-module.exports = function (options) {
-  return {
-    apply: apply.bind(this, buildOptions(options))
-  };
-};
-
-function buildOptions(options) {
-  return assign({
+  options = assign({
     configFile: '.stylelintrc',
     formatter: formatter,
     quiet: false
   }, options, {
     // Default Glob is any directory level of scss and/or sass file,
     // under webpack's context and specificity changed via globbing patterns
-    files: arrify(options.files || '**/*.{c,sc,sa,le}ss')
+    files: arrify(options.files || '**/*.{c,sc,sa,le}ss').map(function (file) {
+      return path.join(context, '/', file);
+    }),
+    context: context
   });
+
+  var runner = runCompilation.bind(this, options);
+
+  compiler.plugin('run', runner);
+  compiler.plugin('watch-run', runner);
 }
+
+/**
+ * Pass options to the plugin that get checked and updated before running
+ * ref: https://webpack.github.io/docs/plugins.html#the-compiler-instance
+ * @param options - from webpack config, see defaults in `apply` function.
+ * @return {Object} the bound apply function
+ */
+module.exports = function stylelintWebpackPlugin(options) {
+  return {
+    apply: apply.bind(this, options)
+  };
+};

@@ -1,3 +1,3 @@
-require(getPath('./../../../node_modules/file-loader/index') + '!./test.css!./test.scss!./test.sass!./test.less');
+require(getPath('./../../../node_modules/file-loader/index') + '!./test.scss');
 
 console.log('test8');
