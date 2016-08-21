@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 node_js:
-  - 4
-  - "stable"
+  - 'node'
+  - 'stable'
 
 after_success: "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
