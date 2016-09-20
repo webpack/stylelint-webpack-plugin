@@ -90,4 +90,19 @@ describe('stylelint-webpack-plugin', function () {
         expect(stats.compilation.warnings).to.have.length(1);
       });
   });
+
+  it('works without configuration', function () {
+    var config = {
+      context: './test/fixtures/test9',
+      entry: './index',
+      plugins: [
+        new StyleLintPlugin()
+      ]
+    };
+
+    return pack(assign({}, baseConfig, config))
+      .then(function (stats) {
+        expect(stats.compilation.errors).to.have.length(0);
+      });
+  });
 });

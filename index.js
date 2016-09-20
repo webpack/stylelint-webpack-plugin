@@ -10,6 +10,7 @@ var formatter = require('stylelint/dist/formatters/stringFormatter').default;
 var runCompilation = require('./lib/run-compilation');
 
 function apply(options, compiler) {
+  options = options || {};
   var context = options.context || compiler.context;
 
   options = assign({
