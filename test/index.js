@@ -91,7 +91,7 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
-  it('works without configuration', function () {
+  it('works without StyleLintPlugin configuration but posts warnign .stylelintrc file not found', function () {
     var config = {
       context: './test/fixtures/test9',
       entry: './index',
