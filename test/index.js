@@ -103,6 +103,7 @@ describe('stylelint-webpack-plugin', function () {
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
         expect(stats.compilation.errors).to.have.length(0);
+        expect(stats.compilation.warnings).to.have.length(0);
       });
   });
 });
