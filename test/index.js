@@ -90,4 +90,17 @@ describe('stylelint-webpack-plugin', function () {
         expect(stats.compilation.warnings).to.have.length(1);
       });
   });
+
+  it('works with CSS, SCSS, SASS and LESS files by default', function () {
+    var config = {
+      context: './test/fixtures/test9',
+      entry: './index'
+    };
+
+    return pack(assign({}, baseConfig, config))
+      .then(function (stats) {
+        expect(stats.compilation.errors).to.have.length(4);
+        expect(stats.compilation.warnings).to.have.length(4);
+      });
+  });
 });
