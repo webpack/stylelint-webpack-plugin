@@ -20,7 +20,7 @@ $ npm install stylelint-webpack-plugin
 
 ## Usage
 
-In your webpack configuration
+Minimum webpack configuration:
 
 ```js
 var StyleLintPlugin = require('stylelint-webpack-plugin');
@@ -28,15 +28,17 @@ var StyleLintPlugin = require('stylelint-webpack-plugin');
 module.exports = {
   // ...
   plugins: [
-    new StyleLintPlugin(),
+    new StyleLintPlugin({
+      configFile: '.stylelintrc',
+    }),
   ],
   // ...
-}
+};
 ```
 
 ### Options
 
-See [stylelint options](http://stylelint.io/user-guide/node-api/#options), for the complete list of options.
+See [stylelint options](http://stylelint.io/user-guide/node-api/#options) for a complete list.
 
 * `configFile`: You can change the config file location. Default: (`.stylelintrc`)
 * `context`: String indicating the root of your SCSS files. Default inherits from webpack config.
