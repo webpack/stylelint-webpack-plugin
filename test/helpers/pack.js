@@ -3,8 +3,6 @@
 var webpack = require('webpack');
 var MemoryFileSystem = require('memory-fs');
 
-var outputFileSystem = new MemoryFileSystem();
-
 /**
  * Basic in memory compiler, promisified
  * @param testConfig - the plugin config being tested run through the webpack compiler
@@ -13,10 +11,10 @@ var outputFileSystem = new MemoryFileSystem();
 module.exports = function pack(testConfig) {
   return new Promise(function (resolve, reject) {
     var compiler = webpack(testConfig);
-    compiler.outputFileSystem = outputFileSystem;
+    compiler.outputFileSystem = new MemoryFileSystem();
     compiler.run(function (err, stats) {
       if (err) {
-        return reject({err: err, stats: stats});
+        return reject(err);
       }
       return resolve(stats);
     });
