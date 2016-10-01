@@ -53,7 +53,6 @@ module.exports = {
   plugins: [
     new StyleLintPlugin({
       configFile: '.stylelintrc',
-      context: 'inherits from webpack',
       files: '**/*.s?(a|c)ss',
       failOnError: false,
     })
