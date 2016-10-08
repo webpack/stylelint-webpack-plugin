@@ -59,7 +59,7 @@ describe('stylelint-webpack-plugin', function () {
     };
 
     expect(pack(assign({}, baseConfig, config)))
-      .to.eventually.be.rejectedWith('Error: Failed because of a stylelint error.\n');
+      .to.eventually.be.rejectedWith('Failed because of a stylelint error.\n');
   });
 
   it('works with multiple source files', function () {
