@@ -70,7 +70,9 @@ describe('stylelint-webpack-plugin', function () {
 
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
-        expect(stats.compilation.errors).to.have.length(2);
+        expect(stats.compilation.errors).to.have.length(1);
+        expect(stats.compilation.errors[0]).to.contain('test/fixtures/test7/_second.scss');
+        expect(stats.compilation.errors[0]).to.contain('test/fixtures/test7/test.scss');
       });
   });
 
