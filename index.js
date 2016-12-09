@@ -30,7 +30,7 @@ function apply(options, compiler) {
 
   compiler.plugin('run', runner);
   compiler.plugin('watch-run', function (watcher, callback) {
-    runner(watcher.compiler, callback)
+    runner(watcher.compiler, callback);
   });
 }
 
