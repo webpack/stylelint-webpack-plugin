@@ -29,7 +29,7 @@ function apply(options, compiler) {
   var runner = runCompilation.bind(this, options);
 
   compiler.plugin('run', runner);
-  compiler.plugin('watch-run', function (watcher, callback) {
+  compiler.plugin('watch-run', function onWatchRun (watcher, callback) {
     runner(watcher.compiler, callback);
   });
 }
