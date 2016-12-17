@@ -23,14 +23,14 @@
   },
   "homepage": "https://github.com/vieron/stylelint-webpack-plugin#readme",
   "peerDependencies": {
-    "stylelint": "^7.0.1"
+    "stylelint": "^7.0.1",
+    "webpack": "^2 || ^2.2.0-rc.0 || ^2.1.0-beta.0 || ^1.13.2"
   },
   "dependencies": {
     "arrify": "^1.0.1",
     "chalk": "^1.1.3",
     "object-assign": "^4.1.0",
-    "stylelint": "^7.3.1",
-    "webpack": "^1.13.2"
+    "stylelint": "^7.3.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -39,7 +39,8 @@
     "memory-fs": "^0.3.0",
     "mocha": "^3.1.0",
     "nyc": "^8.3.1",
-    "xo": "^0.16.0"
+    "xo": "^0.16.0",
+    "webpack": "^1.13.2"
   },
   "scripts": {
     "pretest": "xo",
