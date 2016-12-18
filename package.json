@@ -44,7 +44,9 @@
   },
   "scripts": {
     "pretest": "xo",
-    "test": "nyc mocha",
+    "test:webpack1": "npm i webpack@1 && nyc mocha",
+    "test:webpack2": "npm i webpack@beta && nyc mocha && npm i webpack@1",
+    "test": "npm run test:webpack1 && npm run test:webpack2",
     "preversion": "npm run test",
     "version": "git add -A ."
   },

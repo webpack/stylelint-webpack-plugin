@@ -8,7 +8,6 @@ var pack = require('./helpers/pack');
 
 var configFilePath = getPath('./.stylelintrc');
 var baseConfig = {
-  debug: false,
   output: {
     path: getPath('output')
   },
@@ -19,6 +18,16 @@ var baseConfig = {
     })
   ]
 };
+
+if (typeof webpack.LoaderOptionsPlugin === 'undefined') {
+  baseConfig.debug = false;
+} else {
+  baseConfig.plugins.push(
+    new webpack.LoaderOptionsPlugin({
+      debug: false
+    })
+  );
+}
 
 describe('stylelint-webpack-plugin', function () {
   it('works with a simple file', function () {
