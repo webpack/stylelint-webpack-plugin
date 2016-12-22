@@ -127,6 +127,24 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
+  it('send messages to console when css file with errors and quiet props set to false', function () {
+    var config = {
+      context: './test/fixtures/test10',
+      entry: './index',
+      plugins: [
+        new StyleLintPlugin({
+          configFile: configFilePath
+        })
+      ]
+    };
+
+    return pack(assign({}, baseConfig, config))
+      .then(function (stats) {
+        expect(stats.compilation.warnings).to.have.length(1);
+        expect(stats.compilation.errors).to.have.length(1);
+      });
+  });
+
   context('interop with NoErrorsPlugin', function () {
     it('works when failOnError is false', function () {
       var config = {
