@@ -1,6 +1,6 @@
 {
   "name": "stylelint-webpack-plugin",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "stylelint plugin for webpack",
   "main": "index.js",
   "keywords": [
@@ -21,16 +21,20 @@
   "bugs": {
     "url": "https://github.com/vieron/stylelint-webpack-plugin/issues"
   },
+  "files": [
+    "index.js",
+    "lib"
+  ],
   "homepage": "https://github.com/vieron/stylelint-webpack-plugin#readme",
   "peerDependencies": {
-    "stylelint": "^7.0.1",
+    "stylelint": "^7.7.0",
     "webpack": "^2 || ^2.2.0-rc.0 || ^2.1.0-beta.0 || ^1.13.2"
   },
   "dependencies": {
     "arrify": "^1.0.1",
     "chalk": "^1.1.3",
     "object-assign": "^4.1.0",
-    "stylelint": "^7.3.1"
+    "stylelint": "^7.7.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

@@ -54,6 +54,23 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
+  it.skip('fails when .stylelintrc is not a proper format', function () {
+    var badConfigFilePath = getPath('./.badstylelintrc');
+    var config = {
+      entry: './index',
+      plugins: [
+        new StyleLintPlugin({
+          configFile: badConfigFilePath
+        })
+      ]
+    };
+
+    return pack(assign({}, baseConfig, config))
+      .then(function (stats) {
+        expect(stats.compilation.errors).to.have.length(0);
+      });
+  });
+
   it('fails on errors when asked to', function () {
     var config = {
       context: './test/fixtures/test3',
