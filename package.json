@@ -42,14 +42,15 @@
     "coveralls": "^2.11.14",
     "memory-fs": "^0.3.0",
     "mocha": "^3.1.0",
+    "npm-install-version": "^6.0.1",
     "nyc": "^8.3.1",
-    "xo": "^0.16.0",
-    "webpack": "^1.13.2"
+    "webpack": "^1.13.2",
+    "xo": "^0.16.0"
   },
   "scripts": {
     "pretest": "xo",
-    "test:webpack1": "npm i webpack@1 && nyc mocha",
-    "test:webpack2": "npm i webpack@beta && nyc mocha && npm i webpack@1",
+    "test:webpack1": "WEBPACK_VERSION=1 nyc mocha",
+    "test:webpack2": "WEBPACK_VERSION=beta nyc mocha",
     "test": "npm run test:webpack1 && npm run test:webpack2",
     "preversion": "npm run test",
     "version": "git add -A ."

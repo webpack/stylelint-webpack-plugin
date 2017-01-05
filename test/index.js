@@ -1,10 +1,10 @@
 'use strict';
 
 var assign = require('object-assign');
-var webpack = require('webpack');
 
 var StyleLintPlugin = require('../');
 var pack = require('./helpers/pack');
+var webpack = require('./helpers/webpack');
 
 var configFilePath = getPath('./.stylelintrc');
 var baseConfig = {
