@@ -4,11 +4,11 @@
 var path = require('path');
 var arrify = require('arrify');
 var assign = require('object-assign');
-var minimatch = require('minimatch');
 var formatter = require('stylelint').formatters.string;
 
 // Modules
 var runCompilation = require('./lib/run-compilation');
+var getChangedFiles = require('./lib/get-chaged-files');
 
 function apply(options, compiler) {
   options = options || {};
@@ -29,20 +29,15 @@ function apply(options, compiler) {
   var runner = runCompilation.bind(this, options);
 
   if (options.lintDirtyModulesOnly) {
+    var isFirstRun = true;
     this.startTime = Date.now();
     this.prevTimestamps = {};
-    var isFirstRun = true;
 
     compiler.plugin('emit', function (compilation, callback) {
       var dirtyOptions = assign({}, options);
       var globPatterb = dirtyOptions.files;
-
-      var changedFiles = Object.keys(compilation.fileTimestamps).filter(function (watchfile) {
-        return (this.prevTimestamps[watchfile] || this.startTime) < (compilation.fileTimestamps[watchfile] || Infinity);
-      }.bind(this)).filter(minimatch.filter(globPatterb.join('|'), {matchBase: true}));
-
+      var changedFiles = getChangedFiles(this, compilation, globPatterb.join('|'));
       this.prevTimestamps = compilation.fileTimestamps;
-
       if (!isFirstRun && changedFiles.length) {
         dirtyOptions.files = changedFiles;
         runCompilation.call(this, dirtyOptions, compiler, callback);
