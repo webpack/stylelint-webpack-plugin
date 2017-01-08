@@ -34,23 +34,6 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
-  it.skip('fails when .stylelintrc is not a proper format', function () {
-    var badConfigFilePath = getPath('./.badstylelintrc');
-    var config = {
-      entry: './index',
-      plugins: [
-        new StyleLintPlugin({
-          configFile: badConfigFilePath
-        })
-      ]
-    };
-
-    return pack(assign({}, baseConfig, config))
-      .then(function (stats) {
-        expect(stats.compilation.errors).to.have.length(0);
-      });
-  });
-
   it('fails on errors when asked to', function () {
     var config = {
       context: './test/fixtures/test3',
@@ -84,19 +67,14 @@ describe('stylelint-webpack-plugin', function () {
 
   it('sends warnings properly', function () {
     var config = {
-      context: './test/fixtures/test8',
+      context: './test/fixtures/warnings',
       entry: './index',
-      plugins: [
-        new StyleLintPlugin({
-          quiet: true,
-          configFile: configFilePath
-        })
-      ]
     };
 
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
         expect(stats.compilation.warnings).to.have.length(1);
+        expect(stats.compilation.errors).to.be.ok.and.have.length(0);
       });
   });
 
@@ -116,7 +94,7 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
-  it('send messages to console when css file with errors and quiet props set to false', function () {
+  it('sends messages to console when css file with errors and quiet props set to false', function () {
     var config = {
       context: './test/fixtures/test10',
       entry: './index',
@@ -173,5 +151,22 @@ describe('stylelint-webpack-plugin', function () {
           expect(err).to.be.instanceof(Error);
         });
     });
+  });
+
+  it.skip('fails when .stylelintrc is not a proper format', function () {
+    var badConfigFilePath = getPath('./.badstylelintrc');
+    var config = {
+      entry: './index',
+      plugins: [
+        new StyleLintPlugin({
+          configFile: badConfigFilePath
+        })
+      ]
+    };
+
+    return pack(assign({}, baseConfig, config))
+      .then(function (stats) {
+        expect(stats.compilation.errors).to.have.length(0);
+      });
   });
 });
