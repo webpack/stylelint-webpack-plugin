@@ -223,8 +223,10 @@ describe('stylelint-webpack-plugin', function () {
         ]
       };
 
-      var dest = context + '/test-tmp.scss';
-      fsExtra.copySync(context + '/initial-bad.scss', dest);
+      var destSass = context + '/test-tmp.scss';
+      var destJS = context + '/index.js';
+      fsExtra.copySync(context + '/initial-index.js', destJS);
+      fsExtra.copySync(context + '/initial-bad.scss', destSass);
       var stop = watch(assign({}, baseConfig, config), watchCallback);
       var runsCount = 0;
 
@@ -232,17 +234,29 @@ describe('stylelint-webpack-plugin', function () {
         if (err) {
           return done(err);
         }
+
+        // First watch run doesn't have any information in stats yet.
+        // So, starting from 2nd.
         if (runsCount === 1) {
+          // Check that there are no errors on initial run.
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(0);
 
-          // async file update with 400ms delay,
-          // so webpack can handle file udpate after initial run
-          fsExtra.copy(context + '/updated-bad.scss', dest);
-        } else if (runsCount > 1) {
+          // Trigger watch build by updating JS file, should have no errors in next step
+          fsExtra.copy(context + '/updated-index.js', destJS);
+        } else
+        if (runsCount === 2) {
+          // Check that on JS file change styleling is not triggered.
+          expect(stats.compilation.errors).to.have.length(0);
+          expect(stats.compilation.warnings).to.have.length(0);
+
+          // Trigger watch build by updating Sass file, should have errors in next step
+          fsExtra.copy(context + '/updated-bad.scss', destSass);
+        } else if (runsCount > 2) {
           stop();
-          fsExtra.removeSync(dest);
-          // changed file should fail
+          fsExtra.removeSync(destSass);
+          fsExtra.removeSync(destJS);
+          // Ensure that Sass file violates linting.
           expect(stats.compilation.warnings).to.have.length(1);
           expect(stats.compilation.errors).to.have.length(1);
           done();
