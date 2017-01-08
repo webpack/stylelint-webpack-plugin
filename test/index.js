@@ -2,26 +2,14 @@
 
 var path = require('path');
 var assign = require('object-assign');
-var webpack = require('webpack');
 var fsExtra = require('node-fs-extra');
-
 var StyleLintPlugin = require('../');
 var pack = require('./helpers/pack');
 var watch = require('./helpers/watch');
+var webpack = require('./helpers/webpack');
+var baseConfig = require('./helpers/base-config');
 
 var configFilePath = getPath('./.stylelintrc');
-var baseConfig = {
-  debug: false,
-  output: {
-    path: getPath('output')
-  },
-  plugins: [
-    new StyleLintPlugin({
-      quiet: true,
-      configFile: configFilePath
-    })
-  ]
-};
 
 describe('stylelint-webpack-plugin', function () {
   it('works with a simple file', function () {
