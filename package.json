@@ -40,10 +40,10 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "coveralls": "^2.11.14",
-    "memory-fs": "^0.3.0",
+    "memory-fs": "^0.4.1",
     "mocha": "^3.1.0",
     "npm-install-version": "^6.0.1",
-    "nyc": "^8.3.1",
+    "nyc": "^10.0.0",
     "webpack": "^1.13.2",
     "xo": "^0.16.0"
   },
@@ -70,6 +70,11 @@
     "globals": [
       "getPath",
       "expect"
+    ]
+  },
+  "greenkeeper": {
+    "ignore": [
+      "xo"
     ]
   }
 }
