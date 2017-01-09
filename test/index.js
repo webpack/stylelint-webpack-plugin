@@ -68,14 +68,14 @@ describe('stylelint-webpack-plugin', function () {
 
   it('sends warnings properly', function () {
     var config = {
-      context: './test/fixtures/warnings',
+      context: './test/fixtures/rule-warning',
       entry: './index'
     };
 
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
         expect(stats.compilation.warnings).to.have.length(1);
-        expect(stats.compilation.errors).to.be.ok.and.have.length(0);
+        expect(stats.compilation.errors).to.have.length(0);
       });
   });
 
@@ -97,7 +97,7 @@ describe('stylelint-webpack-plugin', function () {
 
   it('sends messages to console when css file with errors and quiet props set to false', function () {
     var config = {
-      context: './test/fixtures/test10',
+      context: './test/fixtures/syntax-error',
       entry: './index',
       plugins: [
         new StyleLintPlugin({
