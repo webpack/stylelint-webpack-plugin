@@ -22,7 +22,7 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
-  it('sends errors properly', function () {
+  it('sends errors to the errors output only', function () {
     var config = {
       context: './test/fixtures/test3',
       entry: './index'
@@ -30,7 +30,8 @@ describe('stylelint-webpack-plugin', function () {
 
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
-        expect(stats.compilation.errors).to.have.length(1);
+        expect(stats.compilation.errors).to.have.length(1, 'should have one error');
+        expect(stats.compilation.warnings).to.have.length(0, 'should have no warnings');
       });
   });
 
@@ -68,7 +69,7 @@ describe('stylelint-webpack-plugin', function () {
   it('sends warnings properly', function () {
     var config = {
       context: './test/fixtures/warnings',
-      entry: './index',
+      entry: './index'
     };
 
     return pack(assign({}, baseConfig, config))
@@ -107,7 +108,7 @@ describe('stylelint-webpack-plugin', function () {
 
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
-        expect(stats.compilation.warnings).to.have.length(1);
+        expect(stats.compilation.warnings).to.have.length(0);
         expect(stats.compilation.errors).to.have.length(1);
       });
   });
