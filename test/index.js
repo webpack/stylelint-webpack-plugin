@@ -1,11 +1,9 @@
 'use strict';
 
-var path = require('path');
 var assign = require('object-assign');
-var fsExtra = require('node-fs-extra');
 var StyleLintPlugin = require('../');
+var getChangedFiles = require('../lib/get-chaged-files');
 var pack = require('./helpers/pack');
-var watch = require('./helpers/watch');
 var webpack = require('./helpers/webpack');
 var baseConfig = require('./helpers/base-config');
 
@@ -197,7 +195,16 @@ describe('stylelint-webpack-plugin', function () {
           expect(stats.compilation.errors).to.have.length(0);
         });
     });
-    it('lints only changed files in watch mode', function (done) {
+
+    /*
+     @TODO: come back later to integration tests
+     @see https://github.com/vieron/stylelint-webpack-plugin/pull/53#discussion_r95084529
+     Dependencies to install or include for following test:
+          - `node-fs-extra`
+          - `../helpers/watch`
+          - `path`
+     // Webpack integration test.
+     it('lints only changed files in watch mode', function (done) {
       this.timeout(5000);
       var context = path.resolve(__dirname, 'fixtures/lint-dirty-files');
       var config = {
@@ -251,6 +258,33 @@ describe('stylelint-webpack-plugin', function () {
         }
         runsCount++;
       }
+    });
+    */
+  });
+
+  context('getChangedFiles', function () {
+    it('returns changed style files', function () {
+      var plugin = {
+        startTime: 10,
+        prevTimestamps: {
+          '/test/changed.scss': 5,
+          '/test/removed.scss': 5,
+          '/test/changed.js': 5
+        }
+      };
+      var compilation = {
+        fileTimestamps: {
+          '/test/changed.scss': 20,
+          '/test/changed.js': 20,
+          '/test/newly-created.scss': 15
+        }
+      };
+      var glob = '/**/*.scss';
+
+      expect(getChangedFiles(plugin, compilation, glob)).to.eql([
+        '/test/changed.scss',
+        '/test/newly-created.scss'
+      ]);
     });
   });
 });

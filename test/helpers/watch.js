@@ -1,7 +1,7 @@
 'use strict';
 
-var webpack = require('webpack');
 var MemoryFileSystem = require('memory-fs');
+var webpack = require('./webpack');
 
 /**
  * Webpack watch in memory compiler

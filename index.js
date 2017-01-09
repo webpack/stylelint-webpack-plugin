@@ -35,8 +35,9 @@ function apply(options, compiler) {
 
     compiler.plugin('emit', function (compilation, callback) {
       var dirtyOptions = assign({}, options);
-      var globPatterb = dirtyOptions.files;
-      var changedFiles = getChangedFiles(this, compilation, globPatterb.join('|'));
+      var glob = dirtyOptions.files.join('|');
+      var plugin = this;
+      var changedFiles = getChangedFiles(plugin, compilation, glob);
       this.prevTimestamps = compilation.fileTimestamps;
       if (!isFirstRun && changedFiles.length) {
         dirtyOptions.files = changedFiles;
