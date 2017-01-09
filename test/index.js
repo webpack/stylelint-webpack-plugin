@@ -101,7 +101,8 @@ describe('stylelint-webpack-plugin', function () {
       entry: './index',
       plugins: [
         new StyleLintPlugin({
-          configFile: configFilePath
+          configFile: configFilePath,
+          quiet: true
         })
       ]
     };
