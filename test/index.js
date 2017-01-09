@@ -22,7 +22,7 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
-  it('sends errors properly', function () {
+  it('sends errors to the errors output only', function () {
     var config = {
       context: './test/fixtures/test3',
       entry: './index'
@@ -30,24 +30,8 @@ describe('stylelint-webpack-plugin', function () {
 
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
-        expect(stats.compilation.errors).to.have.length(1);
-      });
-  });
-
-  it.skip('fails when .stylelintrc is not a proper format', function () {
-    var badConfigFilePath = getPath('./.badstylelintrc');
-    var config = {
-      entry: './index',
-      plugins: [
-        new StyleLintPlugin({
-          configFile: badConfigFilePath
-        })
-      ]
-    };
-
-    return pack(assign({}, baseConfig, config))
-      .then(function (stats) {
-        expect(stats.compilation.errors).to.have.length(0);
+        expect(stats.compilation.errors).to.have.length(1, 'should have one error');
+        expect(stats.compilation.warnings).to.have.length(0, 'should have no warnings');
       });
   });
 
@@ -84,19 +68,14 @@ describe('stylelint-webpack-plugin', function () {
 
   it('sends warnings properly', function () {
     var config = {
-      context: './test/fixtures/test8',
-      entry: './index',
-      plugins: [
-        new StyleLintPlugin({
-          quiet: true,
-          configFile: configFilePath
-        })
-      ]
+      context: './test/fixtures/rule-warning',
+      entry: './index'
     };
 
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
         expect(stats.compilation.warnings).to.have.length(1);
+        expect(stats.compilation.errors).to.have.length(0);
       });
   });
 
@@ -116,9 +95,9 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
-  it('send messages to console when css file with errors and quiet props set to false', function () {
+  it('sends messages to console when css file with errors and quiet props set to false', function () {
     var config = {
-      context: './test/fixtures/test10',
+      context: './test/fixtures/syntax-error',
       entry: './index',
       plugins: [
         new StyleLintPlugin({
@@ -129,7 +108,7 @@ describe('stylelint-webpack-plugin', function () {
 
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
-        expect(stats.compilation.warnings).to.have.length(1);
+        expect(stats.compilation.warnings).to.have.length(0);
         expect(stats.compilation.errors).to.have.length(1);
       });
   });
@@ -173,6 +152,23 @@ describe('stylelint-webpack-plugin', function () {
           expect(err).to.be.instanceof(Error);
         });
     });
+  });
+
+  it.skip('fails when .stylelintrc is not a proper format', function () {
+    var badConfigFilePath = getPath('./.badstylelintrc');
+    var config = {
+      entry: './index',
+      plugins: [
+        new StyleLintPlugin({
+          configFile: badConfigFilePath
+        })
+      ]
+    };
+
+    return pack(assign({}, baseConfig, config))
+      .then(function (stats) {
+        expect(stats.compilation.errors).to.have.length(0);
+      });
   });
 
   context('lintDirtyModulesOnly flag is enabled', function () {

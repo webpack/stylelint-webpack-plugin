@@ -1,6 +1,6 @@
 {
   "name": "stylelint-webpack-plugin",
-  "version": "0.4.2",
+  "version": "0.5.1",
   "description": "stylelint plugin for webpack",
   "main": "index.js",
   "keywords": [
@@ -41,12 +41,13 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
+    "conventional-github-releaser": "^1.1.3",
     "coveralls": "^2.11.14",
-    "memory-fs": "^0.3.0",
+    "dotenv": "^4.0.0",
+    "memory-fs": "^0.4.1",
     "mocha": "^3.1.0",
     "npm-install-version": "^6.0.1",
-    "nyc": "^8.3.1",
-    "webpack": "^1.13.2",
+    "nyc": "^10.0.0",
     "xo": "^0.16.0"
   },
   "scripts": {
@@ -72,6 +73,11 @@
     "globals": [
       "getPath",
       "expect"
+    ]
+  },
+  "greenkeeper": {
+    "ignore": [
+      "xo"
     ]
   }
 }
