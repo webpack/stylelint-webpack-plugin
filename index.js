@@ -14,7 +14,6 @@ function apply(options, compiler) {
   var context = options.context || compiler.context;
 
   options = assign({
-    configFile: '.stylelintrc',
     formatter: formatter,
     quiet: false
   }, options, {
