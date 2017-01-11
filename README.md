@@ -40,7 +40,7 @@ module.exports = {
 
 See [stylelint options](http://stylelint.io/user-guide/node-api/#options) for the complete list of options. This object is passed straight to the `stylelint.lint` function and has the following defaults:
 
-* `configFile`: You can change the config file location. Default: (`undefined`)
+* `configFile`: You can change the config file location. Default: (`undefined`), handled by [stylelint's cosmiconfig module](http://stylelint.io/user-guide/configuration/).
 * `context`: String indicating the root of your SCSS files. Default: inherits from webpack config.
 * `files`: Change the glob pattern for finding files. Default: (`['**/*.s?(a|c)ss']`)
 * `syntax`: Use `'scss'` to lint .scss files. Default (`undefined`)
