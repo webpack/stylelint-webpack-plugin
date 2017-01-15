@@ -19,6 +19,7 @@ describe('stylelint-webpack-plugin', function () {
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
         expect(stats.compilation.errors).to.have.length(0);
+        expect(stats.compilation.warnings).to.have.length(0);
       });
   });
 
@@ -48,8 +49,11 @@ describe('stylelint-webpack-plugin', function () {
       ]
     };
 
-    expect(pack(assign({}, baseConfig, config)))
-      .to.eventually.be.rejectedWith('Failed because of a stylelint error.\n');
+    return pack(assign({}, baseConfig, config))
+      .then(expect.fail)
+      .catch(function (err) {
+        expect(err.message).to.equal('Failed because of a stylelint error.\n');
+      });
   });
 
   it('works with multiple source files', function () {
@@ -74,8 +78,8 @@ describe('stylelint-webpack-plugin', function () {
 
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
-        expect(stats.compilation.warnings).to.have.length(1);
         expect(stats.compilation.errors).to.have.length(0);
+        expect(stats.compilation.warnings).to.have.length(1);
       });
   });
 
@@ -95,7 +99,8 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
-  it('sends messages to console when css file with errors and quiet props set to false', function () {
+  // TODO use snapshots to ensure something is printed to the console
+  it.skip('sends messages to console when quiet prop set to false', function () {
     var config = {
       context: './test/fixtures/syntax-error',
       entry: './index',
@@ -109,8 +114,8 @@ describe('stylelint-webpack-plugin', function () {
 
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
-        expect(stats.compilation.warnings).to.have.length(0);
         expect(stats.compilation.errors).to.have.length(1);
+        expect(stats.compilation.warnings).to.have.length(0);
       });
   });
 
@@ -155,20 +160,22 @@ describe('stylelint-webpack-plugin', function () {
     });
   });
 
-  it.skip('fails when .stylelintrc is not a proper format', function () {
-    var badConfigFilePath = getPath('./.badstylelintrc');
+  it('fails when .stylelintrc is not a proper format', function () {
     var config = {
       entry: './index',
+      context: './test/fixtures/test3',
       plugins: [
         new StyleLintPlugin({
-          configFile: badConfigFilePath
+          configFile: getPath('./.badstylelintrc'),
+          quiet: true
         })
       ]
     };
 
     return pack(assign({}, baseConfig, config))
-      .then(function (stats) {
-        expect(stats.compilation.errors).to.have.length(0);
+      .then(expect.fail)
+      .catch(function (err) {
+        expect(err.message).to.contain('Failed to parse').and.contain('as JSON');
       });
   });
 

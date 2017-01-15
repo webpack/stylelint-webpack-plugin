@@ -10,11 +10,10 @@ var formatter = require('stylelint').formatters.string;
 var runCompilation = require('./lib/run-compilation');
 var LintDirtyModulesPlugin = require('./lib/lint-dirty-modules-plugin');
 
-function apply(options, compiler) {
+function apply (options, compiler) {
   options = options || {};
   var context = options.context || compiler.context;
   options = assign({
-    configFile: '.stylelintrc',
     formatter: formatter,
     quiet: false
   }, options, {
@@ -44,7 +43,7 @@ function apply(options, compiler) {
  * @param options - from webpack config, see defaults in `apply` function.
  * @return {Object} the bound apply function
  */
-module.exports = function stylelintWebpackPlugin(options) {
+module.exports = function stylelintWebpackPlugin (options) {
   return {
     apply: apply.bind(this, options)
   };

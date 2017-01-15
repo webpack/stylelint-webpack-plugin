@@ -1,8 +1,8 @@
 # Stylelint Plugin for Webpack v[1, 2]
 [![npm version](https://badge.fury.io/js/stylelint-webpack-plugin.svg)](https://badge.fury.io/js/stylelint-webpack-plugin)
-[![Build Status](https://travis-ci.org/vieron/stylelint-webpack-plugin.svg?branch=master)](https://travis-ci.org/vieron/stylelint-webpack-plugin)
-[![Coverage Status](https://coveralls.io/repos/github/vieron/stylelint-webpack-plugin/badge.svg?branch=master)](https://coveralls.io/github/vieron/stylelint-webpack-plugin?branch=master)
-[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
+[![Build Status](https://travis-ci.org/JaKXz/stylelint-webpack-plugin.svg?branch=master)](https://travis-ci.org/JaKXz/stylelint-webpack-plugin)
+[![Coverage Status](https://coveralls.io/repos/github/JaKXz/stylelint-webpack-plugin/badge.svg?branch=master)](https://coveralls.io/github/JaKXz/stylelint-webpack-plugin?branch=master)
+[![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-red.svg)](https://github.com/Flet/semistandard)
 [![Gitter](https://badges.gitter.im/stylelint-webpack-plugin/Lobby.svg)](https://gitter.im/stylelint-webpack-plugin/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 > ## Why you might want to use this plugin instead of [stylelint-loader](https://github.com/adrianhall/stylelint-loader)
@@ -40,7 +40,7 @@ module.exports = {
 
 See [stylelint options](http://stylelint.io/user-guide/node-api/#options) for the complete list of options. This object is passed straight to the `stylelint.lint` function and has the following defaults:
 
-* `configFile`: You can change the config file location. Default: (`.stylelintrc`)
+* `configFile`: You can change the config file location. Default: (`undefined`), handled by [stylelint's cosmiconfig module](http://stylelint.io/user-guide/configuration/).
 * `context`: String indicating the root of your SCSS files. Default: inherits from webpack config.
 * `failOnError`: Have Webpack's build process die on error. Default: `false`
 * `files`: Change the glob pattern for finding files. Default: (`['**/*.s?(a|c)ss']`)
@@ -60,5 +60,7 @@ You can use the `quiet` option to not print stylelint output to the console.
 
 This project is basically a modified version of `sasslint-webpack-plugin`. It changed considerably
 since stylelint is async, and its Node API changes compared with sasslint.
+
+Thanks to Javier ([@vieron](https://github.com/vieron)) for originally publishing this plugin, and passing the torch to our [growing list of contributors](https://github.com/JaKXz/stylelint-webpack-plugin/graphs/contributors)! :smile:
 
 ## [License](LICENSE)
