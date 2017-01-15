@@ -31,7 +31,7 @@ function apply (options, compiler) {
     new LintDirtyModulesPlugin(compiler, options); // eslint-disable-line no-new
   } else {
     compiler.plugin('run', runner);
-    compiler.plugin('watch-run', function onWatchRun(watcher, callback) {
+    compiler.plugin('watch-run', function onWatchRun (watcher, callback) {
       runner(watcher.compiler, callback);
     });
   }

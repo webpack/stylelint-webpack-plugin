@@ -25,7 +25,7 @@ describe('lint-dirty-modules-plugin', function () {
 
       compilerMock = {
         callback: null,
-        plugin: function plugin(event, callback) {
+        plugin: function plugin (event, callback) {
           this.callback = callback;
         }
       };
