@@ -8,7 +8,7 @@ var formatter = require('stylelint').formatters.string;
 
 // Modules
 var runCompilation = require('./lib/run-compilation');
-var getChangedFiles = require('./lib/get-chaged-files');
+var LintDirtyModulesPlugin = require('./lib/lint-dirty-modules-plugin');
 
 function apply(options, compiler) {
   options = options || {};
@@ -29,25 +29,7 @@ function apply(options, compiler) {
   var runner = runCompilation.bind(this, options);
 
   if (options.lintDirtyModulesOnly) {
-    var isFirstRun = true;
-    this.startTime = Date.now();
-    this.prevTimestamps = {};
-
-    compiler.plugin('emit', function (compilation, callback) {
-      var dirtyOptions = assign({}, options);
-      var glob = dirtyOptions.files.join('|');
-      var plugin = this;
-      var changedFiles = getChangedFiles(plugin, compilation, glob);
-      this.prevTimestamps = compilation.fileTimestamps;
-      if (!isFirstRun && changedFiles.length) {
-        dirtyOptions.files = changedFiles;
-        runCompilation.call(this, dirtyOptions, compiler, callback);
-      } else {
-        callback();
-      }
-
-      isFirstRun = false;
-    }.bind(this));
+    new LintDirtyModulesPlugin(compiler, options); // eslint-disable-line no-new
   } else {
     compiler.plugin('run', runner);
     compiler.plugin('watch-run', function onWatchRun(watcher, callback) {
