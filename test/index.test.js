@@ -7,7 +7,6 @@ var webpack = require('./helpers/webpack');
 var baseConfig = require('./helpers/base-config');
 
 var configFilePath = getPath('./.stylelintrc');
-require('./lib/lint-dirty-modules-plugin');
 
 describe('stylelint-webpack-plugin', function () {
   it('works with a simple file', function () {
@@ -154,6 +153,7 @@ describe('stylelint-webpack-plugin', function () {
       };
 
       return pack(assign({}, baseConfig, config))
+        .then(expect.fail)
         .catch(function (err) {
           expect(err).to.be.instanceof(Error);
         });
@@ -189,8 +189,7 @@ describe('stylelint-webpack-plugin', function () {
             configFile: configFilePath,
             quiet: true,
             lintDirtyModulesOnly: true
-          }),
-          new webpack.NoErrorsPlugin()
+          })
         ]
       };
 

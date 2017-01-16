@@ -2,3 +2,6 @@
 --harmony
 --full-trace
 --check-leaks
+--recursive
+--ui bdd
+test/**/*.test.js
