@@ -8,7 +8,7 @@ var runCompilation = td.replace('../../lib/run-compilation');
 var LintDirtyModulesPlugin = require('../../lib/lint-dirty-modules-plugin');
 
 var configFilePath = getPath('./.stylelintrc');
-var glob = '/**/*.s?(c|a)ss';
+var glob = require('../../lib/constants').defaultFilesGlob;
 
 describe('lint-dirty-modules-plugin', function () {
   context('lintDirtyModulesOnly flag is enabled', function () {

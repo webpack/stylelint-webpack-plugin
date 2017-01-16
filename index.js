@@ -9,6 +9,7 @@ var formatter = require('stylelint').formatters.string;
 // Modules
 var runCompilation = require('./lib/run-compilation');
 var LintDirtyModulesPlugin = require('./lib/lint-dirty-modules-plugin');
+var defaultFilesGlob = require('./lib/constants').defaultFilesGlob;
 
 function apply (options, compiler) {
   options = options || {};
@@ -19,7 +20,7 @@ function apply (options, compiler) {
   }, options, {
     // Default Glob is any directory level of scss and/or sass file,
     // under webpack's context and specificity changed via globbing patterns
-    files: arrify(options.files || '**/*.s?(c|a)ss').map(function (file) {
+    files: arrify(options.files || defaultFilesGlob).map(function (file) {
       return path.join(context, '/', file);
     }),
     context: context
