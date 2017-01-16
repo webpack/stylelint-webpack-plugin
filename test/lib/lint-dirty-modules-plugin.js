@@ -42,13 +42,13 @@ describe('lint-dirty-modules-plugin', function () {
       var lintStub = td.function();
       var doneStub = td.function();
       LintDirtyModulesPluginCloned.prototype.lint = lintStub;
-      var plugin = new LintDirtyModulesPluginCloned(compilerMock, optionsMock);
-
       var compilationMock = {
         fileTimestamps: {
-          '/udpated.scss': 5
+          '/updated.scss': 5
         }
       };
+      var plugin = new LintDirtyModulesPluginCloned(compilerMock, optionsMock);
+
       compilerMock.callback(compilationMock, doneStub);
 
       expect(plugin.isFirstRun).to.eql(true);
