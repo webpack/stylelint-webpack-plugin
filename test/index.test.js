@@ -11,7 +11,7 @@ var configFilePath = getPath('./.stylelintrc');
 describe('stylelint-webpack-plugin', function () {
   it('works with a simple file', function () {
     var config = {
-      context: './test/fixtures/test1',
+      context: './test/fixtures/lint-free',
       entry: './index'
     };
 
@@ -24,7 +24,7 @@ describe('stylelint-webpack-plugin', function () {
 
   it('sends errors to the errors output only', function () {
     var config = {
-      context: './test/fixtures/test3',
+      context: './test/fixtures/single-error',
       entry: './index'
     };
 
@@ -37,7 +37,7 @@ describe('stylelint-webpack-plugin', function () {
 
   it('fails on errors when asked to', function () {
     var config = {
-      context: './test/fixtures/test3',
+      context: './test/fixtures/single-error',
       entry: './index',
       plugins: [
         new StyleLintPlugin({
@@ -57,15 +57,15 @@ describe('stylelint-webpack-plugin', function () {
 
   it('works with multiple source files', function () {
     var config = {
-      context: './test/fixtures/test7',
+      context: './test/fixtures/multiple-sources',
       entry: './index'
     };
 
     return pack(assign({}, baseConfig, config))
       .then(function (stats) {
         expect(stats.compilation.errors).to.have.length(1);
-        expect(stats.compilation.errors[0]).to.contain('test/fixtures/test7/_second.scss');
-        expect(stats.compilation.errors[0]).to.contain('test/fixtures/test7/test.scss');
+        expect(stats.compilation.errors[0]).to.contain('test/fixtures/multiple-sources/_second.scss');
+        expect(stats.compilation.errors[0]).to.contain('test/fixtures/multiple-sources/test.scss');
       });
   });
 
@@ -84,7 +84,7 @@ describe('stylelint-webpack-plugin', function () {
 
   it('works without StyleLintPlugin configuration but posts warning .stylelintrc file not found', function () {
     var config = {
-      context: './test/fixtures/test9',
+      context: './test/fixtures/lint-free',
       entry: './index',
       plugins: [
         new StyleLintPlugin()
@@ -121,7 +121,7 @@ describe('stylelint-webpack-plugin', function () {
   context('interop with NoErrorsPlugin', function () {
     it('works when failOnError is false', function () {
       var config = {
-        context: './test/fixtures/test3',
+        context: './test/fixtures/single-error',
         entry: './index',
         plugins: [
           new StyleLintPlugin({
@@ -140,7 +140,7 @@ describe('stylelint-webpack-plugin', function () {
 
     it('throws when failOnError is true', function () {
       var config = {
-        context: './test/fixtures/test3',
+        context: './test/fixtures/single-error',
         entry: './index',
         plugins: [
           new StyleLintPlugin({
@@ -163,7 +163,7 @@ describe('stylelint-webpack-plugin', function () {
   it('fails when .stylelintrc is not a proper format', function () {
     var config = {
       entry: './index',
-      context: './test/fixtures/test3',
+      context: './test/fixtures/single-error',
       plugins: [
         new StyleLintPlugin({
           configFile: getPath('./.badstylelintrc'),
@@ -182,7 +182,7 @@ describe('stylelint-webpack-plugin', function () {
   context('lintDirtyModulesOnly flag is enabled', function () {
     it('skips linting on initial run', function () {
       var config = {
-        context: './test/fixtures/test3',
+        context: './test/fixtures/single-error',
         entry: './index',
         plugins: [
           new StyleLintPlugin({
