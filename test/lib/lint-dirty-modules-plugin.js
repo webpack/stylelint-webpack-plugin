@@ -38,7 +38,7 @@ describe('lint-dirty-modules-plugin', function () {
       };
     });
 
-    it('lint is called on \'emit\'', function () {
+    it('lint is called on "emit"', function () {
       var lintStub = td.function();
       var doneStub = td.function();
       LintDirtyModulesPluginCloned.prototype.lint = lintStub;
@@ -55,7 +55,7 @@ describe('lint-dirty-modules-plugin', function () {
       td.verify(lintStub(compilationMock, doneStub));
     });
 
-    context('LintDirtyModulesPlugin.prototype.lint()', function () {
+    context('#lint()', function () {
       var getChangedFilesStub;
       var doneStub;
       var compilationMock;
@@ -82,7 +82,9 @@ describe('lint-dirty-modules-plugin', function () {
 
       it('skips compilation on first run', function () {
         expect(pluginMock.isFirstRun).to.eql(true);
+
         LintDirtyModulesPluginCloned.prototype.lint.call(pluginMock, compilationMock, doneStub);
+
         td.verify(doneStub());
         expect(pluginMock.isFirstRun).to.eql(false);
         td.verify(getChangedFilesStub, {times: 0, ignoreExtraArgs: true});
@@ -91,7 +93,9 @@ describe('lint-dirty-modules-plugin', function () {
 
       it('runCompilation is not called if files are not changed', function () {
         pluginMock.isFirstRun = false;
+
         LintDirtyModulesPluginCloned.prototype.lint.call(pluginMock, compilationMock, doneStub);
+
         td.verify(doneStub());
         td.verify(runCompilation, {times: 0, ignoreExtraArgs: true});
       });
@@ -101,13 +105,15 @@ describe('lint-dirty-modules-plugin', function () {
         compilationMock = {
           fileTimestamps: fileTimestamps
         };
+
         LintDirtyModulesPluginCloned.prototype.lint.call(pluginMock, compilationMock, doneStub);
         optionsMock.files = Object.keys(fileTimestamps);
+
         td.verify(runCompilation(optionsMock, compilerMock, doneStub));
       });
     });
 
-    context('LintDirtyModulesPlugin.prototype.getChangedFiles()', function () {
+    context('#getChangedFiles()', function () {
       var pluginMock;
       before(function () {
         pluginMock = {
@@ -122,6 +128,7 @@ describe('lint-dirty-modules-plugin', function () {
           }
         };
       });
+
       it('returns changed style files', function () {
         var fileTimestamps = {
           '/test/changed.scss': 20,
@@ -129,12 +136,12 @@ describe('lint-dirty-modules-plugin', function () {
           '/test/newly-created.scss': 15
         };
 
-        expect(
-          LintDirtyModulesPluginCloned.prototype.getChangedFiles.call(pluginMock, fileTimestamps, glob)).to.eql([
-            '/test/changed.scss',
-            '/test/newly-created.scss'
-          ]
-        );
+        var changedFiles = LintDirtyModulesPluginCloned.prototype.getChangedFiles.call(pluginMock, fileTimestamps, glob);
+
+        expect(changedFiles).to.eql([
+          '/test/changed.scss',
+          '/test/newly-created.scss'
+        ]);
       });
     });
   });
