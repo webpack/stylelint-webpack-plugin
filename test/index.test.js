@@ -82,22 +82,6 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
-  it('works without StyleLintPlugin configuration but posts warning .stylelintrc file not found', function () {
-    var config = {
-      context: './test/fixtures/lint-free',
-      entry: './index',
-      plugins: [
-        new StyleLintPlugin()
-      ]
-    };
-
-    return pack(assign({}, baseConfig, config))
-      .then(function (stats) {
-        expect(stats.compilation.errors).to.have.length(0);
-        expect(stats.compilation.warnings).to.have.length(0);
-      });
-  });
-
   // TODO use snapshots to ensure something is printed to the console
   it.skip('sends messages to console when quiet prop set to false', function () {
     var config = {
@@ -116,6 +100,36 @@ describe('stylelint-webpack-plugin', function () {
         expect(stats.compilation.errors).to.have.length(1);
         expect(stats.compilation.warnings).to.have.length(0);
       });
+  });
+
+  context('without StyleLintPlugin configuration', function () {
+    it('works by using stylelint#cosmiconfig under the hood', function () {
+      var config = {
+        context: './test/fixtures/lint-free',
+        entry: './index',
+        plugins: [
+          new StyleLintPlugin()
+        ]
+      };
+
+      return pack(assign({}, baseConfig, config))
+        .then(function (stats) {
+          expect(stats.compilation.errors).to.have.length(0);
+          expect(stats.compilation.warnings).to.have.length(0);
+        });
+    });
+
+    it('finds the right stylelintrc', function () {
+      var config = {
+        context: './test/fixtures/single-error',
+        entry: './index'
+      };
+
+      return pack(assign({}, baseConfig, config))
+        .then(function (stats) {
+          expect(stats.compilation.errors).to.have.length(1);
+        });
+    });
   });
 
   context('interop with NoErrorsPlugin', function () {
