@@ -15,8 +15,7 @@ function apply (options, compiler) {
   options = options || {};
   var context = options.context || compiler.context;
   options = assign({
-    formatter: formatter,
-    quiet: false
+    formatter: formatter
   }, options, {
     // Default Glob is any directory level of scss and/or sass file,
     // under webpack's context and specificity changed via globbing patterns
