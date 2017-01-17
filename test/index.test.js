@@ -8,6 +8,7 @@ var webpack = require('./helpers/webpack');
 var baseConfig = require('./helpers/base-config');
 
 var configFilePath = getPath('./.stylelintrc');
+var errorMessage = require('../lib/constants').errorMessage;
 
 describe('stylelint-webpack-plugin', function () {
   it('works with a simple file', function () {
@@ -52,7 +53,7 @@ describe('stylelint-webpack-plugin', function () {
     return pack(assign({}, baseConfig, config))
       .then(expect.fail)
       .catch(function (err) {
-        expect(err.message).to.equal('Failed because of a stylelint error.\n');
+        expect(err.message).to.equal(errorMessage);
       });
   });
 
