@@ -152,7 +152,7 @@ describe('stylelint-webpack-plugin', function () {
         });
     });
 
-    it('throws when failOnError is true', function () {
+    context('when failOnError is true', function () {
       var config = {
         context: './test/fixtures/single-error',
         entry: './index',
@@ -166,11 +166,20 @@ describe('stylelint-webpack-plugin', function () {
         ]
       };
 
-      return pack(assign({}, baseConfig, config))
-        .then(expect.fail)
-        .catch(function (err) {
-          expect(err).to.be.instanceof(Error);
-        });
+      it('throws when there is an error', function () {
+        return pack(assign({}, baseConfig, config))
+          .then(expect.fail)
+          .catch(function (err) {
+            expect(err).to.be.instanceof(Error);
+          });
+      });
+
+      it('does not throw when there are only warnings', function () {
+        return pack(assign({}, baseConfig, config, { context: './test/fixtures/rule-warning' }))
+          .then(function (stats) {
+            expect(stats.compilation.warnings).to.have.length(1);
+          });
+      });
     });
   });
 
