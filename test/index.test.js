@@ -102,6 +102,25 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
+  it('fails when .stylelintrc is not a proper format', function () {
+    var config = {
+      entry: './index',
+      context: './test/fixtures/single-error',
+      plugins: [
+        new StyleLintPlugin({
+          configFile: getPath('./.badstylelintrc'),
+          quiet: true
+        })
+      ]
+    };
+
+    return pack(assign({}, baseConfig, config))
+      .then(expect.fail)
+      .catch(function (err) {
+        expect(err.message).to.contain('Failed to parse').and.contain('as JSON');
+      });
+  });
+
   context('without StyleLintPlugin configuration', function () {
     it('works by using stylelint#cosmiconfig under the hood', function () {
       var config = {
@@ -121,13 +140,13 @@ describe('stylelint-webpack-plugin', function () {
 
     it('finds the right stylelintrc', function () {
       var config = {
-        context: './test/fixtures/single-error',
+        context: './test/fixtures/rule-warning',
         entry: './index'
       };
 
       return pack(assign({}, baseConfig, config))
         .then(function (stats) {
-          expect(stats.compilation.errors).to.have.length(1);
+          expect(stats.compilation.warnings).to.have.length(1);
         });
     });
   });
@@ -181,25 +200,6 @@ describe('stylelint-webpack-plugin', function () {
           });
       });
     });
-  });
-
-  it('fails when .stylelintrc is not a proper format', function () {
-    var config = {
-      entry: './index',
-      context: './test/fixtures/single-error',
-      plugins: [
-        new StyleLintPlugin({
-          configFile: getPath('./.badstylelintrc'),
-          quiet: true
-        })
-      ]
-    };
-
-    return pack(assign({}, baseConfig, config))
-      .then(expect.fail)
-      .catch(function (err) {
-        expect(err.message).to.contain('Failed to parse').and.contain('as JSON');
-      });
   });
 
   context('lintDirtyModulesOnly flag is enabled', function () {
