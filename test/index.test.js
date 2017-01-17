@@ -122,15 +122,15 @@ describe('stylelint-webpack-plugin', function () {
   });
 
   context('without StyleLintPlugin configuration', function () {
-    it('works by using stylelint#cosmiconfig under the hood', function () {
-      var config = {
-        context: './test/fixtures/lint-free',
-        entry: './index',
-        plugins: [
-          new StyleLintPlugin()
-        ]
-      };
+    var config = {
+      context: './test/fixtures/lint-free',
+      entry: './index',
+      plugins: [
+        new StyleLintPlugin()
+      ]
+    };
 
+    it('works by using stylelint#cosmiconfig under the hood', function () {
       return pack(assign({}, baseConfig, config))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
@@ -139,12 +139,7 @@ describe('stylelint-webpack-plugin', function () {
     });
 
     it('finds the right stylelintrc', function () {
-      var config = {
-        context: './test/fixtures/rule-warning',
-        entry: './index'
-      };
-
-      return pack(assign({}, baseConfig, config))
+      return pack(assign({}, baseConfig, config, { context: './test/fixtures/rule-warning' }))
         .then(function (stats) {
           expect(stats.compilation.warnings).to.have.length(1);
         });
