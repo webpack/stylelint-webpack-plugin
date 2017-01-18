@@ -1,8 +1,8 @@
 sudo: false
 language: node_js
 node_js:
-  - 4
-  - "stable"
+  - 'node'
+  - 'stable'
 
 cache: yarn
 
