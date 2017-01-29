@@ -1,4 +1,6 @@
 # Stylelint Plugin for Webpack v[1, 2]
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/JaKXz/stylelint-webpack-plugin.svg)](https://greenkeeper.io/)
 [![npm version](https://badge.fury.io/js/stylelint-webpack-plugin.svg)](https://badge.fury.io/js/stylelint-webpack-plugin)
 [![Build Status](https://travis-ci.org/JaKXz/stylelint-webpack-plugin.svg?branch=master)](https://travis-ci.org/JaKXz/stylelint-webpack-plugin)
 [![Coverage Status](https://coveralls.io/repos/github/JaKXz/stylelint-webpack-plugin/badge.svg?branch=master)](https://coveralls.io/github/JaKXz/stylelint-webpack-plugin?branch=master)
