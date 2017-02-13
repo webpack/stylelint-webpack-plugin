@@ -57,65 +57,6 @@ describe('stylelint-webpack-plugin', function () {
       });
   });
 
-  it('emits errors as warnings when asked to', function () {
-    var config = {
-      context: './test/fixtures/single-error',
-      entry: './index',
-      plugins: [
-        new StyleLintPlugin({
-          configFile: configFilePath,
-          quiet: true,
-          emitErrors: false
-        })
-      ]
-    };
-
-    return pack(assign({}, baseConfig, config))
-      .then(function (stats) {
-        expect(stats.compilation.errors).to.have.length(0);
-        expect(stats.compilation.warnings).to.have.length(1);
-      });
-  });
-
-  it('does not emit errors as warnings when asked not to', function () {
-    var config = {
-      context: './test/fixtures/single-error',
-      entry: './index',
-      plugins: [
-        new StyleLintPlugin({
-          configFile: configFilePath,
-          quiet: true,
-          emitErrors: true
-        })
-      ]
-    };
-
-    return pack(assign({}, baseConfig, config))
-      .then(function (stats) {
-        expect(stats.compilation.errors).to.have.length(1);
-        expect(stats.compilation.warnings).to.have.length(0);
-      });
-  });
-
-  it('does not emit errors as warnings when not asked to', function () {
-    var config = {
-      context: './test/fixtures/single-error',
-      entry: './index',
-      plugins: [
-        new StyleLintPlugin({
-          configFile: configFilePath,
-          quiet: true
-        })
-      ]
-    };
-
-    return pack(assign({}, baseConfig, config))
-      .then(function (stats) {
-        expect(stats.compilation.errors).to.have.length(1);
-        expect(stats.compilation.warnings).to.have.length(0);
-      });
-  });
-
   it('works with multiple source files', function () {
     var config = {
       context: './test/fixtures/multiple-sources',
@@ -264,6 +205,67 @@ describe('stylelint-webpack-plugin', function () {
             expect(stats.compilation.warnings).to.have.length(1);
           });
       });
+    });
+  });
+
+  context('different values for the `emitErrors` flag', function () {
+    it('emits errors as warnings when asked to', function () {
+      var config = {
+        context: './test/fixtures/single-error',
+        entry: './index',
+        plugins: [
+          new StyleLintPlugin({
+            configFile: configFilePath,
+            quiet: true,
+            emitErrors: false
+          })
+        ]
+      };
+
+      return pack(assign({}, baseConfig, config))
+        .then(function (stats) {
+          expect(stats.compilation.errors).to.have.length(0);
+          expect(stats.compilation.warnings).to.have.length(1);
+        });
+    });
+
+    it('does not emit errors as warnings when asked not to', function () {
+      var config = {
+        context: './test/fixtures/single-error',
+        entry: './index',
+        plugins: [
+          new StyleLintPlugin({
+            configFile: configFilePath,
+            quiet: true,
+            emitErrors: true
+          })
+        ]
+      };
+
+      return pack(assign({}, baseConfig, config))
+        .then(function (stats) {
+          expect(stats.compilation.errors).to.have.length(1);
+          expect(stats.compilation.warnings).to.have.length(0);
+        });
+    });
+
+    it('does not emit errors as warnings when not asked to', function () {
+      var config = {
+        context: './test/fixtures/single-error',
+        entry: './index',
+        plugins: [
+          new StyleLintPlugin({
+            configFile: configFilePath,
+            quiet: true
+          })
+        ]
+      };
+
+      return pack(assign({}, baseConfig, config))
+        .then(function (stats) {
+          expect(stats.compilation.errors).to.have.length(1);
+          expect(stats.compilation.warnings).to.have.length(0);
+        });
     });
   });
 
