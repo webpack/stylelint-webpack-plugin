@@ -249,7 +249,7 @@ describe('stylelint-webpack-plugin', function () {
         });
     });
 
-    it('does not emit errors as warnings when not asked to', function () {
+    it('does not emit errors as warnings when `emitErrors` is not provided', function () {
       var config = {
         context: './test/fixtures/single-error',
         entry: './index',
