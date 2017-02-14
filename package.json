@@ -24,6 +24,9 @@
   "bugs": {
     "url": "https://github.com/JaKXz/stylelint-webpack-plugin/issues"
   },
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "files": [
     "index.js",
     "lib"
