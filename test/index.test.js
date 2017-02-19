@@ -229,6 +229,44 @@ describe('stylelint-webpack-plugin', function () {
         });
     });
 
+    it('still indicates that errors are errors to the user, even when emitting them as warnings', function () {
+      var config = {
+        context: './test/fixtures/single-error',
+        entry: './index',
+        plugins: [
+          new StyleLintPlugin({
+            configFile: configFilePath,
+            quiet: true,
+            emitErrors: false
+          })
+        ]
+      };
+
+      return pack(assign({}, baseConfig, config))
+        .then(function (stats) {
+          expect(stats.compilation.warnings[0]).to.contain('✖');
+        });
+    });
+
+    it('still indicates that warnings are warnings to the user, even when emitting errors as warnings too', function () {
+      var config = {
+        context: './test/fixtures/rule-warning',
+        entry: './index',
+        plugins: [
+          new StyleLintPlugin({
+            configFile: configFilePath,
+            quiet: true,
+            emitErrors: false
+          })
+        ]
+      };
+
+      return pack(assign({}, baseConfig, config))
+        .then(function (stats) {
+          expect(stats.compilation.warnings[0]).to.contain('⚠');
+        });
+    });
+
     it('does not emit errors as warnings when asked not to', function () {
       var config = {
         context: './test/fixtures/single-error',
