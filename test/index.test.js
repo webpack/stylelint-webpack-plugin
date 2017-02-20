@@ -270,5 +270,26 @@ describe('stylelint-webpack-plugin', function () {
           expect(stats.compilation.warnings).to.have.length(0);
         });
     });
+    
+    it('still skips on initial run with `emitErrors` disabled', function () {
+      var config = {
+        context: './test/fixtures/single-error',
+        entry: './index',
+        plugins: [
+          new StyleLintPlugin({
+            configFile: configFilePath,
+            quiet: true,
+            lintDirtyModulesOnly: true,
+            emitErrors: false
+          })
+        ]
+      };
+      
+      return pack(assign({}, baseConfig, config))
+        .then(function (stats) {
+          expect(stats.compilation.errors).to.have.length(0);
+          expect(stats.compilation.warnings).to.have.length(0);
+        });
+    });
   });
 });
