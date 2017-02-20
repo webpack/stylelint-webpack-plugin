@@ -32,7 +32,7 @@ describe('lint-dirty-modules-plugin', function () {
     optionsMock = {
       configFile: configFilePath,
       lintDirtyModulesOnly: true,
-      fomatter: formatter,
+      formatter: formatter,
       files: [glob]
     };
   });
