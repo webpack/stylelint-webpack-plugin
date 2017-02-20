@@ -208,7 +208,7 @@ describe('stylelint-webpack-plugin', function () {
     });
   });
 
-  context('different values for the `emitErrors` flag', function () {
+  context('when `emitErrors` is disabled', function () {
     it('emits errors as warnings when asked to', function () {
       var config = {
         context: './test/fixtures/single-error',
@@ -226,24 +226,6 @@ describe('stylelint-webpack-plugin', function () {
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(1);
-        });
-    });
-
-    it('still indicates that errors are errors to the user, even when emitting them as warnings', function () {
-      var config = {
-        context: './test/fixtures/single-error',
-        entry: './index',
-        plugins: [
-          new StyleLintPlugin({
-            configFile: configFilePath,
-            quiet: true,
-            emitErrors: false
-          })
-        ]
-      };
-
-      return pack(assign({}, baseConfig, config))
-        .then(function (stats) {
           expect(stats.compilation.warnings[0]).to.contain('✖');
         });
     });
@@ -264,45 +246,6 @@ describe('stylelint-webpack-plugin', function () {
       return pack(assign({}, baseConfig, config))
         .then(function (stats) {
           expect(stats.compilation.warnings[0]).to.contain('⚠');
-        });
-    });
-
-    it('does not emit errors as warnings when asked not to', function () {
-      var config = {
-        context: './test/fixtures/single-error',
-        entry: './index',
-        plugins: [
-          new StyleLintPlugin({
-            configFile: configFilePath,
-            quiet: true,
-            emitErrors: true
-          })
-        ]
-      };
-
-      return pack(assign({}, baseConfig, config))
-        .then(function (stats) {
-          expect(stats.compilation.errors).to.have.length(1);
-          expect(stats.compilation.warnings).to.have.length(0);
-        });
-    });
-
-    it('does not emit errors as warnings when `emitErrors` is not provided', function () {
-      var config = {
-        context: './test/fixtures/single-error',
-        entry: './index',
-        plugins: [
-          new StyleLintPlugin({
-            configFile: configFilePath,
-            quiet: true
-          })
-        ]
-      };
-
-      return pack(assign({}, baseConfig, config))
-        .then(function (stats) {
-          expect(stats.compilation.errors).to.have.length(1);
-          expect(stats.compilation.warnings).to.have.length(0);
         });
     });
   });
