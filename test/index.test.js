@@ -1,15 +1,15 @@
 'use strict';
 
-var assign = require('object-assign');
-var td = require('testdouble');
+const assign = require('object-assign');
+const td = require('testdouble');
 
-var StyleLintPlugin = require('../');
+const StyleLintPlugin = require('../');
 
-var pack = require('./helpers/pack');
-var webpack = require('./helpers/webpack');
-var baseConfig = require('./helpers/base-config');
-var configFilePath = getPath('./.stylelintrc');
-var errorMessage = require('../lib/constants').errorMessage;
+const pack = require('./helpers/pack');
+const webpack = require('./helpers/webpack');
+const baseConfig = require('./helpers/base-config');
+const configFilePath = getPath('./.stylelintrc');
+const errorMessage = require('../lib/constants').errorMessage;
 
 describe('stylelint-webpack-plugin', function () {
   it('works with a simple file', function () {
@@ -46,7 +46,7 @@ describe('stylelint-webpack-plugin', function () {
   });
 
   it('fails on errors when asked to', function () {
-    var config = {
+    const config = {
       context: './test/fixtures/single-error',
       plugins: [
         new StyleLintPlugin({
@@ -65,7 +65,7 @@ describe('stylelint-webpack-plugin', function () {
   });
 
   it('fails when .stylelintrc is not a proper format', function () {
-    var config = {
+    const config = {
       context: './test/fixtures/single-error',
       plugins: [
         new StyleLintPlugin({
@@ -92,7 +92,7 @@ describe('stylelint-webpack-plugin', function () {
     });
 
     it('sends messages to the console', function () {
-      var config = {
+      const config = {
         context: './test/fixtures/syntax-error',
         plugins: [
           new StyleLintPlugin({
@@ -111,15 +111,14 @@ describe('stylelint-webpack-plugin', function () {
   });
 
   context('without StyleLintPlugin configuration', function () {
-    var config = {
-      context: './test/fixtures/lint-free',
+    const config = {
       plugins: [
         new StyleLintPlugin()
       ]
     };
 
     it('works by using stylelint#cosmiconfig under the hood', function () {
-      return pack(assign({}, baseConfig, config))
+      return pack(assign({}, baseConfig, config, { context: './test/fixtures/lint-free' }))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(0);
@@ -136,7 +135,7 @@ describe('stylelint-webpack-plugin', function () {
 
   context('interop with NoErrorsPlugin', function () {
     it('works when failOnError is false', function () {
-      var config = {
+      const config = {
         context: './test/fixtures/single-error',
         plugins: [
           new StyleLintPlugin({
@@ -154,8 +153,7 @@ describe('stylelint-webpack-plugin', function () {
     });
 
     context('when failOnError is true', function () {
-      var config = {
-        context: './test/fixtures/single-error',
+      const config = {
         plugins: [
           new StyleLintPlugin({
             configFile: configFilePath,
@@ -167,7 +165,7 @@ describe('stylelint-webpack-plugin', function () {
       };
 
       it('throws when there is an error', function () {
-        return pack(assign({}, baseConfig, config))
+        return pack(assign({}, baseConfig, config, { context: './test/fixtures/single-error' }))
           .then(expect.fail)
           .catch(function (err) {
             expect(err).to.be.instanceof(Error);
@@ -184,19 +182,26 @@ describe('stylelint-webpack-plugin', function () {
   });
 
   context('when `emitErrors` is disabled', function () {
-    it('emits errors as warnings when asked to', function () {
-      var config = {
-        context: './test/fixtures/single-error',
-        plugins: [
-          new StyleLintPlugin({
-            configFile: configFilePath,
-            quiet: true,
-            emitErrors: false
-          })
-        ]
-      };
+    const config = {
+      plugins: [
+        new StyleLintPlugin({
+          configFile: configFilePath,
+          quiet: true,
+          emitErrors: false
+        })
+      ]
+    };
 
-      return pack(assign({}, baseConfig, config))
+    it('does not print warnings or errors when there are none', function () {
+      return pack(assign({}, baseConfig, config, { context: './test/fixtures/lint-free' }))
+        .then(function (stats) {
+          expect(stats.compilation.errors).to.have.length(0);
+          expect(stats.compilation.warnings).to.have.length(0);
+        });
+    });
+
+    it('emits errors as warnings when asked to', function () {
+      return pack(assign({}, baseConfig, config, { context: './test/fixtures/single-error' }))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(1);
@@ -205,18 +210,7 @@ describe('stylelint-webpack-plugin', function () {
     });
 
     it('still indicates that warnings are warnings, even when emitting errors as warnings too', function () {
-      var config = {
-        context: './test/fixtures/rule-warning',
-        plugins: [
-          new StyleLintPlugin({
-            configFile: configFilePath,
-            quiet: true,
-            emitErrors: false
-          })
-        ]
-      };
-
-      return pack(assign({}, baseConfig, config))
+      return pack(assign({}, baseConfig, config, { context: './test/fixtures/rule-warning' }))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(1);
@@ -227,7 +221,7 @@ describe('stylelint-webpack-plugin', function () {
 
   context('lintDirtyModulesOnly flag is enabled', function () {
     it('skips linting on initial run', function () {
-      var config = {
+      const config = {
         context: './test/fixtures/single-error',
         plugins: [
           new StyleLintPlugin({
@@ -246,7 +240,7 @@ describe('stylelint-webpack-plugin', function () {
     });
 
     it('still skips on initial run with `emitErrors` disabled', function () {
-      var config = {
+      const config = {
         context: './test/fixtures/single-error',
         plugins: [
           new StyleLintPlugin({
