@@ -3436,9 +3436,9 @@ string_decoder@~0.10.x:
   version "0.10.31"
   resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-0.10.31.tgz#62e203bc41766c6c28c9fc84301dab1c5310fa94"
 
-stringify-object@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/stringify-object/-/stringify-object-2.4.0.tgz#c62d11023eb21fe2d9b087be039a26df3b22a09d"
+stringify-object-es5@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/stringify-object-es5/-/stringify-object-es5-2.5.0.tgz#057c3c9a90a127339bb9d1704a290bb7bd0a1ec5"
   dependencies:
     is-plain-obj "^1.0.0"
     is-regexp "^1.0.0"
@@ -3604,13 +3604,13 @@ test-exclude@^3.3.0:
     read-pkg-up "^1.0.1"
     require-main-filename "^1.0.1"
 
-testdouble@^1.10.2:
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/testdouble/-/testdouble-1.11.1.tgz#fcb0096b4c8a41720dddecb339d2df037948d3af"
+testdouble@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/testdouble/-/testdouble-2.0.1.tgz#460fb3bcef0c19e58758c2ceff6911225566b9de"
   dependencies:
     lodash "^4.15.0"
     quibble "^0.4.0"
-    stringify-object "^2.4.0"
+    stringify-object-es5 "^2.5.0"
 
 text-extensions@^1.0.0:
   version "1.4.0"
