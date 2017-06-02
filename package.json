@@ -51,7 +51,7 @@
     "npm-install-version": "^6.0.1",
     "nyc": "^10.0.0",
     "semistandard": "^11.0.0",
-    "testdouble": "^2.0.1"
+    "testdouble": "^3.0.0"
   },
   "scripts": {
     "pretest": "semistandard",
