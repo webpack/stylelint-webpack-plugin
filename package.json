@@ -48,7 +48,7 @@
     "dotenv": "^4.0.0",
     "memory-fs": "^0.4.1",
     "mocha": "^3.1.0",
-    "npm-install-version": "^6.0.1",
+    "npm-install-version": "^6.0.2",
     "nyc": "^10.0.0",
     "semistandard": "^11.0.0",
     "testdouble": "^2.0.1"

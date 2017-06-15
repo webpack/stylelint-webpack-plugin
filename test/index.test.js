@@ -1,6 +1,7 @@
 'use strict';
 
 const assign = require('object-assign');
+const path = require('path');
 const td = require('testdouble');
 
 const StyleLintPlugin = require('../');
@@ -13,7 +14,7 @@ const errorMessage = require('../lib/constants').errorMessage;
 
 describe('stylelint-webpack-plugin', function () {
   it('works with a simple file', function () {
-    return pack(assign({}, baseConfig, { context: './test/fixtures/lint-free' }))
+    return pack(assign({}, baseConfig, { context: path.resolve('./test/fixtures/lint-free') }))
       .then(function (stats) {
         expect(stats.compilation.errors).to.have.length(0);
         expect(stats.compilation.warnings).to.have.length(0);
@@ -21,7 +22,7 @@ describe('stylelint-webpack-plugin', function () {
   });
 
   it('sends errors to the errors output only', function () {
-    return pack(assign({}, baseConfig, { context: './test/fixtures/single-error' }))
+    return pack(assign({}, baseConfig, { context: path.resolve('./test/fixtures/single-error') }))
       .then(function (stats) {
         expect(stats.compilation.errors).to.have.length(1, 'should have one error');
         expect(stats.compilation.warnings).to.have.length(0, 'should have no warnings');
@@ -29,7 +30,7 @@ describe('stylelint-webpack-plugin', function () {
   });
 
   it('works with multiple source files', function () {
-    return pack(assign({}, baseConfig, { context: './test/fixtures/multiple-sources' }))
+    return pack(assign({}, baseConfig, { context: path.resolve('./test/fixtures/multiple-sources') }))
       .then(function (stats) {
         expect(stats.compilation.errors).to.have.length(1);
         expect(stats.compilation.errors[0]).to.contain('test/fixtures/multiple-sources/_second.scss');
@@ -38,7 +39,7 @@ describe('stylelint-webpack-plugin', function () {
   });
 
   it('sends warnings properly', function () {
-    return pack(assign({}, baseConfig, { context: './test/fixtures/rule-warning' }))
+    return pack(assign({}, baseConfig, { context: path.resolve('./test/fixtures/rule-warning') }))
       .then(function (stats) {
         expect(stats.compilation.errors).to.have.length(0);
         expect(stats.compilation.warnings).to.have.length(1);
@@ -47,7 +48,7 @@ describe('stylelint-webpack-plugin', function () {
 
   it('fails on errors when asked to', function () {
     const config = {
-      context: './test/fixtures/single-error',
+      context: path.resolve('./test/fixtures/single-error'),
       plugins: [
         new StyleLintPlugin({
           configFile: configFilePath,
@@ -66,7 +67,7 @@ describe('stylelint-webpack-plugin', function () {
 
   it('fails when .stylelintrc is not a proper format', function () {
     const config = {
-      context: './test/fixtures/single-error',
+      context: path.resolve('./test/fixtures/single-error'),
       plugins: [
         new StyleLintPlugin({
           configFile: getPath('./.badstylelintrc'),
@@ -93,7 +94,7 @@ describe('stylelint-webpack-plugin', function () {
 
     it('sends messages to the console', function () {
       const config = {
-        context: './test/fixtures/syntax-error',
+        context: path.resolve('./test/fixtures/syntax-error'),
         plugins: [
           new StyleLintPlugin({
             configFile: configFilePath,
@@ -118,7 +119,7 @@ describe('stylelint-webpack-plugin', function () {
     };
 
     it('works by using stylelint#cosmiconfig under the hood', function () {
-      return pack(assign({}, baseConfig, config, { context: './test/fixtures/lint-free' }))
+      return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/lint-free') }))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(0);
@@ -126,7 +127,7 @@ describe('stylelint-webpack-plugin', function () {
     });
 
     it('finds the right stylelintrc', function () {
-      return pack(assign({}, baseConfig, config, { context: './test/fixtures/rule-warning' }))
+      return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/rule-warning') }))
         .then(function (stats) {
           expect(stats.compilation.warnings).to.have.length(1);
         });
@@ -136,7 +137,7 @@ describe('stylelint-webpack-plugin', function () {
   context('interop with NoErrorsPlugin', function () {
     it('works when failOnError is false', function () {
       const config = {
-        context: './test/fixtures/single-error',
+        context: path.resolve('./test/fixtures/single-error'),
         plugins: [
           new StyleLintPlugin({
             configFile: configFilePath,
@@ -165,7 +166,7 @@ describe('stylelint-webpack-plugin', function () {
       };
 
       it('throws when there is an error', function () {
-        return pack(assign({}, baseConfig, config, { context: './test/fixtures/single-error' }))
+        return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/single-error') }))
           .then(expect.fail)
           .catch(function (err) {
             expect(err).to.be.instanceof(Error);
@@ -173,7 +174,7 @@ describe('stylelint-webpack-plugin', function () {
       });
 
       it('does not throw when there are only warnings', function () {
-        return pack(assign({}, baseConfig, config, { context: './test/fixtures/rule-warning' }))
+        return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/rule-warning') }))
           .then(function (stats) {
             expect(stats.compilation.warnings).to.have.length(1);
           });
@@ -193,7 +194,7 @@ describe('stylelint-webpack-plugin', function () {
     };
 
     it('does not print warnings or errors when there are none', function () {
-      return pack(assign({}, baseConfig, config, { context: './test/fixtures/lint-free' }))
+      return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/lint-free') }))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(0);
@@ -201,7 +202,7 @@ describe('stylelint-webpack-plugin', function () {
     });
 
     it('emits errors as warnings when asked to', function () {
-      return pack(assign({}, baseConfig, config, { context: './test/fixtures/single-error' }))
+      return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/single-error') }))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(1);
@@ -210,7 +211,7 @@ describe('stylelint-webpack-plugin', function () {
     });
 
     it('still indicates that warnings are warnings, even when emitting errors as warnings too', function () {
-      return pack(assign({}, baseConfig, config, { context: './test/fixtures/rule-warning' }))
+      return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/rule-warning') }))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(1);
@@ -222,7 +223,7 @@ describe('stylelint-webpack-plugin', function () {
   context('lintDirtyModulesOnly flag is enabled', function () {
     it('skips linting on initial run', function () {
       const config = {
-        context: './test/fixtures/single-error',
+        context: path.resolve('./test/fixtures/single-error'),
         plugins: [
           new StyleLintPlugin({
             configFile: configFilePath,
@@ -241,7 +242,7 @@ describe('stylelint-webpack-plugin', function () {
 
     it('still skips on initial run with `emitErrors` disabled', function () {
       const config = {
-        context: './test/fixtures/single-error',
+        context: path.resolve('./test/fixtures/single-error'),
         plugins: [
           new StyleLintPlugin({
             configFile: configFilePath,
