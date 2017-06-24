@@ -33,8 +33,9 @@ describe('stylelint-webpack-plugin', function () {
     return pack(assign({}, baseConfig, { context: path.resolve('./test/fixtures/multiple-sources') }))
       .then(function (stats) {
         expect(stats.compilation.errors).to.have.length(1);
-        expect(stats.compilation.errors[0]).to.contain('test/fixtures/multiple-sources/_second.scss');
-        expect(stats.compilation.errors[0]).to.contain('test/fixtures/multiple-sources/test.scss');
+        expect(stats.compilation.errors[0]).to.be.an.instanceof(Error);
+        expect(stats.compilation.errors[0].message).to.contain('test/fixtures/multiple-sources/_second.scss');
+        expect(stats.compilation.errors[0].message).to.contain('test/fixtures/multiple-sources/test.scss');
       });
   });
 
@@ -206,7 +207,8 @@ describe('stylelint-webpack-plugin', function () {
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(1);
-          expect(stats.compilation.warnings[0]).to.contain('✖');
+          expect(stats.compilation.warnings[0]).to.be.an.instanceof(Error);
+          expect(stats.compilation.warnings[0].message).to.contain('✖');
         });
     });
 
@@ -215,7 +217,8 @@ describe('stylelint-webpack-plugin', function () {
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(1);
-          expect(stats.compilation.warnings[0]).to.contain('⚠');
+          expect(stats.compilation.warnings[0]).to.be.an.instanceof(Error);
+          expect(stats.compilation.warnings[0].message).to.contain('⚠');
         });
     });
   });
