@@ -38,7 +38,7 @@
     "minimatch": "^3.0.3",
     "object-assign": "^4.1.0",
     "ramda": "^0.24.1",
-    "stylelint": "^7.7.0"
+    "stylelint": "^8.0.0"
   },
   "devDependencies": {
     "chai": "^4.0.2",
