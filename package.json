@@ -30,7 +30,7 @@
   ],
   "homepage": "https://github.com/JaKXz/stylelint-webpack-plugin#readme",
   "peerDependencies": {
-    "stylelint": "^7.7.0",
+    "stylelint": "^8.0.0",
     "webpack": "^3 || ^2 || ^2.2.0-rc.0 || ^2.1.0-beta.0 || ^1.13.2"
   },
   "dependencies": {
