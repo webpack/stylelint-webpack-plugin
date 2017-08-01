@@ -43,8 +43,8 @@ See [stylelint options](http://stylelint.io/user-guide/node-api/#options) for th
 
 * `configFile`: You can change the config file location. Default: (`undefined`), handled by [stylelint's cosmiconfig module](http://stylelint.io/user-guide/configuration/).
 * `context`: String indicating the root of your SCSS files. Default: inherits from webpack config.
-* `emitErrors`: Display Stylelint errors as actual errors, rather than just warnings. Default: `true`
-* `failOnError`: Have Webpack's build process die on error. Default: `false`
+* `emitErrors`: Pipe stylelint 'error' severity messages to the error message handler in webpack's current instance. Note when this property is disabled (false) all stylelint messages are piped to webpack's warning message handler. Default: `true`
+* `failOnError`: Throw a fatal error in the global build process (e.g. kill your entire build process on any stylelint 'error' severity message). Default: `false`
 * `files`: Change the glob pattern for finding files. Must be relative to `options.context`. Default: `['**/*.s?(a|c)ss']`
 * `formatter`: Use a custom formatter to print errors to the console. Default: `require('stylelint').formatters.string`
 * `lintDirtyModulesOnly`: Lint only changed files, skip lint on start. Default: `false`
