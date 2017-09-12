@@ -45,7 +45,7 @@ See [stylelint options](http://stylelint.io/user-guide/node-api/#options) for th
 * `context`: String indicating the root of your SCSS files. Default: inherits from webpack config.
 * `emitErrors`: Display Stylelint errors as actual errors, rather than just warnings. Default: `true`
 * `failOnError`: Have Webpack's build process die on error. Default: `false`
-* `files`: Change the glob pattern for finding files. Default: `['**/*.s?(a|c)ss']`
+* `files`: Change the glob pattern for finding files. Must be relative to `options.context`. Default: `['**/*.s?(a|c)ss']`
 * `formatter`: Use a custom formatter to print errors to the console. Default: `require('stylelint').formatters.string`
 * `lintDirtyModulesOnly`: Lint only changed files, skip lint on start. Default: `false`
 * [`syntax`](https://stylelint.io/user-guide/node-api/#syntax): e.g. use `'scss'` to lint .scss files. Default: `undefined`
