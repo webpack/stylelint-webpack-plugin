@@ -44,7 +44,7 @@
     "conventional-github-releaser": "^1.1.3",
     "coveralls": "^3.0.0",
     "cross-env": "^5.1.3",
-    "dotenv": "^4.0.0",
+    "dotenv": "^5.0.0",
     "memory-fs": "^0.4.1",
     "mocha": "^5.0.0",
     "npm-install-version": "^6.0.2",
