@@ -12,7 +12,6 @@ var baseConfig = {
   },
   plugins: [
     new StyleLintPlugin({
-      quiet: true,
       configFile: configFilePath
     })
   ]

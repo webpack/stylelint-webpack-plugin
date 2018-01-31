@@ -49,7 +49,6 @@ See [stylelint options](http://stylelint.io/user-guide/node-api/#options) for th
 * `formatter`: Use a custom formatter to print errors to the console. Default: `require('stylelint').formatters.string`
 * `lintDirtyModulesOnly`: Lint only changed files, skip lint on start. Default: `false`
 * [`syntax`](https://stylelint.io/user-guide/node-api/#syntax): e.g. use `'scss'` to lint .scss files. Default: `undefined`
-* `quiet`: Prints `stylelint` output directly to the console if negated. Default: `true`.
 
 ## Errors
 

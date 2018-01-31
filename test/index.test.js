@@ -13,6 +13,16 @@ const configFilePath = getPath('./.stylelintrc');
 const errorMessage = require('../lib/constants').errorMessage;
 
 describe('stylelint-webpack-plugin', function () {
+  beforeEach(function () {
+    td.replace(console, 'warn', td.function());
+  });
+
+  afterEach(function () {
+    // See https://github.com/JaKXz/stylelint-webpack-plugin/issues/61
+    td.verify(console.warn(), { times: 0, ignoreExtraArgs: true });
+    td.reset();
+  });
+
   it('works with a simple file', function () {
     return pack(assign({}, baseConfig, { context: path.resolve('./test/fixtures/lint-free') }))
       .then(function (stats) {
@@ -53,7 +63,6 @@ describe('stylelint-webpack-plugin', function () {
       plugins: [
         new StyleLintPlugin({
           configFile: configFilePath,
-          quiet: true,
           failOnError: true
         })
       ]
@@ -71,8 +80,7 @@ describe('stylelint-webpack-plugin', function () {
       context: path.resolve('./test/fixtures/single-error'),
       plugins: [
         new StyleLintPlugin({
-          configFile: getPath('./.badstylelintrc'),
-          quiet: true
+          configFile: getPath('./.badstylelintrc')
         })
       ]
     };
@@ -82,34 +90,6 @@ describe('stylelint-webpack-plugin', function () {
       .catch(function (err) {
         expect(err.message).to.contain('Failed to parse').and.contain('as JSON');
       });
-  });
-
-  context('iff quiet is strictly false', function () {
-    beforeEach(function () {
-      td.replace(console, 'warn', td.function());
-    });
-
-    afterEach(function () {
-      td.reset();
-    });
-
-    it('sends messages to the console', function () {
-      const config = {
-        context: path.resolve('./test/fixtures/syntax-error'),
-        plugins: [
-          new StyleLintPlugin({
-            configFile: configFilePath,
-            quiet: false
-          })
-        ]
-      };
-
-      return pack(assign({}, baseConfig, config))
-        .then(function (stats) {
-          expect(stats.compilation.errors).to.have.length(1);
-          td.verify(console.warn(td.matchers.contains(/.*/i)));
-        });
-    });
   });
 
   context('without StyleLintPlugin configuration', function () {
@@ -141,8 +121,7 @@ describe('stylelint-webpack-plugin', function () {
         context: path.resolve('./test/fixtures/single-error'),
         plugins: [
           new StyleLintPlugin({
-            configFile: configFilePath,
-            quiet: true
+            configFile: configFilePath
           }),
           new webpack.NoErrorsPlugin()
         ]
@@ -159,7 +138,6 @@ describe('stylelint-webpack-plugin', function () {
         plugins: [
           new StyleLintPlugin({
             configFile: configFilePath,
-            quiet: true,
             failOnError: true
           }),
           new webpack.NoErrorsPlugin()
@@ -188,7 +166,6 @@ describe('stylelint-webpack-plugin', function () {
       plugins: [
         new StyleLintPlugin({
           configFile: configFilePath,
-          quiet: true,
           emitErrors: false
         })
       ]
@@ -230,7 +207,6 @@ describe('stylelint-webpack-plugin', function () {
         plugins: [
           new StyleLintPlugin({
             configFile: configFilePath,
-            quiet: true,
             lintDirtyModulesOnly: true
           })
         ]
@@ -249,7 +225,6 @@ describe('stylelint-webpack-plugin', function () {
         plugins: [
           new StyleLintPlugin({
             configFile: configFilePath,
-            quiet: true,
             lintDirtyModulesOnly: true,
             emitErrors: false
           })
