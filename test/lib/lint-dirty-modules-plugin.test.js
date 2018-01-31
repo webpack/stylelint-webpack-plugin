@@ -86,8 +86,8 @@ describe('lint-dirty-modules-plugin', function () {
 
       td.verify(doneStub());
       expect(pluginMock.isFirstRun).to.eql(false);
-      td.verify(getChangedFilesStub, {times: 0, ignoreExtraArgs: true});
-      td.verify(runCompilation, {times: 0, ignoreExtraArgs: true});
+      td.verify(getChangedFilesStub(), { times: 0, ignoreExtraArgs: true });
+      td.verify(runCompilation(), { times: 0, ignoreExtraArgs: true });
     });
 
     it('runCompilation is not called if files are not changed', function () {
@@ -96,7 +96,7 @@ describe('lint-dirty-modules-plugin', function () {
       LintDirtyModulesPluginCloned.prototype.lint.call(pluginMock, compilationMock, doneStub);
 
       td.verify(doneStub());
-      td.verify(runCompilation, {times: 0, ignoreExtraArgs: true});
+      td.verify(runCompilation(), { times: 0, ignoreExtraArgs: true });
     });
 
     it('runCompilation is called if styles are changed', function () {
