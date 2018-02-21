@@ -79,6 +79,9 @@
     "globals": [
       "getPath",
       "expect"
+    ],
+    "ignore": [
+      "/lib/StylelintPluginError.js"
     ]
   }
 }

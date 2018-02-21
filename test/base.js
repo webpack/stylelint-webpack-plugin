@@ -24,7 +24,7 @@ describe('stylelint-webpack-plugin', function () {
   });
 
   it('works with a simple file', function () {
-    return pack(assign({}, baseConfig, { context: path.resolve('./test/fixtures/lint-free') }))
+    return pack(assign({}, baseConfig(), { context: path.resolve('./test/fixtures/lint-free') }))
       .then(function (stats) {
         expect(stats.compilation.errors).to.have.length(0);
         expect(stats.compilation.warnings).to.have.length(0);
@@ -32,7 +32,7 @@ describe('stylelint-webpack-plugin', function () {
   });
 
   it('sends errors to the errors output only', function () {
-    return pack(assign({}, baseConfig, { context: path.resolve('./test/fixtures/single-error') }))
+    return pack(assign({}, baseConfig(), { context: path.resolve('./test/fixtures/single-error') }))
       .then(function (stats) {
         expect(stats.compilation.errors).to.have.length(1, 'should have one error');
         expect(stats.compilation.warnings).to.have.length(0, 'should have no warnings');
@@ -40,7 +40,7 @@ describe('stylelint-webpack-plugin', function () {
   });
 
   it('works with multiple source files', function () {
-    return pack(assign({}, baseConfig, { context: path.resolve('./test/fixtures/multiple-sources') }))
+    return pack(assign({}, baseConfig(), { context: path.resolve('./test/fixtures/multiple-sources') }))
       .then(function (stats) {
         expect(stats.compilation.errors).to.have.length(1);
         expect(stats.compilation.errors[0]).to.be.an.instanceof(Error);
@@ -50,10 +50,38 @@ describe('stylelint-webpack-plugin', function () {
   });
 
   it('sends warnings properly', function () {
-    return pack(assign({}, baseConfig, { context: path.resolve('./test/fixtures/rule-warning') }))
+    return pack(assign({}, baseConfig(), { context: path.resolve('./test/fixtures/rule-warning') }))
       .then(function (stats) {
         expect(stats.compilation.errors).to.have.length(0);
         expect(stats.compilation.warnings).to.have.length(1);
+      });
+  });
+
+  it('pushes errors using the webpack formatter', function () {
+    const formatter = { formatter: 'webpack' };
+    return pack(assign({}, baseConfig(formatter), { context: path.resolve('./test/fixtures/single-error') }))
+      .then(function (stats) {
+        expect(stats.compilation.errors).to.have.length(1, 'should have one error');
+        expect(stats.compilation.warnings).to.have.length(0, 'should have no warnings');
+
+        const error = stats.compilation.errors[0];
+
+        expect(error.message).to.contain('test/fixtures/single-error/test.scss');
+        expect(error.message).to.contain('3:1 Unexpected missing end-of-source newline (no-missing-end-of-source-newline)');
+      });
+  });
+
+  it('pushes warnings using the webpack formatter', function () {
+    const formatter = { formatter: 'webpack' };
+    return pack(assign({}, baseConfig(formatter), { context: path.resolve('./test/fixtures/rule-warning') }))
+      .then(function (stats) {
+        expect(stats.compilation.errors).to.have.length(0);
+        expect(stats.compilation.warnings).to.have.length(1);
+
+        const warning = stats.compilation.warnings[0];
+
+        expect(warning.message).to.contain('test/fixtures/rule-warning/test.scss');
+        expect(warning.message).to.contain('2:10 Expected "#FFF" to be "#fff" (color-hex-case)');
       });
   });
 
@@ -68,7 +96,7 @@ describe('stylelint-webpack-plugin', function () {
       ]
     };
 
-    return pack(assign({}, baseConfig, config))
+    return pack(assign({}, baseConfig(), config))
       .then(expect.fail)
       .catch(function (err) {
         expect(err.message).to.equal(errorMessage);
@@ -85,7 +113,7 @@ describe('stylelint-webpack-plugin', function () {
       ]
     };
 
-    return pack(assign({}, baseConfig, config))
+    return pack(assign({}, baseConfig(), config))
       .then(expect.fail)
       .catch(function (err) {
         expect(err.message).to.contain('Failed to parse').and.contain('as JSON');
@@ -100,7 +128,7 @@ describe('stylelint-webpack-plugin', function () {
     };
 
     it('works by using stylelint#cosmiconfig under the hood', function () {
-      return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/lint-free') }))
+      return pack(assign({}, baseConfig(), config, { context: path.resolve('./test/fixtures/lint-free') }))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(0);
@@ -108,7 +136,7 @@ describe('stylelint-webpack-plugin', function () {
     });
 
     it('finds the right stylelintrc', function () {
-      return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/rule-warning') }))
+      return pack(assign({}, baseConfig(), config, { context: path.resolve('./test/fixtures/rule-warning') }))
         .then(function (stats) {
           expect(stats.compilation.warnings).to.have.length(1);
         });
@@ -151,7 +179,7 @@ describe('stylelint-webpack-plugin', function () {
       }
 
       it('throws when there is an error', function () {
-        return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/single-error') }))
+        return pack(assign({}, baseConfig(), config, { context: path.resolve('./test/fixtures/single-error') }))
           .then(expect.fail)
           .catch(function (err) {
             expect(err).to.be.instanceof(Error);
@@ -159,7 +187,7 @@ describe('stylelint-webpack-plugin', function () {
       });
 
       it('does not throw when there are only warnings', function () {
-        return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/rule-warning') }))
+        return pack(assign({}, baseConfig(), config, { context: path.resolve('./test/fixtures/rule-warning') }))
           .then(function (stats) {
             expect(stats.compilation.warnings).to.have.length(1);
           });
@@ -178,7 +206,7 @@ describe('stylelint-webpack-plugin', function () {
     };
 
     it('does not print warnings or errors when there are none', function () {
-      return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/lint-free') }))
+      return pack(assign({}, baseConfig(), config, { context: path.resolve('./test/fixtures/lint-free') }))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(0);
@@ -186,7 +214,7 @@ describe('stylelint-webpack-plugin', function () {
     });
 
     it('emits errors as warnings when asked to', function () {
-      return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/single-error') }))
+      return pack(assign({}, baseConfig(), config, { context: path.resolve('./test/fixtures/single-error') }))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(1);
@@ -196,7 +224,7 @@ describe('stylelint-webpack-plugin', function () {
     });
 
     it('still indicates that warnings are warnings, even when emitting errors as warnings too', function () {
-      return pack(assign({}, baseConfig, config, { context: path.resolve('./test/fixtures/rule-warning') }))
+      return pack(assign({}, baseConfig(), config, { context: path.resolve('./test/fixtures/rule-warning') }))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(1);
@@ -218,7 +246,7 @@ describe('stylelint-webpack-plugin', function () {
         ]
       };
 
-      return pack(assign({}, baseConfig, config))
+      return pack(assign({}, baseConfig(), config))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(0);
@@ -237,7 +265,7 @@ describe('stylelint-webpack-plugin', function () {
         ]
       };
 
-      return pack(assign({}, baseConfig, config))
+      return pack(assign({}, baseConfig(), config))
         .then(function (stats) {
           expect(stats.compilation.errors).to.have.length(0);
           expect(stats.compilation.warnings).to.have.length(0);
