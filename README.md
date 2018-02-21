@@ -50,6 +50,21 @@ See [stylelint options](http://stylelint.io/user-guide/node-api/#options) for th
 * `lintDirtyModulesOnly`: Lint only changed files, skip lint on start. Default: `false`
 * [`syntax`](https://stylelint.io/user-guide/node-api/#syntax): e.g. use `'scss'` to lint .scss files. Default: `undefined`
 
+## Use With Webpack Reporters
+
+When using this plugin with a webpack reporter, such as
+[webpack-stylish](https://github.com/webpack-contrib/webpack-stylish), you must
+set the `formatter` option to `'webpack'` for proper error and warning output. eg:
+
+```js
+plugins: [
+  new StyleLintPlugin({
+    formatter: 'webpack'
+  })
+]
+
+```
+
 ## Errors
 
 The plugin will dump full reporting of errors.
