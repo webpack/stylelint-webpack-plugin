@@ -67,7 +67,7 @@ describe('stylelint-webpack-plugin', function () {
         const error = stats.compilation.errors[0];
 
         expect(error.message).to.contain('test/fixtures/single-error/test.scss');
-        expect(error.message).to.contain('3:1 Unexpected missing end-of-source newline (no-missing-end-of-source-newline)');
+        expect(error.message).to.contain('3:1 stylelint: Unexpected missing end-of-source newline (no-missing-end-of-source-newline)');
       });
   });
 
@@ -81,7 +81,7 @@ describe('stylelint-webpack-plugin', function () {
         const warning = stats.compilation.warnings[0];
 
         expect(warning.message).to.contain('test/fixtures/rule-warning/test.scss');
-        expect(warning.message).to.contain('2:10 Expected "#FFF" to be "#fff" (color-hex-case)');
+        expect(warning.message).to.contain('2:10 stylelint: Expected "#FFF" to be "#fff" (color-hex-case)');
       });
   });
 
