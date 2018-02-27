@@ -4,6 +4,7 @@
 var path = require('path');
 var arrify = require('arrify');
 var assign = require('object-assign');
+var webpack = require('webpack');
 var formatter = require('stylelint').formatters.string;
 
 // Modules
@@ -33,7 +34,11 @@ function apply (options, compiler) {
 
     compiler.plugin('run', runner);
     compiler.plugin('watch-run', function onWatchRun (watcher, done) {
-      runner(watcher.compiler, done);
+      if (watcher.compiler === undefined && watcher instanceof webpack.Compiler) {
+        runner(watcher, done);
+      } else {
+        runner(watcher.compiler, done);
+      }
     });
   }
 }
