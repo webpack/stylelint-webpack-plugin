@@ -33,8 +33,9 @@ function apply (options, compiler) {
 
     if (compiler.hooks) {
       compiler.hooks.run.tapAsync('StylelintWebpackPlugin', runner);
-      compiler.hooks.watchRun.tapAsync('StylelintWebpackPlugin', function onWatchRun (watcher, done) {
-        runner(watcher.compiler, done);
+
+      compiler.hooks.watchRun.tapAsync('StylelintWebpackPlugin', function onWatchRun (compiler, done) {
+        runner(compiler, done);
       });
     } else {
       compiler.plugin('run', runner);
