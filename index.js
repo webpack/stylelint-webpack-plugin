@@ -31,10 +31,17 @@ function apply (options, compiler) {
   } else {
     var runner = runCompilation.bind(this, options);
 
-    compiler.plugin('run', runner);
-    compiler.plugin('watch-run', function onWatchRun (watcher, done) {
-      runner(watcher.compiler, done);
-    });
+    if (compiler.hooks) {
+      compiler.hooks.run.tapAsync('StylelintWebpackPlugin', runner);
+      compiler.hooks.watchRun.tapAsync('StylelintWebpackPlugin', function onWatchRun (watcher, done) {
+        runner(watcher.compiler, done);
+      });
+    } else {
+      compiler.plugin('run', runner);
+      compiler.plugin('watch-run', function onWatchRun (watcher, done) {
+        runner(watcher.compiler, done);
+      });
+    }
   }
 }
 
