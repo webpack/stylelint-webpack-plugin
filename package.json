@@ -1,6 +1,6 @@
 {
   "name": "stylelint-webpack-plugin",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "stylelint plugin for webpack",
   "main": "index.js",
   "keywords": [
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "arrify": "^1.0.1",
-    "micromatch": "^2.3.0",
+    "micromatch": "^3.1.8",
     "object-assign": "^4.1.0",
     "ramda": "^0.25.0"
   },
