@@ -1,6 +1,6 @@
 {
   "name": "stylelint-webpack-plugin",
-  "version": "0.8.0",
+  "version": "0.10.3",
   "description": "stylelint plugin for webpack",
   "main": "index.js",
   "keywords": [
@@ -30,34 +30,34 @@
   ],
   "homepage": "https://github.com/JaKXz/stylelint-webpack-plugin#readme",
   "peerDependencies": {
-    "stylelint": "^7.7.0",
+    "stylelint": "^8.0.0",
     "webpack": "^3 || ^2 || ^2.2.0-rc.0 || ^2.1.0-beta.0 || ^1.13.2"
   },
   "dependencies": {
     "arrify": "^1.0.1",
-    "minimatch": "^3.0.3",
+    "micromatch": "^3.1.8",
     "object-assign": "^4.1.0",
-    "ramda": "^0.24.1",
-    "stylelint": "^7.7.0"
+    "ramda": "^0.25.0"
   },
   "devDependencies": {
     "chai": "^4.0.2",
     "conventional-github-releaser": "^1.1.3",
-    "coveralls": "^2.11.14",
-    "dotenv": "^4.0.0",
+    "coveralls": "^3.0.0",
+    "cross-env": "^5.1.3",
+    "dotenv": "^5.0.0",
     "memory-fs": "^0.4.1",
-    "mocha": "^3.1.0",
+    "mocha": "^5.0.0",
     "npm-install-version": "^6.0.2",
     "npm-run-all": "^4.0.2",
-    "nyc": "^11.0.2",
-    "semistandard": "^11.0.0",
-    "testdouble": "^3.0.0"
+    "nyc": "^11.4.1",
+    "semistandard": "^12.0.0",
+    "stylelint": "^8.4.0",
+    "testdouble": "^3.3.1"
   },
   "scripts": {
     "pretest": "semistandard",
-    "test:webpack1": "WEBPACK_VERSION=1 nyc mocha",
-    "test:webpack2": "WEBPACK_VERSION=2 nyc mocha",
-    "test:webpack3": "WEBPACK_VERSION=3 nyc mocha",
+    "test:webpack1": "cross-env WEBPACK_VERSION=1 nyc mocha",
+    "test:webpack3": "cross-env WEBPACK_VERSION=3 nyc mocha",
     "test": "run-s test:*",
     "preversion": "npm run test",
     "version": "git add -A ."

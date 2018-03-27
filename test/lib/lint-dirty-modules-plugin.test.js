@@ -1,19 +1,19 @@
 'use strict';
 
-var td = require('testdouble');
-var formatter = require('stylelint').formatters.string;
+const td = require('testdouble');
+const formatter = require('stylelint').formatters.string;
 
-var runCompilation = td.replace('../../lib/run-compilation');
+const runCompilation = td.replace('../../lib/run-compilation');
 
-var LintDirtyModulesPlugin = require('../../lib/lint-dirty-modules-plugin');
+const LintDirtyModulesPlugin = require('../../lib/lint-dirty-modules-plugin');
 
-var configFilePath = getPath('./.stylelintrc');
-var glob = require('../../lib/constants').defaultFilesGlob;
+const configFilePath = getPath('./.stylelintrc');
+const glob = require('../../lib/constants').defaultFilesGlob;
 
 describe('lint-dirty-modules-plugin', function () {
-  var LintDirtyModulesPluginCloned;
-  var compilerMock;
-  var optionsMock;
+  let LintDirtyModulesPluginCloned;
+  let compilerMock;
+  let optionsMock;
 
   beforeEach(function () {
     LintDirtyModulesPluginCloned = function () {
@@ -38,15 +38,15 @@ describe('lint-dirty-modules-plugin', function () {
   });
 
   it('lint is called on "emit"', function () {
-    var lintStub = td.function();
-    var doneStub = td.function();
+    const lintStub = td.function();
+    const doneStub = td.function();
     LintDirtyModulesPluginCloned.prototype.lint = lintStub;
-    var compilationMock = {
+    const compilationMock = {
       fileTimestamps: {
         '/updated.scss': 5
       }
     };
-    var plugin = new LintDirtyModulesPluginCloned(compilerMock, optionsMock);
+    const plugin = new LintDirtyModulesPluginCloned(compilerMock, optionsMock);
 
     compilerMock.callback(compilationMock, doneStub);
 
@@ -55,14 +55,14 @@ describe('lint-dirty-modules-plugin', function () {
   });
 
   context('#lint()', function () {
-    var getChangedFilesStub;
-    var doneStub;
-    var compilationMock;
-    var fileTimestamps = {
+    let getChangedFilesStub;
+    let doneStub;
+    let compilationMock;
+    const fileTimestamps = {
       '/test/changed.scss': 5,
       '/test/newly-created.scss': 5
     };
-    var pluginMock;
+    let pluginMock;
     beforeEach(function () {
       getChangedFilesStub = td.function();
       doneStub = td.function();
@@ -86,8 +86,8 @@ describe('lint-dirty-modules-plugin', function () {
 
       td.verify(doneStub());
       expect(pluginMock.isFirstRun).to.eql(false);
-      td.verify(getChangedFilesStub, {times: 0, ignoreExtraArgs: true});
-      td.verify(runCompilation, {times: 0, ignoreExtraArgs: true});
+      td.verify(getChangedFilesStub(), { times: 0, ignoreExtraArgs: true });
+      td.verify(runCompilation(), { times: 0, ignoreExtraArgs: true });
     });
 
     it('runCompilation is not called if files are not changed', function () {
@@ -96,7 +96,7 @@ describe('lint-dirty-modules-plugin', function () {
       LintDirtyModulesPluginCloned.prototype.lint.call(pluginMock, compilationMock, doneStub);
 
       td.verify(doneStub());
-      td.verify(runCompilation, {times: 0, ignoreExtraArgs: true});
+      td.verify(runCompilation(), { times: 0, ignoreExtraArgs: true });
     });
 
     it('runCompilation is called if styles are changed', function () {
@@ -113,7 +113,7 @@ describe('lint-dirty-modules-plugin', function () {
   });
 
   context('#getChangedFiles()', function () {
-    var pluginMock;
+    let pluginMock;
     before(function () {
       pluginMock = {
         compiler: compilerMock,
@@ -129,13 +129,13 @@ describe('lint-dirty-modules-plugin', function () {
     });
 
     it('returns changed style files', function () {
-      var fileTimestamps = {
+      const fileTimestamps = {
         '/test/changed.scss': 20,
         '/test/changed.js': 20,
         '/test/newly-created.scss': 15
       };
 
-      var changedFiles = LintDirtyModulesPluginCloned.prototype.getChangedFiles.call(pluginMock, fileTimestamps, glob);
+      const changedFiles = LintDirtyModulesPluginCloned.prototype.getChangedFiles.call(pluginMock, fileTimestamps, glob);
 
       expect(changedFiles).to.eql([
         '/test/changed.scss',
