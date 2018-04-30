@@ -1,35 +1,34 @@
-'use strict';
+const path = require('path');
+const arrify = require('arrify');
+const assign = require('object-assign');
+const formatter = require('stylelint').formatters.string;
+const runCompilation = require('./lib/run-compilation');
+const LintDirtyModulesPlugin = require('./lib/lint-dirty-modules-plugin');
+const { defaultFilesGlob } = require('./lib/constants');
 
-// Dependencies
-var path = require('path');
-var arrify = require('arrify');
-var assign = require('object-assign');
-var formatter = require('stylelint').formatters.string;
-
-// Modules
-var runCompilation = require('./lib/run-compilation');
-var LintDirtyModulesPlugin = require('./lib/lint-dirty-modules-plugin');
-var defaultFilesGlob = require('./lib/constants').defaultFilesGlob;
-
-function apply (options, compiler) {
+function apply(options, compiler) {
   options = options || {};
-  var context = options.context || compiler.context;
+  const context = options.context || compiler.context;
 
-  options = assign({
-    formatter: formatter
-  }, options, {
-    // Default Glob is any directory level of scss and/or sass file,
-    // under webpack's context and specificity changed via globbing patterns
-    files: arrify(options.files || defaultFilesGlob).map(function (file) {
-      return path.join(context, '/', file);
-    }),
-    context: context
-  });
+  options = assign(
+    {
+      formatter,
+    },
+    options,
+    {
+      // Default Glob is any directory level of scss and/or sass file,
+      // under webpack's context and specificity changed via globbing patterns
+      files: arrify(options.files || defaultFilesGlob).map((file) =>
+        path.join(context, '/', file)
+      ),
+      context,
+    }
+  );
 
   if (options.lintDirtyModulesOnly) {
     new LintDirtyModulesPlugin(compiler, options); // eslint-disable-line no-new
   } else {
-    var runner = runCompilation.bind(this, options);
+    const runner = runCompilation.bind(this, options);
 
     if (compiler.hooks) {
       const pluginName = 'StylelintWebpackPlugin';
@@ -39,7 +38,7 @@ function apply (options, compiler) {
       });
     } else {
       compiler.plugin('run', runner);
-      compiler.plugin('watch-run', function onWatchRun (watcher, done) {
+      compiler.plugin('watch-run', (watcher, done) => {
         runner(watcher.compiler, done);
       });
     }
@@ -52,8 +51,8 @@ function apply (options, compiler) {
  * @param options - from webpack config, see defaults in `apply` function.
  * @return {Object} the bound apply function
  */
-module.exports = function stylelintWebpackPlugin (options) {
+module.exports = function stylelintWebpackPlugin(options) {
   return {
-    apply: apply.bind(this, options)
+    apply: apply.bind(this, options),
   };
 };

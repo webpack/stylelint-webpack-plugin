@@ -1,18 +1,16 @@
-'use strict';
-
-var MemoryFileSystem = require('memory-fs');
-var webpack = require('./webpack');
+const MemoryFileSystem = require('memory-fs');
+const webpack = require('./webpack');
 
 /**
  * Basic in memory compiler, promisified
  * @param testConfig - the plugin config being tested run through the webpack compiler
  * @return {Promise} - rejects with both stats and the error if needed
  */
-module.exports = function pack (testConfig) {
-  return new Promise(function (resolve, reject) {
-    var compiler = webpack(testConfig);
+module.exports = function pack(testConfig) {
+  return new Promise((resolve, reject) => {
+    const compiler = webpack(testConfig);
     compiler.outputFileSystem = new MemoryFileSystem();
-    compiler.run(function (err, stats) {
+    compiler.run((err, stats) => {
       if (err) {
         return reject(err);
       }

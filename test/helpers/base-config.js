@@ -1,20 +1,18 @@
-'use strict';
+const StyleLintPlugin = require('../../');
+const webpack = require('./webpack');
 
-var StyleLintPlugin = require('../../');
-var webpack = require('./webpack');
+const configFilePath = getPath('./.stylelintrc');
 
-var configFilePath = getPath('./.stylelintrc');
-
-var baseConfig = {
+const baseConfig = {
   entry: './index',
   output: {
-    path: getPath('output')
+    path: getPath('output'),
   },
   plugins: [
     new StyleLintPlugin({
-      configFile: configFilePath
-    })
-  ]
+      configFile: configFilePath,
+    }),
+  ],
 };
 
 if (typeof webpack.LoaderOptionsPlugin === 'undefined') {
@@ -22,7 +20,7 @@ if (typeof webpack.LoaderOptionsPlugin === 'undefined') {
 } else {
   baseConfig.plugins.push(
     new webpack.LoaderOptionsPlugin({
-      debug: false
+      debug: false,
     })
   );
 }
