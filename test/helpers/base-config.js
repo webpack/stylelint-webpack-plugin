@@ -1,13 +1,13 @@
-'use strict';
+const StyleLintPlugin = require('../../');
+const webpack = require('./webpack');
 
-var StyleLintPlugin = require('../../');
-var webpack = require('./webpack');
+const configFilePath = getPath('./.stylelintrc');
 
 module.exports = function (options) {
-  var configFilePath = getPath('./.stylelintrc');
+  const configFilePath = getPath('./.stylelintrc');
   const pluginOptions = Object.assign({ configFile: configFilePath }, options || {});
 
-  var baseConfig = {
+  const baseConfig = {
     entry: './index',
     output: {
       path: getPath('output')
@@ -26,6 +26,7 @@ module.exports = function (options) {
       })
     );
   }
+
 
 if (process.env.WEBPACK_VERSION === '4') {
   baseConfig.mode = 'development';

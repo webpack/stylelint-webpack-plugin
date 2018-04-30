@@ -1,0 +1,9 @@
+{
+  "globals": {
+    "getPath": true
+  },
+  "rules": {
+    "import/no-dynamic-require": "off",
+    "no-console": "off"
+  }
+}

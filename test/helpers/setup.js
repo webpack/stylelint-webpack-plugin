@@ -1,6 +1,4 @@
-'use strict';
-
-var chai = require('chai');
+const chai = require('chai');
 
 global.expect = chai.expect;
 

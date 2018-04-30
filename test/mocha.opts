@@ -1,7 +1,7 @@
 --require ./test/helpers/setup.js
 --harmony
 --full-trace
---check-leaks
 --recursive
 --ui bdd
-test/**/*.test.js
+--exit
+test/test.js
