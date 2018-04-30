@@ -133,6 +133,21 @@ See the `styelint`
 [user guide](https://stylelint.io/user-guide/node-api/#syntax) for more info.
 e.g. use `'scss'` to lint .scss files.
 
+## Use With Webpack Reporters
+
+When using this plugin with a webpack reporter, such as
+[webpack-stylish](https://github.com/webpack-contrib/webpack-stylish), you must
+set the `formatter` option to `'webpack'` for proper error and warning output. eg:
+
+```js
+plugins: [
+  new StyleLintPlugin({
+    formatter: 'webpack'
+  })
+]
+
+```
+
 ## Error Reporting
 
 By default the plugin will dump full reporting of errors. Set `failOnError` to

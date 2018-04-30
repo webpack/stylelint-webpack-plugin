@@ -5,6 +5,7 @@ const formatter = require('stylelint').formatters.string;
 const runCompilation = require('./lib/run-compilation');
 const LintDirtyModulesPlugin = require('./lib/lint-dirty-modules-plugin');
 const { defaultFilesGlob } = require('./lib/constants');
+const webpackFormatter = require('./lib/formatter-webpack');
 
 function apply(options, compiler) {
   options = options || {};
@@ -24,6 +25,10 @@ function apply(options, compiler) {
       context,
     }
   );
+
+  if (options.formatter === 'webpack') {
+    options.formatter = webpackFormatter;
+  }
 
   if (options.lintDirtyModulesOnly) {
     new LintDirtyModulesPlugin(compiler, options); // eslint-disable-line no-new

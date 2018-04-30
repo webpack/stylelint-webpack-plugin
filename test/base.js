@@ -22,7 +22,7 @@ describe('stylelint-webpack-plugin', () => {
 
   it('works with a simple file', () =>
     pack(
-      assign({}, baseConfig, {
+      assign({}, baseConfig(), {
         context: path.resolve('./test/fixtures/lint-free'),
       })
     ).then((stats) => {
@@ -32,7 +32,7 @@ describe('stylelint-webpack-plugin', () => {
 
   it('sends errors to the errors output only', () =>
     pack(
-      assign({}, baseConfig, {
+      assign({}, baseConfig(), {
         context: path.resolve('./test/fixtures/single-error'),
       })
     ).then((stats) => {
@@ -48,7 +48,7 @@ describe('stylelint-webpack-plugin', () => {
 
   it('works with multiple source files', () =>
     pack(
-      assign({}, baseConfig, {
+      assign({}, baseConfig(), {
         context: path.resolve('./test/fixtures/multiple-sources'),
       })
     ).then((stats) => {
@@ -64,7 +64,7 @@ describe('stylelint-webpack-plugin', () => {
 
   it('sends warnings properly', () =>
     pack(
-      assign({}, baseConfig, {
+      assign({}, baseConfig(), {
         context: path.resolve('./test/fixtures/rule-warning'),
       })
     ).then((stats) => {
@@ -83,7 +83,7 @@ describe('stylelint-webpack-plugin', () => {
       ],
     };
 
-    return pack(assign({}, baseConfig, config))
+    return pack(assign({}, baseConfig(), config))
       .then(expect.fail)
       .catch((err) => {
         expect(err.message).to.equal(errorMessage);
@@ -100,7 +100,7 @@ describe('stylelint-webpack-plugin', () => {
       ],
     };
 
-    return pack(assign({}, baseConfig, config))
+    return pack(assign({}, baseConfig(), config))
       .then(expect.fail)
       .catch((err) => {
         expect(err.message)
@@ -116,7 +116,7 @@ describe('stylelint-webpack-plugin', () => {
 
     it('works by using stylelint#cosmiconfig under the hood', () =>
       pack(
-        assign({}, baseConfig, config, {
+        assign({}, baseConfig(), config, {
           context: path.resolve('./test/fixtures/lint-free'),
         })
       ).then((stats) => {
@@ -126,7 +126,7 @@ describe('stylelint-webpack-plugin', () => {
 
     it('finds the right stylelintrc', () =>
       pack(
-        assign({}, baseConfig, config, {
+        assign({}, baseConfig(), config, {
           context: path.resolve('./test/fixtures/rule-warning'),
         })
       ).then((stats) => {
@@ -170,7 +170,7 @@ describe('stylelint-webpack-plugin', () => {
 
       it('throws when there is an error', () =>
         pack(
-          assign({}, baseConfig, config, {
+          assign({}, baseConfig(), config, {
             context: path.resolve('./test/fixtures/single-error'),
           })
         )
@@ -181,7 +181,7 @@ describe('stylelint-webpack-plugin', () => {
 
       it('does not throw when there are only warnings', () =>
         pack(
-          assign({}, baseConfig, config, {
+          assign({}, baseConfig(), config, {
             context: path.resolve('./test/fixtures/rule-warning'),
           })
         ).then((stats) => {
@@ -202,7 +202,7 @@ describe('stylelint-webpack-plugin', () => {
 
     it('does not print warnings or errors when there are none', () =>
       pack(
-        assign({}, baseConfig, config, {
+        assign({}, baseConfig(), config, {
           context: path.resolve('./test/fixtures/lint-free'),
         })
       ).then((stats) => {
@@ -212,7 +212,7 @@ describe('stylelint-webpack-plugin', () => {
 
     it('emits errors as warnings when asked to', () =>
       pack(
-        assign({}, baseConfig, config, {
+        assign({}, baseConfig(), config, {
           context: path.resolve('./test/fixtures/single-error'),
         })
       ).then((stats) => {
@@ -224,7 +224,7 @@ describe('stylelint-webpack-plugin', () => {
 
     it('still indicates that warnings are warnings, even when emitting errors as warnings too', () =>
       pack(
-        assign({}, baseConfig, config, {
+        assign({}, baseConfig(), config, {
           context: path.resolve('./test/fixtures/rule-warning'),
         })
       ).then((stats) => {
@@ -247,7 +247,7 @@ describe('stylelint-webpack-plugin', () => {
         ],
       };
 
-      return pack(assign({}, baseConfig, config)).then((stats) => {
+      return pack(assign({}, baseConfig(), config)).then((stats) => {
         expect(stats.compilation.errors).to.have.length(0);
         expect(stats.compilation.warnings).to.have.length(0);
       });
@@ -265,7 +265,7 @@ describe('stylelint-webpack-plugin', () => {
         ],
       };
 
-      return pack(assign({}, baseConfig, config)).then((stats) => {
+      return pack(assign({}, baseConfig(), config)).then((stats) => {
         expect(stats.compilation.errors).to.have.length(0);
         expect(stats.compilation.warnings).to.have.length(0);
       });
