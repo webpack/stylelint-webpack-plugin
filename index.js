@@ -1,7 +1,9 @@
 const path = require('path');
+
 const arrify = require('arrify');
 const assign = require('object-assign');
 const formatter = require('stylelint').formatters.string;
+
 const runCompilation = require('./lib/run-compilation');
 const LintDirtyModulesPlugin = require('./lib/lint-dirty-modules-plugin');
 const { defaultFilesGlob } = require('./lib/constants');
