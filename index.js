@@ -22,7 +22,9 @@ function apply(options, compiler) {
       // under webpack's context and specificity changed via globbing patterns
       files: arrify(options.files || defaultFilesGlob).map((file) =>
         path.join(context, '/', file)
-      ),
+      ).concat(arrify(options.excludeFiles).map((file) =>
+        `!${path.join(context, '/', file)}`
+      )),
       context,
     }
   );
