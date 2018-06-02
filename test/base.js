@@ -1,8 +1,11 @@
 const path = require('path');
+
 const assign = require('object-assign');
 const td = require('testdouble');
+
 const StyleLintPlugin = require('../');
 const { errorMessage } = require('../lib/constants');
+
 const pack = require('./helpers/pack');
 const webpack = require('./helpers/webpack');
 const baseConfig = require('./helpers/base-config');
@@ -103,9 +106,7 @@ describe('stylelint-webpack-plugin', () => {
     return pack(assign({}, baseConfig, config))
       .then(expect.fail)
       .catch((err) => {
-        expect(err.message)
-          .to.contain('Failed to parse')
-          .and.contain('as JSON');
+        expect(err.message).to.match(/duplicated mapping key|Failed to parse/);
       });
   });
 

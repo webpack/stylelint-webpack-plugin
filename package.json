@@ -1,6 +1,6 @@
 {
   "name": "stylelint-webpack-plugin",
-  "version": "0.10.5",
+  "version": "0.10.6",
   "publishConfig": {
     "tag": "next"
   },
@@ -46,7 +46,7 @@
     "webpack-plugin"
   ],
   "peerDependencies": {
-    "stylelint": "^8.0.0",
+    "stylelint": "^8.0.0 || ^9.2.0",
     "webpack": "^1.13.2 || ^2.7.0 || ^3.11.0 || ^4.4.0"
   },
   "dependencies": {
@@ -84,7 +84,7 @@
     "pre-commit": "^1.2.2",
     "prettier": "^1.11.1",
     "standard-version": "^4.3.0",
-    "stylelint": "^8.4.0",
+    "stylelint": "^9.2.1",
     "testdouble": "^3.3.1",
     "webpack": "^4.4.1",
     "webpack-defaults": "^2.1.1"
