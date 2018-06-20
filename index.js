@@ -20,8 +20,8 @@ function apply(options, compiler) {
     {
       // Default Glob is any directory level of scss and/or sass file,
       // under webpack's context and specificity changed via globbing patterns
-      files: arrify(options.files || defaultFilesGlob).map((file) =>
-        path.join(context, '/', file)
+      files: arrify(options.files || defaultFilesGlob).map(
+        (file) => (path.isAbsolute(file) ? file : path.join(context, '/', file))
       ),
       context,
     }
