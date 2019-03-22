@@ -106,9 +106,6 @@ jobs:
           name: NPM Rebuild
           command: npm install
       - run:
-          name: Validate Commit Messages
-          command: npm run release:validate
-      - run:
           name: Publish to NPM
           command: printf "noop running conventional-github-releaser"
 
