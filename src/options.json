@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "configFile": {
+      "description": "Specify the config file location to be used by `stylelint`.",
+      "type": "string"
+    },
+    "context": {
+      "description": "A `String` indicating the root of your `SCSS` files.",
+      "type": "string"
+    },
+    "emitErrors": {
+      "description": "If true, pipes `stylelint` error severity messages to the `webpack` compiler's error message handler.",
+      "type": "boolean"
+    },
+    "failOnError": {
+      "description": "If true, throws a fatal error in the global build process. This will end the build process on any `stylelint` error.",
+      "type": "boolean"
+    },
+    "files": {
+      "description": "Specify the glob pattern for finding files. Must be relative to `options.context`.",
+      "anyOf": [{ "type": "string" }, { "type": "array" }]
+    },
+    "formatter": {
+      "description": "Specify a custom formatter to format errors printed to the console.",
+      "instanceof": "Function"
+    },
+    "lintDirtyModulesOnly": {
+      "description": "Lint only changed files, skip lint on start.",
+      "type": "boolean"
+    },
+    "syntax": {
+      "description": "See the `styelint` [user guide](https://stylelint.io/user-guide/node-api/#syntax) for more info. e.g. use `'scss'` to lint .scss files.",
+      "type": "string"
+    }
+  }
+}
