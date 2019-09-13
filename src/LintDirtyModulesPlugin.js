@@ -33,12 +33,23 @@ export default class LintDirtyModulesPlugin {
 
   getChangedFiles(fileTimestamps, glob) {
     const hasFileChanged = (filename, timestamp) => {
-      const prevTimestamps = this.prevTimestamps[filename]
-        ? this.prevTimestamps[filename]
-        : this.startTime;
+      const prevTimestamp =
+        this.prevTimestamps instanceof Map
+          ? this.prevTimestamps.get(filename)
+          : this.prevTimestamps[filename];
 
-      return prevTimestamps < timestamp ? timestamp : Infinity;
+      return (prevTimestamp || this.startTime) < (timestamp || Infinity);
     };
+
+    if (fileTimestamps instanceof Map) {
+      const changedFiles = [];
+      for (const [filename, timestamp] of fileTimestamps.entries()) {
+        if (hasFileChanged(filename, timestamp) && isMatch(filename, glob)) {
+          changedFiles.push(filename);
+        }
+      }
+      return changedFiles;
+    }
 
     return Object.keys(fileTimestamps).filter(
       (filename) =>
