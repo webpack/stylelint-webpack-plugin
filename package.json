@@ -60,6 +60,7 @@
     "eslint-config-prettier": "^6.3.0",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-plugin-import": "^2.18.2",
+    "file-loader": "^4.2.0",
     "husky": "^3.0.5",
     "jest": "^24.9.0",
     "jest-junit": "^8.0.0",

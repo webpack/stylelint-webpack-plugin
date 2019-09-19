@@ -1,3 +1,1 @@
-require(`${getPath('./../../../node_modules/file-loader/index')}!./test.scss`);
-
-console.log('test1');
+require('file-loader!./test.scss');

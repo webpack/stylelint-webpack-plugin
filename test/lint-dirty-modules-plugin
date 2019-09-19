@@ -1,9 +1,9 @@
 // eslint-disable-next-line import/order
 const td = require('testdouble');
 
-const runCompilation = td.replace('../../lib/run-compilation');
+const runCompilation = td.replace('../lib/run-compilation');
 
-const { string: formatter } = require('stylelint').formatters;
+const { formatters } = require('stylelint');
 const LintDirtyModulesPlugin = require('../../lib/lint-dirty-modules-plugin');
 const { defaultFilesGlob: glob } = require('../../lib/constants');
 
@@ -34,7 +34,7 @@ describe('lint-dirty-modules-plugin', () => {
     optionsMock = {
       configFile: configFilePath,
       lintDirtyModulesOnly: true,
-      formatter,
+      formatter: formatters.string,
       files: [glob],
     };
   });
