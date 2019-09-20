@@ -1,6 +1,6 @@
 import { isMatch } from 'micromatch';
 
-import runCompilation from './runCompilation';
+import linter from './linter';
 
 export default class LintDirtyModulesPlugin {
   constructor(options) {
@@ -15,6 +15,7 @@ export default class LintDirtyModulesPlugin {
       this.isFirstRun = false;
       this.prevTimestamps = compiler.fileTimestamps;
       callback();
+      return;
     }
 
     const dirtyOptions = { ...this.options };
@@ -25,7 +26,7 @@ export default class LintDirtyModulesPlugin {
 
     if (changedFiles.length) {
       dirtyOptions.files = changedFiles;
-      runCompilation(dirtyOptions, compiler, callback);
+      linter(dirtyOptions, compiler, callback);
     } else {
       callback();
     }
@@ -43,11 +44,13 @@ export default class LintDirtyModulesPlugin {
 
     if (fileTimestamps instanceof Map) {
       const changedFiles = [];
+
       for (const [filename, timestamp] of fileTimestamps.entries()) {
         if (hasFileChanged(filename, timestamp) && isMatch(filename, glob)) {
           changedFiles.push(filename);
         }
       }
+
       return changedFiles;
     }
 

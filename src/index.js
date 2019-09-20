@@ -4,7 +4,7 @@ import arrify from 'arrify';
 
 import getOptions from './getOptions';
 import LintDirtyModulesPlugin from './LintDirtyModulesPlugin';
-import runCompilation from './runCompilation';
+import linter from './linter';
 
 class StylelintWebpackPlugin {
   constructor(options = {}) {
@@ -28,11 +28,11 @@ class StylelintWebpackPlugin {
       });
     } else {
       compiler.hooks.run.tapAsync(plugin, (compilation, callback) => {
-        runCompilation(options, compilation, callback);
+        linter(options, compilation, callback);
       });
 
       compiler.hooks.watchRun.tapAsync(plugin, (compilation, callback) => {
-        runCompilation(options, compilation, callback);
+        linter(options, compilation, callback);
       });
     }
   }
