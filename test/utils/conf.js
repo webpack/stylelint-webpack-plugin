@@ -2,16 +2,19 @@ import { join } from 'path';
 
 import StyleLintPlugin from '../../src/index';
 
-export default (webpackConf, pluginConf) => {
+export default (context, webpackConf = {}, pluginConf = {}) => {
+  const testDir = join(__dirname, '..');
+
   return {
+    context: join(testDir, 'fixtures', context),
     mode: 'development',
     entry: './index',
     output: {
-      path: join(__dirname, '..', 'output'),
+      path: join(testDir, 'output'),
     },
     plugins: [
       new StyleLintPlugin({
-        configFile: join(__dirname, '..', '.stylelintrc'),
+        configFile: join(testDir, '.stylelintrc'),
         ...pluginConf,
       }),
     ],

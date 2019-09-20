@@ -1,12 +1,8 @@
-import { resolve } from 'path';
-
 import pack from './utils/pack';
 
-describe('stylelint-webpack-plugin', () => {
+describe('ok', () => {
   it('works with a simple file', (done) => {
-    const compiler = pack({
-      context: resolve('./test/fixtures/lint-free'),
-    });
+    const compiler = pack('ok');
 
     compiler.run((err, stats) => {
       expect(stats.hasWarnings()).toBe(false);
