@@ -7,16 +7,8 @@
       "type": "string"
     },
     "context": {
-      "description": "A `String` indicating the root of your `SCSS` files.",
+      "description": "A `String` indicating the root of your style files.",
       "type": "string"
-    },
-    "emitErrors": {
-      "description": "If true, pipes `stylelint` error severity messages to the `webpack` compiler's error message handler.",
-      "type": "boolean"
-    },
-    "failOnError": {
-      "description": "If true, throws a fatal error in the global build process. This will end the build process on any `stylelint` error.",
-      "type": "boolean"
     },
     "files": {
       "description": "Specify the glob pattern for finding files. Must be relative to `options.context`.",
@@ -33,6 +25,26 @@
     "syntax": {
       "description": "See the `styelint` [user guide](https://stylelint.io/user-guide/node-api/#syntax) for more info. e.g. use `'scss'` to lint .scss files.",
       "type": "string"
+    },
+    "emitError": {
+      "description": "Will always return errors, if this option is set to `true`.",
+      "type": "boolean"
+    },
+    "emitWarning": {
+      "description": "Will always return warnings, if option is set to `true`.",
+      "type": "boolean"
+    },
+    "failOnError": {
+      "description": "Will cause the module build to fail if there are any errors, if option is set to `true`.",
+      "type": "boolean"
+    },
+    "failOnWarning": {
+      "description": "Will cause the module build to fail if there are any warnings, if option is set to `true`.",
+      "type": "boolean"
+    },
+    "quiet": {
+      "description": "Will process and report errors only and ignore warnings, if this option is set to `true`.",
+      "type": "boolean"
     }
   }
 }

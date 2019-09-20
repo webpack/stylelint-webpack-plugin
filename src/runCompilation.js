@@ -9,7 +9,11 @@ export default function runCompilation(options, compiler, callback) {
 
   lint(options)
     .then(({ results }) => {
-      if (options.emitErrors === false) {
+      if (options.emitError) {
+        errors = results.filter(
+          (file) => fileHasErrors(file) || fileHasWarnings(file)
+        );
+      } else if (options.emitWarning) {
         warnings = results.filter(
           (file) => fileHasErrors(file) || fileHasWarnings(file)
         );
@@ -20,15 +24,21 @@ export default function runCompilation(options, compiler, callback) {
         errors = results.filter(fileHasErrors);
       }
 
+      if (options.quiet && warnings.length) {
+        warnings = [];
+      }
+
       if (options.failOnError && errors.length) {
-        callback(new Error('Failed because of a stylelint error.'));
+        callback(new Error(options.formatter(errors)));
+      } else if (options.failOnWarning && warnings.length) {
+        callback(new Error(options.formatter(warnings)));
       } else {
         callback();
       }
     })
     .catch(callback);
 
-  compiler.hooks[options.emitErrors ? 'afterCompile' : 'afterEmit'].tapAsync(
+  compiler.hooks.afterCompile.tapAsync(
     'StylelintWebpackPlugin',
     (compilation, next) => {
       if (warnings.length) {

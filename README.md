@@ -54,35 +54,14 @@ the complete list of options available. These options are passed through to the
 
 Specify the config file location to be used by `stylelint`.
 
-_Note: By default this is
-[handled by `stylelint`](http://stylelint.io/user-guide/configuration/) via
-cosmiconfig._
+_Note: By default this is [handled by `stylelint`](http://stylelint.io/user-guide/configuration/)._
 
 ### `context`
 
 - Type: `String`
 - Default: `compiler.context`
 
-A `String` indicating the root of your `SCSS` files.
-
-### `emitErrors`
-
-- Type: `Boolean`
-- Default: `true`
-
-If true, pipes `stylelint` error severity messages to the `webpack` compiler's
-error message handler.
-
-_Note: When this property is disabled all `stylelint` messages are piped to the
-`webpack` compiler's warning message handler._
-
-### `failOnError`
-
-- Type: `Boolean`
-- Default: `false`
-
-If true, throws a fatal error in the global build process. This will end the
-build process on any `stylelint` error.
+A `String` indicating the root of your style files.
 
 ### `files`
 
@@ -113,11 +92,45 @@ Lint only changed files, skip lint on start.
 See the `styelint` [user guide](https://stylelint.io/user-guide/node-api/#syntax) for more info.
 e.g. use `'scss'` to lint .scss files.
 
-## Error Reporting
+### Errors and Warning
 
-By default the plugin will dump full reporting of errors. Set `failOnError` to
-true if you want `webpack` build process breaking with any stylelint error. You
-can use the `quiet` option to avoid error output to the console.
+**By default the plugin will auto adjust error reporting depending on stylelint errors/warnings counts.**
+You can still force this behavior by using `emitError` **or** `emitWarning` options:
+
+#### `emitError`
+
+- Type: `Boolean`
+- Default: `false`
+
+Will always return errors, if this option is set to `true`.
+
+#### `emitWarning`
+
+- Type: `Boolean`
+- Default: `false`
+
+Will always return warnings, if option is set to `true`.
+
+#### `failOnError`
+
+- Type: `Boolean`
+- Default: `false`
+
+Will cause the module build to fail if there are any errors, if option is set to `true`.
+
+#### `failOnWarning`
+
+- Type: `Boolean`
+- Default: `false`
+
+Will cause the module build to fail if there are any warnings, if option is set to `true`.
+
+#### `quiet`
+
+- Type: `Boolean`
+- Default: `false`
+
+Will process and report errors only and ignore warnings, if this option is set to `true`.
 
 ## Acknowledgement
 
