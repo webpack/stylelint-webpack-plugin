@@ -1,7 +1,5 @@
 import validateOptions from 'schema-utils';
 
-import { formatters } from 'stylelint';
-
 import schema from './options.json';
 
 export default function getOptions(options) {
@@ -10,9 +8,15 @@ export default function getOptions(options) {
     baseDataPath: 'options',
   });
 
+  const stylelintPath = options.stylelintPath || 'stylelint';
+
+  // eslint-disable-next-line
+  const { formatters } = require(stylelintPath);
+
   return {
     files: '**/*.s?(c|a)ss',
     formatter: formatters.string,
+    stylelintPath,
     ...options,
   };
 }

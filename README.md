@@ -84,6 +84,13 @@ Specify a custom formatter to format errors printed to the console.
 
 Lint only changed files, skip lint on start.
 
+### `stylelintPath`
+
+- Type: `String`
+- Default: `stylelint`
+
+Path to `stylelint` instance that will be used for linting.
+
 ### `syntax`
 
 - Type: `String`
