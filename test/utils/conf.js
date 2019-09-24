@@ -1,6 +1,6 @@
 import { join } from 'path';
 
-import StyleLintPlugin from '../../src/index';
+import StylelintPlugin from '../../src/index';
 
 export default (context, webpackConf = {}, pluginConf = {}) => {
   const testDir = join(__dirname, '..');
@@ -13,7 +13,7 @@ export default (context, webpackConf = {}, pluginConf = {}) => {
       path: join(testDir, 'output'),
     },
     plugins: [
-      new StyleLintPlugin({
+      new StylelintPlugin({
         configFile: join(testDir, '.stylelintrc'),
         ...pluginConf,
       }),

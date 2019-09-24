@@ -32,11 +32,11 @@ npm install stylelint --save-dev
 In your webpack configuration
 
 ```js
-const StyleLintPlugin = require('stylelint-webpack-plugin');
+const StylelintPlugin = require('stylelint-webpack-plugin');
 
 module.exports = {
   // ...
-  plugins: [new StyleLintPlugin(options)],
+  plugins: [new StylelintPlugin(options)],
   // ...
 };
 ```
