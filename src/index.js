@@ -31,6 +31,7 @@ class StylelintWebpackPlugin {
         linter(options, compilation, callback);
       });
 
+      /* istanbul ignore next */
       compiler.hooks.watchRun.tapAsync(plugin, (compilation, callback) => {
         linter(options, compilation, callback);
       });
