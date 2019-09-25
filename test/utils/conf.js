@@ -2,7 +2,7 @@ import { join } from 'path';
 
 import StylelintPlugin from '../../src/index';
 
-export default (context, webpackConf = {}, pluginConf = {}) => {
+export default (context, pluginConf = {}, webpackConf = {}) => {
   const testDir = join(__dirname, '..');
 
   return {

@@ -4,7 +4,7 @@ describe('quiet', () => {
   const pluginConf = { quiet: true };
 
   it('does not print warnings or errors when there are none', (done) => {
-    const compiler = pack('ok', {}, pluginConf);
+    const compiler = pack('ok', pluginConf);
 
     compiler.run((err, stats) => {
       expect(stats.hasWarnings()).toBe(false);
@@ -14,7 +14,7 @@ describe('quiet', () => {
   });
 
   it('emits errors only', (done) => {
-    const compiler = pack('error', {}, pluginConf);
+    const compiler = pack('error', pluginConf);
 
     compiler.run((err, stats) => {
       const { errors } = stats.compilation;
@@ -27,7 +27,7 @@ describe('quiet', () => {
   });
 
   it('does not emits warnings', (done) => {
-    const compiler = pack('warning', {}, pluginConf);
+    const compiler = pack('warning', pluginConf);
 
     compiler.run((err, stats) => {
       expect(stats.hasWarnings()).toBe(false);
