@@ -1,7 +1,0 @@
---require ./test/helpers/setup.js
---harmony
---full-trace
---recursive
---ui bdd
---exit
-test/test.js

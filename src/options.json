@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "configFile": {
+      "description": "Specify the config file location to be used by `stylelint`.",
+      "type": "string"
+    },
+    "context": {
+      "description": "A `String` indicating the root of your style files.",
+      "type": "string"
+    },
+    "emitError": {
+      "description": "Will always return errors, if this option is set to `true`.",
+      "type": "boolean"
+    },
+    "emitWarning": {
+      "description": "Will always return warnings, if option is set to `true`.",
+      "type": "boolean"
+    },
+    "failOnError": {
+      "description": "Will cause the module build to fail if there are any errors, if option is set to `true`.",
+      "type": "boolean"
+    },
+    "failOnWarning": {
+      "description": "Will cause the module build to fail if there are any warnings, if option is set to `true`.",
+      "type": "boolean"
+    },
+    "files": {
+      "description": "Specify the glob pattern for finding files. Must be relative to `options.context`.",
+      "anyOf": [{ "type": "string" }, { "type": "array" }]
+    },
+    "formatter": {
+      "description": "Specify a custom formatter to format errors printed to the console.",
+      "instanceof": "Function"
+    },
+    "lintDirtyModulesOnly": {
+      "description": "Lint only changed files, skip lint on start.",
+      "type": "boolean"
+    },
+    "stylelintPath": {
+      "description": "Path to `stylelint` instance that will be used for linting.",
+      "type": "string"
+    },
+    "syntax": {
+      "description": "See the `styelint` [user guide](https://stylelint.io/user-guide/node-api/#syntax) for more info. e.g. use `'scss'` to lint .scss files.",
+      "type": "string"
+    },
+    "quiet": {
+      "description": "Will process and report errors only and ignore warnings, if this option is set to `true`.",
+      "type": "boolean"
+    }
+  }
+}
