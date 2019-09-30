@@ -3,30 +3,31 @@ import { isMatch } from 'micromatch';
 import linter from './linter';
 
 export default class LintDirtyModulesPlugin {
-  constructor(options) {
+  constructor(compiler, options) {
+    this.compiler = compiler;
     this.options = options;
     this.startTime = Date.now();
     this.prevTimestamps = {};
     this.isFirstRun = true;
   }
 
-  apply(compiler, callback) {
+  apply(compilation, callback) {
     if (this.isFirstRun) {
       this.isFirstRun = false;
-      this.prevTimestamps = compiler.fileTimestamps;
+      this.prevTimestamps = compilation.fileTimestamps;
       callback();
       return;
     }
 
     const dirtyOptions = { ...this.options };
     const glob = dirtyOptions.files.join('|');
-    const changedFiles = this.getChangedFiles(compiler.fileTimestamps, glob);
+    const changedFiles = this.getChangedFiles(compilation.fileTimestamps, glob);
 
-    this.prevTimestamps = compiler.fileTimestamps;
+    this.prevTimestamps = compilation.fileTimestamps;
 
     if (changedFiles.length) {
       dirtyOptions.files = changedFiles;
-      linter(dirtyOptions, compiler, callback);
+      linter(dirtyOptions, this.compiler, callback);
     } else {
       callback();
     }

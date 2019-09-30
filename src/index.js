@@ -22,9 +22,9 @@ class StylelintWebpackPlugin {
     const plugin = { name: this.constructor.name };
 
     if (options.lintDirtyModulesOnly) {
-      const lintDirtyModulesPlugin = new LintDirtyModulesPlugin(options);
+      const lintDirty = new LintDirtyModulesPlugin(compiler, options);
       compiler.hooks.emit.tapAsync(plugin, (compilation, callback) => {
-        lintDirtyModulesPlugin.apply(compilation, callback);
+        lintDirty.apply(compilation, callback);
       });
     } else {
       compiler.hooks.run.tapAsync(plugin, (compilation, callback) => {

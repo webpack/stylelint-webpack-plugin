@@ -21,7 +21,7 @@ export default function linter(options, compiler, callback) {
     })
     .catch(callback);
 
-  compiler.hooks.afterCompile.tapAsync(
+  compiler.hooks.afterEmit.tapAsync(
     'StylelintWebpackPlugin',
     (compilation, next) => {
       if (warnings.length) {
