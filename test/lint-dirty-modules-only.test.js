@@ -12,7 +12,7 @@ describe('lint dirty modules only', () => {
   beforeAll(() => {
     callback = jest.fn();
 
-    plugin = new LintDirtyModulesPlugin(null, { files: ['**/*.s?(c|a)ss'] });
+    plugin = new LintDirtyModulesPlugin(null, { files: ['**\\*.s?(c|a)ss'] });
     plugin.isFirstRun = false;
   });
 
@@ -32,9 +32,16 @@ describe('lint dirty modules only', () => {
   });
 
   it('linting on change file', () => {
-    const fileTimestamps = new Map([['changed.scss', 1], ['new-file.scss']]);
+    const fileTimestamps = new Map([
+      ['foo/changed.scss', 1],
+      ['bar\\changed.scss', 1],
+      ['new-file.scss'],
+    ]);
 
-    plugin.prevTimestamps = new Map([['changed.scss', 2]]);
+    plugin.prevTimestamps = new Map([
+      ['foo/changed.scss', 2],
+      ['bar\\changed.scss', 2],
+    ]);
     plugin.apply({ fileTimestamps }, callback);
 
     expect(linter).toBeCalledTimes(1);
