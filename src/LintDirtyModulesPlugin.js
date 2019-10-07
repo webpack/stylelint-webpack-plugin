@@ -20,7 +20,7 @@ export default class LintDirtyModulesPlugin {
     }
 
     const dirtyOptions = { ...this.options };
-    const glob = dirtyOptions.files.join('|');
+    const glob = dirtyOptions.files.join('|').replace(/\\/g, '/');
     const changedFiles = this.getChangedFiles(compilation.fileTimestamps, glob);
 
     this.prevTimestamps = compilation.fileTimestamps;
