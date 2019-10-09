@@ -21,7 +21,7 @@
 npm install stylelint-webpack-plugin --save-dev
 ```
 
-**NOTE**: You also need to install `stylelint` from npm, if you haven't already:
+**Note**: You also need to install `stylelint` from npm, if you haven't already:
 
 ```bash
 npm install stylelint --save-dev
@@ -54,14 +54,14 @@ the complete list of options available. These options are passed through to the
 
 Specify the config file location to be used by `stylelint`.
 
-_Note: By default this is [handled by `stylelint`](http://stylelint.io/user-guide/configuration/)._
+*Note: By default this is [handled by `stylelint`](http://stylelint.io/user-guide/configuration/).*
 
 ### `context`
 
 - Type: `String`
 - Default: `compiler.context`
 
-A `String` indicating the root of your style files.
+A string indicating the root of your style files.
 
 ### `files`
 
