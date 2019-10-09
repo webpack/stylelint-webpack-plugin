@@ -29,7 +29,7 @@ npm install stylelint --save-dev
 
 ## Usage
 
-In your webpack configuration
+In your webpack configuration:
 
 ```js
 const StylelintPlugin = require('stylelint-webpack-plugin');
