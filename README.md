@@ -54,7 +54,7 @@ the complete list of options available. These options are passed through to the
 
 Specify the config file location to be used by `stylelint`.
 
-*Note: By default this is [handled by `stylelint`](http://stylelint.io/user-guide/configuration/).*
+_Note: By default this is [handled by `stylelint`](http://stylelint.io/user-guide/configuration/)._
 
 ### `context`
 
