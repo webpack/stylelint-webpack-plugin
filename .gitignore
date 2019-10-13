@@ -11,6 +11,9 @@ yarn-debug.log*
 /node_modules
 /test/output
 
+# ignore npm lock file
+package-lock.json
+
 .DS_Store
 Thumbs.db
 .idea
