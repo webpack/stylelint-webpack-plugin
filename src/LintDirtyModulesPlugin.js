@@ -2,6 +2,25 @@ import { isMatch } from 'micromatch';
 
 import linter from './linter';
 
+function mapFileTimestampsToOldFormat(fileTimestamps) {
+  for (const [filename, FileSystemInfoEntry] of fileTimestamps.entries()) {
+    fileTimestamps.set(
+      filename,
+      FileSystemInfoEntry ? FileSystemInfoEntry.timestamp : null
+    );
+  }
+
+  return fileTimestamps;
+}
+
+function getFileTimestamps(compilation) {
+  return (
+    compilation.fileTimestamps ||
+    // eslint-disable-next-line no-underscore-dangle
+    mapFileTimestampsToOldFormat(compilation.fileSystemInfo._fileTimestamps)
+  );
+}
+
 export default class LintDirtyModulesPlugin {
   constructor(compiler, options) {
     this.compiler = compiler;
@@ -14,16 +33,17 @@ export default class LintDirtyModulesPlugin {
   apply(compilation, callback) {
     if (this.isFirstRun) {
       this.isFirstRun = false;
-      this.prevTimestamps = compilation.fileTimestamps;
+      this.prevTimestamps = getFileTimestamps(compilation);
       callback();
       return;
     }
 
     const dirtyOptions = { ...this.options };
+    const newTimestamps = getFileTimestamps(compilation);
     const glob = dirtyOptions.files.join('|').replace(/\\/g, '/');
-    const changedFiles = this.getChangedFiles(compilation.fileTimestamps, glob);
+    const changedFiles = this.getChangedFiles(newTimestamps, glob);
 
-    this.prevTimestamps = compilation.fileTimestamps;
+    this.prevTimestamps = newTimestamps;
 
     if (changedFiles.length) {
       dirtyOptions.files = changedFiles;
