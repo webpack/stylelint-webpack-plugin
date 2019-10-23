@@ -13,7 +13,7 @@ class StylelintWebpackPlugin {
 
   apply(compiler) {
     const context = this.getContext(compiler);
-    const { options } = this;
+    const options = { ...this.options };
 
     options.files = arrify(options.files).map((file) =>
       join(context, '/', file)
