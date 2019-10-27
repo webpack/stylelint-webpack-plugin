@@ -23,7 +23,9 @@ class StylelintWebpackPlugin {
 
     if (options.lintDirtyModulesOnly) {
       const lintDirty = new LintDirtyModulesPlugin(compiler, options);
-      compiler.hooks.emit.tapAsync(plugin, (compilation, callback) => {
+
+      /* istanbul ignore next */
+      compiler.hooks.watchRun.tapAsync(plugin, (compilation, callback) => {
         lintDirty.apply(compilation, callback);
       });
     } else {
