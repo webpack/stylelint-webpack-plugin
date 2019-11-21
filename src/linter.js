@@ -19,8 +19,12 @@ export default function linter(options, compiler, callback) {
         callback();
       }
     })
-    .catch(() => {
-      callback();
+    .catch((e) => {
+      if (options.failOnError) {
+        callback(e);
+      } else {
+        callback();
+      }
     });
 
   compiler.hooks.afterCompile.tapAsync(
