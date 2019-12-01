@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v1.1.0...v1.1.1) (2019-12-01)
+
+
+### Bug Fixes
+
+* use hook `afterEmit` and emit error on catch ([17f7421](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/17f7421030e6a5b589b2cab015d9af80b868ca95))
+
 ## [1.1.0](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v1.0.4...v1.1.0) (2019-11-18)
 
 
