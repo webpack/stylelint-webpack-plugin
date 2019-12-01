@@ -7,8 +7,12 @@ describe('fail on config', () => {
     const configFile = join(__dirname, '.badstylelintrc');
     const compiler = pack('error', { configFile });
 
-    compiler.run((err) => {
-      expect(err.message).toMatch(/duplicated mapping key|Failed to parse/);
+    compiler.run((err, stats) => {
+      const { errors } = stats.compilation;
+      expect(stats.hasWarnings()).toBe(false);
+      expect(stats.hasErrors()).toBe(true);
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toMatch(/Map keys must be unique/);
       done();
     });
   });

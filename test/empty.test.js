@@ -16,8 +16,12 @@ describe('empty', () => {
       plugins: [new StylelintPlugin()],
     });
 
-    compiler.run((err) => {
-      expect(err.message).toContain('No files matching the pattern');
+    compiler.run((err, stats) => {
+      const { errors } = stats.compilation;
+      expect(stats.hasWarnings()).toBe(false);
+      expect(stats.hasErrors()).toBe(true);
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toContain('No files matching the pattern');
       done();
     });
   });

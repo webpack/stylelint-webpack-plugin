@@ -11,6 +11,23 @@ export default function linter(options, compiler, callback) {
     .then(({ results }) => {
       ({ errors, warnings } = parseResults(options, results));
 
+      compiler.hooks.afterEmit.tapAsync(
+        'StylelintWebpackPlugin',
+        (compilation, next) => {
+          if (warnings.length) {
+            compilation.warnings.push(StylelintError.format(options, warnings));
+            warnings = [];
+          }
+
+          if (errors.length) {
+            compilation.errors.push(StylelintError.format(options, errors));
+            errors = [];
+          }
+
+          next();
+        }
+      );
+
       if (options.failOnError && errors.length) {
         callback(StylelintError.format(options, errors));
       } else if (options.failOnWarning && warnings.length) {
@@ -19,24 +36,17 @@ export default function linter(options, compiler, callback) {
         callback();
       }
     })
-    .catch(callback);
+    .catch((e) => {
+      compiler.hooks.afterEmit.tapAsync(
+        'StylelintWebpackPlugin',
+        (compilation, next) => {
+          compilation.errors.push(new StylelintError(e.message));
+          next();
+        }
+      );
 
-  compiler.hooks.afterCompile.tapAsync(
-    'StylelintWebpackPlugin',
-    (compilation, next) => {
-      if (warnings.length) {
-        compilation.warnings.push(StylelintError.format(options, warnings));
-        warnings = [];
-      }
-
-      if (errors.length) {
-        compilation.errors.push(StylelintError.format(options, errors));
-        errors = [];
-      }
-
-      next();
-    }
-  );
+      callback();
+    });
 }
 
 function parseResults(options, results) {
