@@ -47,7 +47,7 @@ describe('lint dirty modules only', () => {
   });
 
   it('not linter if files are not changed', () => {
-    const fileTimestamps = new Map([['not-changed.scss', 1]]);
+    const fileTimestamps = new Map([['not-changed.scss', { timestamp: 1 }]]);
 
     plugin.isFirstRun = false;
     plugin.prevTimestamps = fileTimestamps;
