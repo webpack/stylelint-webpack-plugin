@@ -43,7 +43,18 @@ module.exports = {
 
 ## Options
 
-You can pass [stylelint options](http://stylelint.io/user-guide/node-api/#options).
+See [stylelint's options](http://stylelint.io/user-guide/node-api/#options) for
+the complete list of options available. These options are passed through to the
+`stylelint` directly.
+
+### `configFile`
+
+- Type: `String`
+- Default: `undefined`
+
+Specify the config file location to be used by `stylelint`.
+
+**Note:** By default this is [handled by `stylelint`](http://stylelint.io/user-guide/configuration/).
 
 ### `context`
 
@@ -58,6 +69,15 @@ A string indicating the root of your files.
 - Default: `'**/*.s?(a|c)ss'`
 
 Specify the glob pattern for finding files. Must be relative to `options.context`.
+
+### `fix`
+
+- Type: `Boolean`
+- Default: `false`
+
+If `true`, `stylelint` will fix as many errors as possible.
+The fixes are made to the actual source files.
+All unfixed errors will be reported. See [Autofixing errors](https://stylelint.io/user-guide/cli#autofixing-errors) docs.
 
 ### `formatter`
 
