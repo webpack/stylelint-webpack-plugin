@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v1.1.1...v1.1.2) (2019-12-04)
+
+
+### Bug Fixes
+
+* support webpack 5 ([#199](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/199)) ([3d9e544](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/3d9e544f31172b7c01f4bd7c7254cfc7e38466c9))
+
 ### [1.1.1](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v1.1.0...v1.1.1) (2019-12-01)
 
 
