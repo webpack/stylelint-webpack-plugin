@@ -43,9 +43,7 @@ module.exports = {
 
 ## Options
 
-See [stylelint's options](http://stylelint.io/user-guide/node-api/#options) for
-the complete list of options available. These options are passed through to the
-`stylelint` directly.
+See [stylelint's options](http://stylelint.io/user-guide/node-api/#options) for the complete list of options available. These options are passed through to the `stylelint` directly.
 
 ### `configFile`
 
@@ -75,9 +73,7 @@ Specify the glob pattern for finding files. Must be relative to `options.context
 - Type: `Boolean`
 - Default: `false`
 
-If `true`, `stylelint` will fix as many errors as possible.
-The fixes are made to the actual source files.
-All unfixed errors will be reported. See [Autofixing errors](https://stylelint.io/user-guide/cli#autofixing-errors) docs.
+If `true`, `stylelint` will fix as many errors as possible. The fixes are made to the actual source files. All unfixed errors will be reported. See [Autofixing errors](https://stylelint.io/user-guide/cli#autofixing-errors) docs.
 
 ### `formatter`
 
