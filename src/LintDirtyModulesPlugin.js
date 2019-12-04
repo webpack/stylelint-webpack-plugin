@@ -12,18 +12,20 @@ export default class LintDirtyModulesPlugin {
   }
 
   apply(compilation, callback) {
+    const fileTimestamps = compilation.fileTimestamps || new Map();
+
     if (this.isFirstRun) {
       this.isFirstRun = false;
-      this.prevTimestamps = compilation.fileTimestamps;
+      this.prevTimestamps = fileTimestamps;
       callback();
       return;
     }
 
     const dirtyOptions = { ...this.options };
     const glob = dirtyOptions.files.join('|').replace(/\\/g, '/');
-    const changedFiles = this.getChangedFiles(compilation.fileTimestamps, glob);
+    const changedFiles = this.getChangedFiles(fileTimestamps, glob);
 
-    this.prevTimestamps = compilation.fileTimestamps;
+    this.prevTimestamps = fileTimestamps;
 
     if (changedFiles.length) {
       dirtyOptions.files = changedFiles;
@@ -34,8 +36,15 @@ export default class LintDirtyModulesPlugin {
   }
 
   getChangedFiles(fileTimestamps, glob) {
-    const hasFileChanged = (filename, timestamp) => {
-      const prevTimestamp = this.prevTimestamps.get(filename);
+    const getTimestamps = (fileSystemInfoEntry) => {
+      return fileSystemInfoEntry && fileSystemInfoEntry.timestamp
+        ? fileSystemInfoEntry.timestamp
+        : fileSystemInfoEntry;
+    };
+
+    const hasFileChanged = (filename, fileSystemInfoEntry) => {
+      const prevTimestamp = getTimestamps(this.prevTimestamps.get(filename));
+      const timestamp = getTimestamps(fileSystemInfoEntry);
 
       return (prevTimestamp || this.startTime) < (timestamp || Infinity);
     };
