@@ -77,10 +77,10 @@ If `true`, `stylelint` will fix as many errors as possible. The fixes are made t
 
 ### `formatter`
 
-- Type: `Function`
-- Default: `require('stylelint').formatters.string`
+- Type: `String|Function`
+- Default: `'string'`
 
-Specify the formatter that you would like to use to format your results.
+Specify the formatter that you would like to use to format your results. See [formatter option](https://stylelint.io/user-guide/node-api#formatter).
 
 ### `lintDirtyModulesOnly`
 

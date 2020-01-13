@@ -2,21 +2,39 @@ import validateOptions from 'schema-utils';
 
 import schema from './options.json';
 
-export default function getOptions(options) {
+export default function getOptions(pluginOptions) {
+  const options = {
+    files: '**/*.s?(c|a)ss',
+    formatter: 'string',
+    stylelintPath: 'stylelint',
+    ...pluginOptions,
+  };
+
   validateOptions(schema, options, {
     name: 'Stylelint Webpack Plugin',
     baseDataPath: 'options',
   });
 
-  const stylelintPath = options.stylelintPath || 'stylelint';
-
   // eslint-disable-next-line
-  const { formatters } = require(stylelintPath);
+  const stylelint = require(options.stylelintPath);
 
-  return {
-    files: '**/*.s?(c|a)ss',
-    formatter: formatters.string,
-    stylelintPath,
-    ...options,
-  };
+  options.formatter = getFormatter(stylelint, options.formatter);
+
+  return options;
+}
+
+function getFormatter({ formatters }, formatter) {
+  if (typeof formatter === 'function') {
+    return formatter;
+  }
+
+  // Try to get oficial formatter
+  if (
+    typeof formatter === 'string' &&
+    typeof formatters[formatter] === 'function'
+  ) {
+    return formatters[formatter];
+  }
+
+  return formatters.string;
 }
