@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v1.1.2...v1.2.0) (2020-01-13)
+
+
+### Features
+
+* make possible to define official formatter as string ([#202](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/202)) ([8d6599c](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/8d6599c3f2f0e26d1515b01f6ecbafabeaa68fac))
+* support stylelint v13 ([#203](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/203)) ([6fb31a3](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/6fb31a3931cb9d7cb0ce8cc99c9db28f928c82f4))
+
 ### [1.1.2](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v1.1.1...v1.1.2) (2019-12-04)
 
 
