@@ -16,7 +16,7 @@ class StylelintWebpackPlugin {
     const options = { ...this.options };
 
     options.files = arrify(options.files).map((file) =>
-      join(context, '/', file)
+      join(context, '/', file).replace(/\\/g, '/')
     );
 
     const plugin = { name: this.constructor.name };
