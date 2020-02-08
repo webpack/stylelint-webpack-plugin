@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.2.3](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v1.2.2...v1.2.3) (2020-02-08)
 
+
+### Performance
+
+* require lint of stylelint only one time ([#207](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/207)) ([7e2495e](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/7e2495e6ba4d8cebb7f07cc9418020ea494670f8)) 
+
 ### [1.2.2](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v1.2.1...v1.2.2) (2020-02-08)
 
 
