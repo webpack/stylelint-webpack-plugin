@@ -53,7 +53,7 @@ export default class LintDirtyModulesPlugin {
 
     for (const [filename, timestamp] of fileTimestamps.entries()) {
       if (hasFileChanged(filename, timestamp) && isMatch(filename, glob)) {
-        changedFiles.push(filename);
+        changedFiles.push(filename.replace(/\\/g, '/'));
       }
     }
 
