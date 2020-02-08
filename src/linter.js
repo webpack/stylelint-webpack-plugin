@@ -1,11 +1,8 @@
 import StylelintError from './StylelintError';
 
-export default function linter(options, compiler, callback) {
+export default function linter(lint, options, compiler, callback) {
   let errors = [];
   let warnings = [];
-
-  // eslint-disable-next-line
-  const { lint } = require(options.stylelintPath);
 
   lint(options)
     .then(({ results }) => {
