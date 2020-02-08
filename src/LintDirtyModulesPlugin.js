@@ -1,6 +1,7 @@
 import { isMatch } from 'micromatch';
 
 import linter from './linter';
+import { replaceBackslashes } from './utils';
 
 export default class LintDirtyModulesPlugin {
   constructor(compiler, options) {
@@ -22,7 +23,7 @@ export default class LintDirtyModulesPlugin {
     }
 
     const dirtyOptions = { ...this.options };
-    const glob = dirtyOptions.files.join('|').replace(/\\/g, '/');
+    const glob = replaceBackslashes(dirtyOptions.files.join('|'));
     const changedFiles = this.getChangedFiles(fileTimestamps, glob);
 
     this.prevTimestamps = fileTimestamps;
@@ -53,7 +54,7 @@ export default class LintDirtyModulesPlugin {
 
     for (const [filename, timestamp] of fileTimestamps.entries()) {
       if (hasFileChanged(filename, timestamp) && isMatch(filename, glob)) {
-        changedFiles.push(filename);
+        changedFiles.push(replaceBackslashes(filename));
       }
     }
 

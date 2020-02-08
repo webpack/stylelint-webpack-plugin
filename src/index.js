@@ -1,10 +1,9 @@
 import { isAbsolute, join } from 'path';
 
-import arrify from 'arrify';
-
 import getOptions from './getOptions';
 import LintDirtyModulesPlugin from './LintDirtyModulesPlugin';
 import linter from './linter';
+import { parseFiles } from './utils';
 
 class StylelintWebpackPlugin {
   constructor(options = {}) {
@@ -12,12 +11,10 @@ class StylelintWebpackPlugin {
   }
 
   apply(compiler) {
-    const context = this.getContext(compiler);
-    const options = { ...this.options };
-
-    options.files = arrify(options.files).map((file) =>
-      join(context, '/', file).replace(/\\/g, '/')
-    );
+    const options = {
+      ...this.options,
+      files: parseFiles(this.options.files, this.getContext(compiler)),
+    };
 
     const plugin = { name: this.constructor.name };
 
