@@ -4,7 +4,8 @@ import linter from './linter';
 import { replaceBackslashes } from './utils';
 
 export default class LintDirtyModulesPlugin {
-  constructor(compiler, options) {
+  constructor(lint, compiler, options) {
+    this.lint = lint;
     this.compiler = compiler;
     this.options = options;
     this.startTime = Date.now();
@@ -30,7 +31,7 @@ export default class LintDirtyModulesPlugin {
 
     if (changedFiles.length) {
       dirtyOptions.files = changedFiles;
-      linter(dirtyOptions, this.compiler, callback);
+      linter(this.lint, dirtyOptions, this.compiler, callback);
     } else {
       callback();
     }

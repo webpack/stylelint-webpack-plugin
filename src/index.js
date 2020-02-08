@@ -16,10 +16,13 @@ class StylelintWebpackPlugin {
       files: parseFiles(this.options.files, this.getContext(compiler)),
     };
 
+    // eslint-disable-next-line
+    const { lint } = require(options.stylelintPath);
+
     const plugin = { name: this.constructor.name };
 
     if (options.lintDirtyModulesOnly) {
-      const lintDirty = new LintDirtyModulesPlugin(compiler, options);
+      const lintDirty = new LintDirtyModulesPlugin(lint, compiler, options);
 
       /* istanbul ignore next */
       compiler.hooks.watchRun.tapAsync(plugin, (compilation, callback) => {
@@ -27,12 +30,12 @@ class StylelintWebpackPlugin {
       });
     } else {
       compiler.hooks.run.tapAsync(plugin, (compilation, callback) => {
-        linter(options, compilation, callback);
+        linter(lint, options, compilation, callback);
       });
 
       /* istanbul ignore next */
       compiler.hooks.watchRun.tapAsync(plugin, (compilation, callback) => {
-        linter(options, compilation, callback);
+        linter(lint, options, compilation, callback);
       });
     }
   }

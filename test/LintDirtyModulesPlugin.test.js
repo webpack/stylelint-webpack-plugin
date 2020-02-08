@@ -10,7 +10,9 @@ describe('lint dirty modules only', () => {
   beforeAll(() => {
     callback = jest.fn();
 
-    plugin = new LintDirtyModulesPlugin(null, { files: ['**\\*.s?(c|a)ss'] });
+    plugin = new LintDirtyModulesPlugin(null, null, {
+      files: ['**\\*.s?(c|a)ss'],
+    });
   });
 
   beforeEach(() => {
