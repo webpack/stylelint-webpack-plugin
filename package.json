@@ -5,6 +5,9 @@
   "license": "MIT",
   "repository": "webpack-contrib/stylelint-webpack-plugin",
   "author": "Javier Sánchez-Marín <javiersanchezmarin@gmail.com>",
+  "contributors": [
+    "Ricardo Gobbo de Souza <ricardogobbosouza@yahoo.com.br>"
+  ],
   "homepage": "https://github.com/webpack-contrib/stylelint-webpack-plugin",
   "bugs": "https://github.com/webpack-contrib/stylelint-webpack-plugin/issues",
   "main": "dist/cjs.js",
