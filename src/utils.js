@@ -5,8 +5,12 @@ import arrify from 'arrify';
 const UNESCAPED_GLOB_SYMBOLS_RE = /(\\?)([()*?[\]{|}]|^!|[!+@](?=\())/g;
 
 export function parseFiles(files, context) {
-  return arrify(files).map((file) =>
-    `${replaceBackslashes(context).replace(UNESCAPED_GLOB_SYMBOLS_RE, '\\$2')}/${replaceBackslashes(file)}`
+  return arrify(files).map(
+    (file) =>
+      `${replaceBackslashes(context).replace(
+        UNESCAPED_GLOB_SYMBOLS_RE,
+        '\\$2'
+      )}/${replaceBackslashes(file)}`
   );
 }
 
