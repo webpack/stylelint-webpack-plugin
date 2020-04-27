@@ -150,8 +150,8 @@ Will process and report errors only and ignore warnings, if set to `true`.
 [node-url]: https://nodejs.org
 [deps]: https://david-dm.org/webpack-contrib/stylelint-webpack-plugin.svg
 [deps-url]: https://david-dm.org/webpack-contrib/stylelint-webpack-plugin
-[tests]: https://dev.azure.com/webpack-contrib/stylelint-webpack-plugin/_apis/build/status/webpack-contrib.stylelint-webpack-plugin?branchName=master
-[tests-url]: https://dev.azure.com/webpack-contrib/stylelint-webpack-plugin/_build/latest?definitionId=4&branchName=master
+[tests]: https://github.com/webpack-contrib/stylelint-webpack-plugin/workflows/stylelint-webpack-plugin/badge.svg
+[tests-url]: https://github.com/webpack-contrib/stylelint-webpack-plugin/actions
 [cover]: https://codecov.io/gh/webpack-contrib/stylelint-webpack-plugin/branch/master/graph/badge.svg
 [cover-url]: https://codecov.io/gh/webpack-contrib/stylelint-webpack-plugin
 [chat]: https://badges.gitter.im/webpack/webpack.svg
