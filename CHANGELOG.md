@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v1.2.3...v2.0.0) (2020-05-04)
+
+
+### Bug Fixes
+
+* avoiding https://github.com/mrmlnc/fast-glob/issues/158 ([#209](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/209)) ([14ae30d](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/14ae30df8a6d6b629c4e1fa647b4c6989377aec8))
+
 ### [1.2.3](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v1.2.2...v1.2.3) (2020-02-08)
 
 
