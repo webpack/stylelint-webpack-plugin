@@ -15,18 +15,22 @@
     "url": "https://opencollective.com/webpack"
   },
   "main": "dist/cjs.js",
+  "types": "declarations/index.d.ts",
   "engines": {
     "node": ">= 10.13.0"
   },
   "scripts": {
     "start": "npm run build -- -w",
-    "clean": "del-cli dist",
+    "clean": "del-cli dist declarations",
     "prebuild": "npm run clean",
-    "build": "cross-env NODE_ENV=production babel src -d dist --copy-files",
+    "build:types": "tsc --declaration --emitDeclarationOnly --outDir declarations && prettier \"declarations/**/*.ts\" --write",
+    "build:code": "cross-env NODE_ENV=production babel src -d dist --copy-files",
+    "build": "npm-run-all -p \"build:**\"",
     "commitlint": "commitlint --from=master",
     "security": "npm audit",
     "lint:prettier": "prettier --list-different .",
     "lint:js": "eslint --cache .",
+    "lint:types": "tsc --pretty --noEmit",
     "lint": "npm-run-all -l -p \"lint:**\"",
     "test:only": "cross-env NODE_ENV=test jest",
     "test:watch": "npm run test:only -- --watch",
@@ -38,7 +42,8 @@
     "defaults": "webpack-defaults"
   },
   "files": [
-    "dist"
+    "dist",
+    "declarations"
   ],
   "peerDependencies": {
     "stylelint": "^13.0.0",
@@ -47,33 +52,37 @@
   "dependencies": {
     "arrify": "^2.0.1",
     "micromatch": "^4.0.2",
-    "schema-utils": "^2.6.6"
+    "schema-utils": "^2.7.0",
+    "@types/micromatch": "^4.0.1",
+    "@types/stylelint": "^9.10.1",
+    "@types/webpack": "^4.41.17"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
     "@webpack-contrib/defaults": "^6.3.0",
     "@webpack-contrib/eslint-config-webpack": "^3.0.0",
     "babel-eslint": "^10.1.0",
-    "babel-jest": "^25.5.1",
+    "babel-jest": "^26.0.1",
     "cross-env": "^7.0.2",
     "del": "^5.1.0",
-    "del-cli": "^3.0.0",
-    "eslint": "^6.8.0",
+    "del-cli": "^3.0.1",
+    "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-friendly-formatter": "^4.0.1",
-    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-import": "^2.21.2",
     "file-loader": "^6.0.0",
     "husky": "^4.2.5",
-    "jest": "^25.5.4",
-    "lint-staged": "^10.2.2",
+    "jest": "^26.0.1",
+    "lint-staged": "^10.2.10",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.5",
-    "standard-version": "^7.1.0",
-    "stylelint": "^13.3.3",
+    "standard-version": "^8.0.0",
+    "stylelint": "^13.6.0",
+    "typescript": "^3.9.5",
     "webpack": "^4.43.0"
   },
   "keywords": [
