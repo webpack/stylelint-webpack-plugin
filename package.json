@@ -52,8 +52,7 @@
   "dependencies": {
     "arrify": "^2.0.1",
     "micromatch": "^4.0.2",
-    "schema-utils": "^2.7.0",
-    "@types/stylelint": "^9.10.1"
+    "schema-utils": "^2.7.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
@@ -62,6 +61,7 @@
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
     "@types/micromatch": "^4.0.1",
+    "@types/stylelint": "^9.10.1",
     "@types/webpack": "^4.41.17",
     "@webpack-contrib/defaults": "^6.3.0",
     "@webpack-contrib/eslint-config-webpack": "^3.0.0",
