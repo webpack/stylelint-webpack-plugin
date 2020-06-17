@@ -1,7 +1,34 @@
 import StylelintError from './StylelintError';
 
+/** @typedef {import('stylelint').LinterResult} LinterResult */
+/** @typedef {import('stylelint').LintResult} LintResult */
+/** @typedef {import('webpack').Compiler} Compiler */
+/** @typedef {import('./getOptions').Options} Options */
+
+/**
+ * @callback Lint
+ * @param {Options} options
+ * @returns {Promise<LinterResult>}
+ */
+
+/**
+ * @callback LinterCallback
+ * @param {StylelintError | null=} error
+ * @returns {void}
+ */
+
+/**
+ * @param {Lint} lint
+ * @param {Options} options
+ * @param {Compiler} compiler
+ * @param {LinterCallback} callback
+ * @returns {void}
+ */
 export default function linter(lint, options, compiler, callback) {
+  /** @type {Array<LintResult>} */
   let errors = [];
+
+  /** @type {Array<LintResult>} */
   let warnings = [];
 
   lint(options)
@@ -46,8 +73,17 @@ export default function linter(lint, options, compiler, callback) {
     });
 }
 
+/**
+ *
+ * @param {Options} options
+ * @param {Array<LintResult>} results
+ * @returns {{errors: Array<LintResult>, warnings: Array<LintResult>}}
+ */
 function parseResults(options, results) {
+  /** @type {Array<LintResult>} */
   let errors = [];
+
+  /** @type {Array<LintResult>} */
   let warnings = [];
 
   if (options.emitError) {
@@ -75,10 +111,18 @@ function parseResults(options, results) {
   };
 }
 
+/**
+ * @param {LintResult} file
+ * @returns {boolean}
+ */
 function fileHasErrors(file) {
-  return file.errored;
+  return !!file.errored;
 }
 
+/**
+ * @param {LintResult} file
+ * @returns {boolean}
+ */
 function fileHasWarnings(file) {
-  return file.warnings && file.warnings.length;
+  return file.warnings && file.warnings.length > 0;
 }

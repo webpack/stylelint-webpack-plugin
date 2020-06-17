@@ -5,11 +5,17 @@ import LintDirtyModulesPlugin from './LintDirtyModulesPlugin';
 import linter from './linter';
 import { parseFiles } from './utils';
 
+/** @typedef {import('webpack').Compiler} Compiler */
+
 class StylelintWebpackPlugin {
   constructor(options = {}) {
     this.options = getOptions(options);
   }
 
+  /**
+   * @param {Compiler} compiler
+   * @returns {void}
+   */
   apply(compiler) {
     const options = {
       ...this.options,
@@ -18,8 +24,7 @@ class StylelintWebpackPlugin {
 
     // eslint-disable-next-line
     const { lint } = require(options.stylelintPath);
-
-    const plugin = { name: this.constructor.name };
+    const { name: plugin } = this.constructor;
 
     if (options.lintDirtyModulesOnly) {
       const lintDirty = new LintDirtyModulesPlugin(lint, compiler, options);
@@ -40,13 +45,18 @@ class StylelintWebpackPlugin {
     }
   }
 
+  /**
+   *
+   * @param {Compiler} compiler
+   * @returns {string}
+   */
   getContext(compiler) {
     if (!this.options.context) {
-      return compiler.options.context;
+      return String(compiler.options.context);
     }
 
     if (!isAbsolute(this.options.context)) {
-      return join(compiler.options.context, this.options.context);
+      return join(String(compiler.options.context), this.options.context);
     }
 
     return this.options.context;
