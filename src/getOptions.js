@@ -24,7 +24,7 @@ import schema from './options.json';
  */
 export default function getOptions(pluginOptions) {
   const options = {
-    files: '**/*.s?(c|a)ss',
+    files: '**/*.(s(c|a)ss|css)',
     formatter: 'string',
     stylelintPath: 'stylelint',
     ...pluginOptions,
