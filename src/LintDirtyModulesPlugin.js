@@ -56,7 +56,7 @@ export default class LintDirtyModulesPlugin {
   }
 
   /**
-   * @param {Map<string, number>} fileTimestamps
+   * @param {Map<string, number|FileSystemInfoEntry>} fileTimestamps
    * @param {string | ReadonlyArray<string>} glob
    * @returns {Array<string>}
    */
