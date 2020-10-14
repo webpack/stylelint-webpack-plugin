@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.1](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v1.2.3...v2.1.1) (2020-10-14)
+
+
+### Features
+
+* support typescript ([#213](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/213)) ([b7dfa19](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/b7dfa195b7836bad7ac94a64a0c0a6163021a3e7))
+
+
+### Bug Fixes
+
+* avoiding https://github.com/mrmlnc/fast-glob/issues/158 ([#209](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/209)) ([14ae30d](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/14ae30df8a6d6b629c4e1fa647b4c6989377aec8))
+* use better micromatch extglobs ([#216](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/216)) ([a70ed3d](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/a70ed3d6b6d8da90bf4dc371057cbe1433b4558d))
+
 ## [2.1.0](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v1.2.3...v2.1.0) (2020-06-17)
 
 
