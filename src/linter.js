@@ -39,11 +39,13 @@ export default function linter(lint, options, compiler, callback) {
         'StylelintWebpackPlugin',
         (compilation, next) => {
           if (warnings.length) {
+            // @ts-ignore
             compilation.warnings.push(StylelintError.format(options, warnings));
             warnings = [];
           }
 
           if (errors.length) {
+            // @ts-ignore
             compilation.errors.push(StylelintError.format(options, errors));
             errors = [];
           }
@@ -64,6 +66,7 @@ export default function linter(lint, options, compiler, callback) {
       compiler.hooks.afterEmit.tapAsync(
         'StylelintWebpackPlugin',
         (compilation, next) => {
+          // @ts-ignore
           compilation.errors.push(new StylelintError(e.message));
           next();
         }

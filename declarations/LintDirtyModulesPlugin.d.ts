@@ -23,12 +23,18 @@ export default class LintDirtyModulesPlugin {
    */
   apply(compilation: Compiler, callback: LinterCallback): void;
   /**
-   * @param {Map<string, number>} fileTimestamps
+   * @param {Map<string, number|FileSystemInfoEntry>} fileTimestamps
    * @param {string | ReadonlyArray<string>} glob
    * @returns {Array<string>}
    */
   getChangedFiles(
-    fileTimestamps: Map<string, number>,
+    fileTimestamps: Map<
+      string,
+      | number
+      | Partial<{
+          timestamp: number;
+        }>
+    >,
     glob: string | ReadonlyArray<string>
   ): Array<string>;
 }
