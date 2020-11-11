@@ -21,7 +21,7 @@ describe('emit error', () => {
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
       expect(errors).toHaveLength(1);
-      expect(errors[0].message).toContain('error/test.scss');
+      expect(errors[0].message).toContain('stylelint\nerror/test.scss');
       done();
     });
   });
@@ -34,7 +34,7 @@ describe('emit error', () => {
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
       expect(errors).toHaveLength(1);
-      expect(errors[0].message).toContain('warning/test.scss');
+      expect(errors[0].message).toContain('stylelint\nwarning/test.scss');
       done();
     });
   });

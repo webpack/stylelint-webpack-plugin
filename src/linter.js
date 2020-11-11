@@ -67,7 +67,7 @@ export default function linter(lint, options, compiler, callback) {
         'StylelintWebpackPlugin',
         (compilation, next) => {
           // @ts-ignore
-          compilation.errors.push(new StylelintError(e.message));
+          compilation.errors.push(`stylelint\n${e.message}`);
           next();
         }
       );

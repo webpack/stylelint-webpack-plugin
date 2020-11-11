@@ -12,7 +12,7 @@ describe('fail on config', () => {
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
       expect(errors).toHaveLength(1);
-      expect(errors[0].message).toMatch(/Map keys must be unique/);
+      expect(errors[0].message).toMatch('stylelint\nMap keys must be unique');
       done();
     });
   });

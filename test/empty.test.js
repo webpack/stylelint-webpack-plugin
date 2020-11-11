@@ -21,7 +21,7 @@ describe('empty', () => {
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
       expect(errors).toHaveLength(1);
-      expect(errors[0].message).toContain('No files matching the pattern');
+      expect(errors[0].message).toContain('stylelint\nNo files matching the pattern');
       done();
     });
   });
