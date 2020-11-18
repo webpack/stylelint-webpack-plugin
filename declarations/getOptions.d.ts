@@ -6,7 +6,7 @@
  * @property {boolean=} emitWarning
  * @property {boolean=} failOnError
  * @property {boolean=} failOnWarning
- * @property {Array<string> | string} files
+ * @property {RegExp} test
  * @property {Function | string} formatter
  * @property {boolean=} lintDirtyModulesOnly
  * @property {boolean=} quiet
@@ -24,7 +24,7 @@ export type Options = {
   emitWarning?: boolean | undefined;
   failOnError?: boolean | undefined;
   failOnWarning?: boolean | undefined;
-  files: Array<string> | string;
+  test: RegExp;
   formatter: Function | string;
   lintDirtyModulesOnly?: boolean | undefined;
   quiet?: boolean | undefined;

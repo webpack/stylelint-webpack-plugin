@@ -61,12 +61,12 @@ Specify the config file location to be used by `stylelint`.
 
 A string indicating the root of your files.
 
-### `files`
+### `test`
 
-- Type: `String|Array[String]`
-- Default: `'**/*.(s(c|a)ss|css)'`
+- Type: `RegExp`
+- Default: `/.*\.(s(c|a)ss|css)$/`
 
-Specify the glob pattern for finding files. Must be relative to `options.context`.
+Specify the regex to test file paths against. Must be relative to `options.context`.
 
 ### `fix`
 

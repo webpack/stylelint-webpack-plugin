@@ -11,7 +11,7 @@ import schema from './options.json';
  * @property {boolean=} emitWarning
  * @property {boolean=} failOnError
  * @property {boolean=} failOnWarning
- * @property {Array<string> | string} files
+ * @property {RegExp} test
  * @property {Function | string} formatter
  * @property {boolean=} lintDirtyModulesOnly
  * @property {boolean=} quiet
@@ -24,7 +24,7 @@ import schema from './options.json';
  */
 export default function getOptions(pluginOptions) {
   const options = {
-    files: '**/*.(s(c|a)ss|css)',
+    test: /.*\.(s(c|a)ss|css)$/,
     formatter: 'string',
     stylelintPath: 'stylelint',
     ...pluginOptions,

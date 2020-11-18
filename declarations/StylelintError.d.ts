@@ -22,7 +22,7 @@ export type Options = {
   emitWarning?: boolean | undefined;
   failOnError?: boolean | undefined;
   failOnWarning?: boolean | undefined;
-  files: string | string[];
+  test: RegExp;
   formatter: TimerHandler;
   lintDirtyModulesOnly?: boolean | undefined;
   quiet?: boolean | undefined;

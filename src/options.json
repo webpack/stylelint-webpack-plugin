@@ -22,9 +22,9 @@
       "description": "Will cause the module build to fail if there are any warnings, if set to `true`.",
       "type": "boolean"
     },
-    "files": {
-      "description": "Specify the glob pattern for finding files. Must be relative to `options.context`.",
-      "anyOf": [{ "type": "string" }, { "type": "array" }]
+    "test": {
+      "description": "Regex to test file paths against. Must be relative to `options.context`.",
+      "instanceof": "RegExp"
     },
     "formatter": {
       "description": "Specify the formatter that you would like to use to format your results.",

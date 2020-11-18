@@ -1,13 +1,35 @@
-import { isAbsolute, join } from 'path';
+import { isAbsolute, join, relative } from 'path';
+
+// @ts-ignore
+import NormalModule from 'webpack/lib/NormalModule';
+// @ts-ignore
+import WebpackError from 'webpack/lib/WebpackError';
 
 import getOptions from './getOptions';
-import LintDirtyModulesPlugin from './LintDirtyModulesPlugin';
-import linter from './linter';
-import { parseFiles } from './utils';
+import StylelintError from './StylelintError';
 
+/** @typedef {import('webpack').NormalModule} NormalModule */
 /** @typedef {import('webpack').Compiler} Compiler */
+/** @typedef {import('stylelint').LintResult} LintResult */
 
 class StylelintWebpackPlugin {
+  /**
+   *
+   * @param {LintResult} file
+   * @returns {boolean}
+   */
+  static fileHasWarnings(file) {
+    return file.warnings && file.warnings.length > 0;
+  }
+  /**
+   *
+   * @param {LintResult} file
+   * @returns {boolean}
+   */
+  static fileHasErrors(file) {
+    return !!file.errored;
+  }
+
   constructor(options = {}) {
     this.options = getOptions(options);
   }
@@ -17,32 +39,122 @@ class StylelintWebpackPlugin {
    * @returns {void}
    */
   apply(compiler) {
-    const options = {
-      ...this.options,
-      files: parseFiles(this.options.files, this.getContext(compiler)),
-    };
-
-    // eslint-disable-next-line
-    const { lint } = require(options.stylelintPath);
     const { name: plugin } = this.constructor;
 
-    if (options.lintDirtyModulesOnly) {
-      const lintDirty = new LintDirtyModulesPlugin(lint, compiler, options);
-
-      /* istanbul ignore next */
-      compiler.hooks.watchRun.tapAsync(plugin, (compilation, callback) => {
-        lintDirty.apply(compilation, callback);
-      });
-    } else {
-      compiler.hooks.run.tapAsync(plugin, (compilation, callback) => {
-        linter(lint, options, compilation, callback);
-      });
-
-      /* istanbul ignore next */
-      compiler.hooks.watchRun.tapAsync(plugin, (compilation, callback) => {
-        linter(lint, options, compilation, callback);
+    if (!this.options.lintDirtyModulesOnly) {
+      compiler.hooks.run.tapAsync(plugin, (c, callback) => {
+        this.run(c);
+        callback();
       });
     }
+
+    compiler.hooks.watchRun.tapAsync(plugin, (c, callback) => {
+      this.run(c);
+      callback();
+    });
+  }
+
+  /**
+   * @param {Compiler} compiler
+   * @returns {void}
+   */
+  run(compiler) {
+    const { name: plugin } = this.constructor;
+    const context = this.getContext(compiler);
+    const regexp = this.options.test;
+    // eslint-disable-next-line
+    const { lint } = require(this.options.stylelintPath);
+
+    compiler.hooks.thisCompilation.tap(plugin, (compilation) => {
+      /** @type {LintResult[]} */
+      let warnings = [];
+      /** @type {LintResult[]} */
+      let errors = [];
+
+      compilation.hooks.buildModule.tap(plugin, (m) => {
+        if (!(m instanceof NormalModule)) {
+          return;
+        }
+
+        const module = /** @type {NormalModule} */ (m);
+        const file = module.resource;
+
+        if (!regexp.test(relative(context, file))) {
+          return;
+        }
+
+        lint({ ...this.options, files: file })
+          // @ts-ignore
+          .then(({ results }) => {
+            ({ errors, warnings } = this.parseResults(results));
+
+            if (warnings.length > 0) {
+              module.addWarning(StylelintError.format(this.options, warnings));
+
+              compiler.close(() => {});
+            }
+            if (errors.length > 0) {
+              module.addError(StylelintError.format(this.options, errors));
+
+              compiler.close(() => {});
+            }
+          })
+          // @ts-ignore
+          .catch((e) => {
+            compilation.errors.push(new WebpackError(e.message));
+          });
+      });
+
+      compiler.hooks.afterEmit.tapAsync(plugin, (c, callback) => {
+        if (this.options.failOnWarning && warnings.length > 0) {
+          callback(StylelintError.format(this.options, warnings));
+        } else if (this.options.failOnError && errors.length > 0) {
+          callback(StylelintError.format(this.options, errors));
+        } else {
+          callback();
+        }
+      });
+    });
+  }
+
+  /**
+   *
+   * @param {Array<LintResult>} results
+   * @returns {{errors: Array<LintResult>, warnings: Array<LintResult>}}
+   */
+  parseResults(results) {
+    /** @type {Array<LintResult>} */
+    let errors = [];
+
+    /** @type {Array<LintResult>} */
+    let warnings = [];
+
+    // @ts-ignore
+    const { fileHasWarnings, fileHasErrors } = this.constructor;
+
+    if (this.options.emitError) {
+      errors = results.filter(
+        (file) => fileHasErrors(file) || fileHasWarnings(file)
+      );
+    } else if (this.options.emitWarning) {
+      warnings = results.filter(
+        (file) => fileHasErrors(file) || fileHasWarnings(file)
+      );
+    } else {
+      warnings = results.filter(
+        (file) => !fileHasErrors(file) && fileHasWarnings(file)
+      );
+      errors = results.filter(fileHasErrors);
+    }
+
+    if (this.options.quiet && warnings.length) {
+      warnings = [];
+    }
+
+    return {
+      errors,
+      warnings,
+    };
   }
 
   /**
