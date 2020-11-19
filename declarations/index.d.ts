@@ -6,18 +6,6 @@ export type LintResult = import('stylelint').LintResult;
 /** @typedef {import('webpack').Compiler} Compiler */
 /** @typedef {import('stylelint').LintResult} LintResult */
 declare class StylelintWebpackPlugin {
-  /**
-   *
-   * @param {LintResult} file
-   * @returns {boolean}
-   */
-  static fileHasWarnings(file: LintResult): boolean;
-  /**
-   *
-   * @param {LintResult} file
-   * @returns {boolean}
-   */
-  static fileHasErrors(file: LintResult): boolean;
   constructor(options?: {});
   options: import('./getOptions').Options;
   /**

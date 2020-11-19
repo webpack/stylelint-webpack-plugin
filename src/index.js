@@ -7,29 +7,13 @@ import WebpackError from 'webpack/lib/WebpackError';
 
 import getOptions from './getOptions';
 import StylelintError from './StylelintError';
+import { replaceBackslashes, fileHasWarnings, fileHasErrors } from './utils';
 
 /** @typedef {import('webpack').NormalModule} NormalModule */
 /** @typedef {import('webpack').Compiler} Compiler */
 /** @typedef {import('stylelint').LintResult} LintResult */
 
 class StylelintWebpackPlugin {
-  /**
-   *
-   * @param {LintResult} file
-   * @returns {boolean}
-   */
-  static fileHasWarnings(file) {
-    return file.warnings && file.warnings.length > 0;
-  }
-  /**
-   *
-   * @param {LintResult} file
-   * @returns {boolean}
-   */
-  static fileHasErrors(file) {
-    return !!file.errored;
-  }
-
   constructor(options = {}) {
     this.options = getOptions(options);
   }
@@ -83,20 +67,22 @@ class StylelintWebpackPlugin {
           return;
         }
 
-        lint({ ...this.options, files: file })
+        lint({ ...this.options, files: replaceBackslashes(file) })
           // @ts-ignore
           .then(({ results }) => {
             ({ errors, warnings } = this.parseResults(results));
 
             if (warnings.length > 0) {
-              module.addWarning(StylelintError.format(this.options, warnings));
-
-              compiler.close(() => {});
+              compilation.warnings.push(
+                // @ts-ignore
+                StylelintError.format(this.options, warnings)
+              );
             }
             if (errors.length > 0) {
-              module.addError(StylelintError.format(this.options, errors));
-
-              compiler.close(() => {});
+              compilation.errors.push(
+                // @ts-ignore
+                StylelintError.format(this.options, errors)
+              );
             }
           })
           // @ts-ignore
@@ -128,9 +114,6 @@ class StylelintWebpackPlugin {
 
     /** @type {Array<LintResult>} */
     let warnings = [];
-
-    // @ts-ignore
-    const { fileHasWarnings, fileHasErrors } = this.constructor;
 
     if (this.options.emitError) {
       errors = results.filter(
