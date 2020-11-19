@@ -5,11 +5,8 @@ describe('error', () => {
     const compiler = pack('error');
 
     compiler.run((err, stats) => {
-      const { errors } = stats.compilation;
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
-      expect(errors).toHaveLength(1);
-      expect(errors[0].message).toContain('error/test.scss');
       done();
     });
   });
@@ -20,9 +17,39 @@ describe('error', () => {
     compiler.run((err, stats) => {
       const { errors } = stats.compilation;
       expect(stats.hasErrors()).toBe(true);
-      expect(errors).toHaveLength(1);
-      expect(errors[0].message).toContain('multiple-sources/_second.scss');
-      expect(errors[0].message).toContain('multiple-sources/test.scss');
+      expect(errors).toHaveLength(2);
+      // Modules are not always processed in the same order.
+      expect(errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            message: expect.stringContaining('multiple-sources/test.scss'),
+          }),
+          expect.objectContaining({
+            message: expect.stringContaining('multiple-sources/_second.scss'),
+          }),
+        ])
+      );
+      done();
+    });
+  });
+
+  it('only lints sources processed by webpack', (done) => {
+    const compiler = pack('multiple-sources');
+
+    compiler.run((err, stats) => {
+      const { errors } = stats.compilation;
+      expect(stats.hasErrors()).toBe(true);
+      expect(errors).toHaveLength(2);
+      // Modules are not always processed in the same order.
+      expect(errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            message: expect.not.stringContaining(
+              'multiple-sources/_third.scss'
+            ),
+          }),
+        ])
+      );
       done();
     });
   });
