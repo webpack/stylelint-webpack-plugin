@@ -32,7 +32,7 @@
     "lint:js": "eslint --cache .",
     "lint:types": "tsc --pretty --noEmit",
     "lint": "npm-run-all -l -p \"lint:**\"",
-    "test:only": "cross-env NODE_ENV=test jest",
+    "test:only": "cross-env NODE_ENV=test jest --runInBand",
     "test:watch": "npm run test:only -- --watch",
     "test:coverage": "npm run test:only -- --collectCoverageFrom=\"src/**/*.js\" --coverage",
     "pretest": "npm run lint",
