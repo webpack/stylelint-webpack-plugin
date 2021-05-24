@@ -46,7 +46,7 @@ describe('watch', () => {
       expect(errors.length).toBe(1);
       const [{ message }] = errors;
       expect(message).toEqual(expect.stringMatching('entry.scss'));
-      expect(message).toEqual(expect.not.stringMatching('leaf.scss'));
+      expect(message).not.toEqual(expect.stringMatching('leaf.scss'));
 
       next = secondPass;
 
@@ -76,7 +76,7 @@ describe('watch', () => {
       expect(errors.length).toBe(1);
       const [{ message }] = errors;
       expect(message).toEqual(expect.stringMatching('entry.scss'));
-      expect(message).toEqual(expect.not.stringMatching('leaf.scss'));
+      expect(message).not.toEqual(expect.stringMatching('leaf.scss'));
 
       next = finish;
 
