@@ -6,17 +6,16 @@ import pack from './utils/pack';
 
 describe('output report', () => {
   it('should output report a default formatter', (done) => {
-    const filePathRelative = join('..', '..', 'output', 'report.txt');
-    const filePathAbsolute = join(__dirname, 'output', 'report.json');
+    const filePath = 'report.txt';
     const compiler = pack('error', {
-      outputReport: { filePath: filePathRelative },
+      outputReport: { filePath },
     });
 
     compiler.run((err, stats) => {
       expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
-      expect(existsSync(filePathAbsolute)).toBe(true);
+      expect(existsSync(join(compiler.outputPath, filePath))).toBe(true);
       done();
     });
   });

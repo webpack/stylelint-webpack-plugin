@@ -1,4 +1,0 @@
-
-[4mtest/fixtures/error/test.scss[24m
- [2m2:12[22m  [31m[31m✖[39m  Expected double quotes   [2mstring-quotes[22m
-
