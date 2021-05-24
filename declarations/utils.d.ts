@@ -1,14 +1,16 @@
 /**
- * @param {Array<string> | string} files
+ * @param {string|string[]} files
  * @param {string} context
- * @returns {Array<string>}
+ * @returns {string[]}
  */
-export function parseFiles(
-  files: Array<string> | string,
-  context: string
-): Array<string>;
+export function parseFiles(files: string | string[], context: string): string[];
 /**
- * @param {string} str
- * @returns {string}
+ * @param {string|string[]} patterns
+ * @param {string|string[]} extensions
+ * @returns {string[]}
  */
-export function replaceBackslashes(str: string): string;
+export function parseFoldersToGlobs(
+  patterns: string | string[],
+  extensions?: string | string[]
+): string[];
+export function jsonStringifyReplacerSortKeys(_: string, value: any): any;

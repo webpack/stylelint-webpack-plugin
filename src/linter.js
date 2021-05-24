@@ -1,112 +1,218 @@
-import StylelintError from './StylelintError';
+import { dirname, isAbsolute, join } from 'path';
 
-/** @typedef {import('stylelint').LinterResult} LinterResult */
+// @ts-ignore
+import arrify from 'arrify';
+
+import StylelintError from './StylelintError';
+import getStylelint from './getStylelint';
+
+/** @typedef {import('stylelint')} Stylelint */
 /** @typedef {import('stylelint').LintResult} LintResult */
 /** @typedef {import('webpack').Compiler} Compiler */
-/** @typedef {import('./getOptions').Options} Options */
+/** @typedef {import('webpack').Compilation} Compilation */
+/** @typedef {import('./options').Options} Options */
+/** @typedef {import('./options').FormatterType} FormatterType */
+/** @typedef {((results: LintResult[]) => string)} FormatterFunction */
+/** @typedef {(compilation: Compilation) => Promise<void>} GenerateReport */
+/** @typedef {{errors?: StylelintError, warnings?: StylelintError, generateReportAsset?: GenerateReport}} Report */
+/** @typedef {() => Promise<Report>} Reporter */
+/** @typedef {(files: string|string[]) => void} Linter */
+/** @typedef {{[files: string]: LintResult}} LintResultMap */
+
+/** @type {WeakMap<Compiler, LintResultMap>} */
+const resultStorage = new WeakMap();
 
 /**
- * @callback Lint
+ * @param {string|undefined} key
  * @param {Options} options
- * @returns {Promise<LinterResult>}
+ * @param {Compilation} compilation
+ * @returns {{lint: Linter, report: Reporter, threads: number}}
  */
+export default function linter(key, options, compilation) {
+  /** @type {Stylelint} */
+  let stylelint;
 
-/**
- * @callback LinterCallback
- * @param {StylelintError | null=} error
- * @returns {void}
- */
+  /** @type {(files: string|string[]) => Promise<LintResult[]>} */
+  let lintFiles;
 
-/**
- * @param {Lint} lint
- * @param {Options} options
- * @param {Compiler} compiler
- * @param {LinterCallback} callback
- * @returns {void}
- */
-export default function linter(lint, options, compiler, callback) {
-  /** @type {Array<LintResult>} */
-  let errors = [];
+  /** @type {() => Promise<void>} */
+  let cleanup;
 
-  /** @type {Array<LintResult>} */
-  let warnings = [];
+  /** @type number */
+  let threads;
 
-  lint(options)
-    .then(({ results }) => {
-      ({ errors, warnings } = parseResults(options, results));
+  /** @type {Promise<LintResult[]>[]} */
+  const rawResults = [];
 
-      compiler.hooks.afterEmit.tapAsync(
-        'StylelintWebpackPlugin',
-        (compilation, next) => {
-          if (warnings.length) {
-            // @ts-ignore
-            compilation.warnings.push(StylelintError.format(options, warnings));
-            warnings = [];
-          }
+  const crossRunResultStorage = getResultStorage(compilation);
 
-          if (errors.length) {
-            // @ts-ignore
-            compilation.errors.push(StylelintError.format(options, errors));
-            errors = [];
-          }
+  try {
+    ({ stylelint, lintFiles, cleanup, threads } = getStylelint(key, options));
+  } catch (e) {
+    throw new StylelintError(e.message);
+  }
 
-          next();
-        }
-      );
+  return {
+    lint,
+    report,
+    threads,
+  };
 
-      if (options.failOnError && errors.length) {
-        callback(StylelintError.format(options, errors));
-      } else if (options.failOnWarning && warnings.length) {
-        callback(StylelintError.format(options, warnings));
-      } else {
-        callback();
+  /**
+   * @param {string | string[]} files
+   */
+  function lint(files) {
+    for (const file of arrify(files)) {
+      delete crossRunResultStorage[file];
+    }
+    rawResults.push(
+      lintFiles(files).catch((e) => {
+        compilation.errors.push(e);
+        return [];
+      })
+    );
+  }
+
+  async function report() {
+    // Filter out ignored files.
+    let results = removeIgnoredWarnings(
+      // Get the current results, resetting the rawResults to empty
+      await flatten(rawResults.splice(0, rawResults.length))
+    );
+
+    await cleanup();
+
+    for (const result of results) {
+      crossRunResultStorage[result.source] = result;
+    }
+
+    results = Object.values(crossRunResultStorage);
+
+    // do not analyze if there are no results or stylelint config
+    if (!results || results.length < 1) {
+      return {};
+    }
+
+    const formatter = loadFormatter(stylelint, options.formatter);
+    const { errors, warnings } = formatResults(
+      formatter,
+      parseResults(options, results)
+    );
+
+    return {
+      errors,
+      warnings,
+      generateReportAsset,
+    };
+
+    /**
+     * @param {Compilation} compilation
+     * @returns {Promise<void>}
+     */
+    async function generateReportAsset({ compiler }) {
+      const { outputReport } = options;
+      /**
+       * @param {string} name
+       * @param {string | Buffer} content
+       */
+      const save = (name, content) =>
+        /** @type {Promise<void>} */ (
+          new Promise((finish, bail) => {
+            const { mkdir, writeFile } = compiler.outputFileSystem;
+            // ensure directory exists
+            // @ts-ignore - the types for `outputFileSystem` are missing the 3 arg overload
+            mkdir(dirname(name), { recursive: true }, (err) => {
+              /* istanbul ignore if */
+              if (err) bail(err);
+              else
+                writeFile(name, content, (err2) => {
+                  /* istanbul ignore if */
+                  if (err2) bail(err2);
+                  else finish();
+                });
+            });
+          })
+        );
+
+      if (!outputReport || !outputReport.filePath) {
+        return;
       }
-    })
-    .catch((e) => {
-      compiler.hooks.afterEmit.tapAsync(
-        'StylelintWebpackPlugin',
-        (compilation, next) => {
-          // @ts-ignore
-          compilation.errors.push(new StylelintError(e.message));
-          next();
-        }
-      );
 
-      callback();
-    });
+      const content = outputReport.formatter
+        ? loadFormatter(stylelint, outputReport.formatter)(results)
+        : formatter(results);
+
+      let { filePath } = outputReport;
+      if (!isAbsolute(filePath)) {
+        filePath = join(compiler.outputPath, filePath);
+      }
+
+      await save(filePath, content);
+    }
+  }
 }
 
 /**
- *
+ * @param {FormatterFunction} formatter
+ * @param {{ errors: LintResult[]; warnings: LintResult[]; }} results
+ * @returns {{errors?: StylelintError, warnings?: StylelintError}}
+ */
+function formatResults(formatter, results) {
+  let errors;
+  let warnings;
+  if (results.warnings.length > 0) {
+    warnings = new StylelintError(formatter(results.warnings));
+  }
+
+  if (results.errors.length > 0) {
+    errors = new StylelintError(formatter(results.errors));
+  }
+
+  return {
+    errors,
+    warnings,
+  };
+}
+
+/**
  * @param {Options} options
- * @param {Array<LintResult>} results
- * @returns {{errors: Array<LintResult>, warnings: Array<LintResult>}}
+ * @param {LintResult[]} results
+ * @returns {{errors: LintResult[], warnings: LintResult[]}}
  */
 function parseResults(options, results) {
-  /** @type {Array<LintResult>} */
-  let errors = [];
+  /** @type {LintResult[]} */
+  const errors = [];
 
-  /** @type {Array<LintResult>} */
-  let warnings = [];
+  /** @type {LintResult[]} */
+  const warnings = [];
 
-  if (options.emitError) {
-    errors = results.filter(
-      (file) => fileHasErrors(file) || fileHasWarnings(file)
-    );
-  } else if (options.emitWarning) {
-    warnings = results.filter(
-      (file) => fileHasErrors(file) || fileHasWarnings(file)
-    );
-  } else {
-    warnings = results.filter(
-      (file) => !fileHasErrors(file) && fileHasWarnings(file)
-    );
-    errors = results.filter(fileHasErrors);
-  }
+  results.forEach((file) => {
+    if (fileHasErrors(file)) {
+      const messages = file.warnings.filter(
+        (message) => options.emitError && message.severity === 'error'
+      );
 
-  if (options.quiet && warnings.length) {
-    warnings = [];
-  }
+      if (messages.length > 0) {
+        errors.push({
+          ...file,
+          warnings: messages,
+        });
+      }
+    }
+
+    if (fileHasWarnings(file)) {
+      const messages = file.warnings.filter(
+        (message) => options.emitWarning && message.severity === 'warning'
+      );
+
+      if (messages.length > 0) {
+        warnings.push({
+          ...file,
+          warnings: messages,
+        });
+      }
+    }
+  });
 
   return {
     errors,
@@ -128,4 +234,58 @@ function fileHasErrors(file) {
  */
 function fileHasWarnings(file) {
   return file.warnings && file.warnings.length > 0;
+}
+
+/**
+ * @param {Stylelint} stylelint
+ * @param {FormatterType=} formatter
+ * @returns {FormatterFunction}
+ */
+function loadFormatter(stylelint, formatter) {
+  if (typeof formatter === 'function') {
+    return formatter;
+  }
+
+  if (typeof formatter === 'string') {
+    try {
+      return stylelint.formatters[formatter];
+    } catch (_) {
+      // Load the default formatter.
+    }
+  }
+
+  return stylelint.formatters.string;
+}
+
+/**
+ * @param {LintResult[]} results
+ * @returns {LintResult[]}
+ */
+function removeIgnoredWarnings(results) {
+  return results.filter((result) => !result.ignored);
+}
+
+/**
+ * @param {Promise<LintResult[]>[]} results
+ * @returns {Promise<LintResult[]>}
+ */
+async function flatten(results) {
+  /**
+   * @param {LintResult[]} acc
+   * @param {LintResult[]} list
+   */
+  const flat = (acc, list) => [...acc, ...list];
+  return (await Promise.all(results)).reduce(flat, []);
+}
+
+/**
+ * @param {Compilation} compilation
+ * @returns {LintResultMap}
+ */
+function getResultStorage({ compiler }) {
+  let storage = resultStorage.get(compiler);
+  if (!storage) {
+    resultStorage.set(compiler, (storage = {}));
+  }
+  return storage;
 }

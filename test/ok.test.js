@@ -1,10 +1,11 @@
 import pack from './utils/pack';
 
 describe('ok', () => {
-  it('works with a simple file', (done) => {
-    const compiler = pack('ok');
+  it("should don't throw error if file is ok", (done) => {
+    const compiler = pack('good');
 
     compiler.run((err, stats) => {
+      expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(false);
       done();

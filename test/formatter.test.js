@@ -2,8 +2,6 @@ import { formatters } from 'stylelint';
 
 import pack from './utils/pack';
 
-jest.setTimeout(20000);
-
 describe('formatter', () => {
   it('should use default formatter', (done) => {
     const compiler = pack('error');

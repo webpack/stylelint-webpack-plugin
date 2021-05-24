@@ -1,40 +1,57 @@
 import pack from './utils/pack';
 
 describe('emit warning', () => {
-  const pluginConf = { emitWarning: true };
-
-  it('does not print warnings or errors when there are none', (done) => {
-    const compiler = pack('ok', pluginConf);
+  it('should not emit warnings if emitWarning is false', (done) => {
+    const compiler = pack('warning', { emitWarning: false });
 
     compiler.run((err, stats) => {
+      expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
+      done();
+    });
+  });
+
+  it('should emit warnings if emitWarning is undefined', (done) => {
+    const compiler = pack('warning', {});
+
+    compiler.run((err, stats) => {
+      expect(err).toBeNull();
+      expect(stats.hasWarnings()).toBe(true);
+      done();
+    });
+  });
+
+  it('should emit warnings if emitWarning is true', (done) => {
+    const compiler = pack('warning', { emitWarning: true });
+
+    compiler.run((err, stats) => {
+      expect(err).toBeNull();
+      expect(stats.hasWarnings()).toBe(true);
+      done();
+    });
+  });
+
+  it('should emit warnings, but not warnings if emitWarning is true and emitError is false', (done) => {
+    const compiler = pack('full-of-problems', {
+      emitWarning: true,
+      emitError: false,
+    });
+
+    compiler.run((err, stats) => {
+      expect(err).toBeNull();
+      expect(stats.hasWarnings()).toBe(true);
       expect(stats.hasErrors()).toBe(false);
       done();
     });
   });
 
-  it('emits warnings when asked to', (done) => {
-    const compiler = pack('warning', pluginConf);
+  it('should emit warnings and errors if emitWarning is true and emitError is undefined', (done) => {
+    const compiler = pack('full-of-problems', { emitWarning: true });
 
     compiler.run((err, stats) => {
-      const { warnings } = stats.compilation;
+      expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(true);
-      expect(stats.hasErrors()).toBe(false);
-      expect(warnings).toHaveLength(1);
-      expect(warnings[0].message).toContain('warning/test.scss');
-      done();
-    });
-  });
-
-  it('emits errors as warnings when asked to', (done) => {
-    const compiler = pack('error', pluginConf);
-
-    compiler.run((err, stats) => {
-      const { warnings } = stats.compilation;
-      expect(stats.hasWarnings()).toBe(true);
-      expect(stats.hasErrors()).toBe(false);
-      expect(warnings).toHaveLength(1);
-      expect(warnings[0].message).toContain('error/test.scss');
+      expect(stats.hasErrors()).toBe(true);
       done();
     });
   });

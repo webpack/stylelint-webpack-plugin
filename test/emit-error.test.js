@@ -1,40 +1,57 @@
 import pack from './utils/pack';
 
 describe('emit error', () => {
-  const pluginConf = { emitError: true };
-
-  it('does not print warnings or errors when there are none', (done) => {
-    const compiler = pack('ok', pluginConf);
+  it('should not emit errors if emitError is false', (done) => {
+    const compiler = pack('error', { emitError: false });
 
     compiler.run((err, stats) => {
-      expect(stats.hasWarnings()).toBe(false);
+      expect(err).toBeNull();
       expect(stats.hasErrors()).toBe(false);
       done();
     });
   });
 
-  it('emits errors when asked to', (done) => {
-    const compiler = pack('error', pluginConf);
+  it('should emit errors if emitError is undefined', (done) => {
+    const compiler = pack('error');
 
     compiler.run((err, stats) => {
-      const { errors } = stats.compilation;
-      expect(stats.hasWarnings()).toBe(false);
+      expect(err).toBeNull();
       expect(stats.hasErrors()).toBe(true);
-      expect(errors).toHaveLength(1);
-      expect(errors[0].message).toContain('error/test.scss');
       done();
     });
   });
 
-  it('emits warnings as errors when asked to', (done) => {
-    const compiler = pack('warning', pluginConf);
+  it('should emit errors if emitError is true', (done) => {
+    const compiler = pack('error', { emitError: true });
 
     compiler.run((err, stats) => {
-      const { errors } = stats.compilation;
+      expect(err).toBeNull();
+      expect(stats.hasErrors()).toBe(true);
+      done();
+    });
+  });
+
+  it('should emit errors, but not warnings if emitError is true and emitWarning is false', (done) => {
+    const compiler = pack('full-of-problems', {
+      emitError: true,
+      emitWarning: false,
+    });
+
+    compiler.run((err, stats) => {
+      expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
-      expect(errors).toHaveLength(1);
-      expect(errors[0].message).toContain('warning/test.scss');
+      done();
+    });
+  });
+
+  it('should emit errors and warnings if emitError is true and emitWarning is undefined', (done) => {
+    const compiler = pack('full-of-problems', { emitError: true });
+
+    compiler.run((err, stats) => {
+      expect(err).toBeNull();
+      expect(stats.hasWarnings()).toBe(true);
+      expect(stats.hasErrors()).toBe(true);
       done();
     });
   });

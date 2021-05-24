@@ -1,15 +1,13 @@
 import pack from './utils/pack';
 
 describe('warning', () => {
-  it('sends warnings properly', (done) => {
+  it('should emit warnings', (done) => {
     const compiler = pack('warning');
 
     compiler.run((err, stats) => {
-      const { warnings } = stats.compilation;
+      expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(true);
       expect(stats.hasErrors()).toBe(false);
-      expect(warnings).toHaveLength(1);
-      expect(warnings[0].message).toContain('warning/test.scss');
       done();
     });
   });

@@ -1,37 +1,24 @@
 import pack from './utils/pack';
 
 describe('quiet', () => {
-  const pluginConf = { quiet: true };
-
-  it('does not print warnings or errors when there are none', (done) => {
-    const compiler = pack('ok', pluginConf);
+  it('should not emit warnings if quiet is set', (done) => {
+    const compiler = pack('warning', { quiet: true });
 
     compiler.run((err, stats) => {
+      expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(false);
       done();
     });
   });
 
-  it('emits errors only', (done) => {
-    const compiler = pack('error', pluginConf);
+  it('should emit errors, but not emit warnings if quiet is set', (done) => {
+    const compiler = pack('full-of-problems', { quiet: true });
 
     compiler.run((err, stats) => {
-      const { errors } = stats.compilation;
+      expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
-      expect(errors).toHaveLength(1);
-      expect(errors[0].message).toContain('error/test.scss');
-      done();
-    });
-  });
-
-  it('does not emits warnings', (done) => {
-    const compiler = pack('warning', pluginConf);
-
-    compiler.run((err, stats) => {
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(false);
       done();
     });
   });
