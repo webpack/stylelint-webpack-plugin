@@ -1,8 +1,6 @@
 import { join } from 'path';
 import { writeFileSync } from 'fs';
 
-import { removeSync } from 'fs-extra';
-
 import pack from './utils/pack';
 
 const target = join(__dirname, 'fixtures', 'watch', 'entry.scss');
@@ -14,8 +12,6 @@ describe('watch', () => {
     if (watch) {
       watch.close();
     }
-    removeSync(target);
-    removeSync(target2);
   });
 
   it('should watch', (done) => {
@@ -41,7 +37,11 @@ describe('watch', () => {
       expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
-      expect(stats.compilation.errors.length).toBe(1);
+      const { errors } = stats.compilation;
+      expect(errors.length).toBe(1);
+      const [{ message }] = errors;
+      expect(message).toEqual(expect.stringMatching('entry.scss'));
+      expect(message).not.toEqual(expect.stringMatching('leaf.scss'));
 
       next = secondPass;
 
@@ -53,9 +53,14 @@ describe('watch', () => {
       expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
-      expect(stats.compilation.errors.length).toBe(1);
+      const { errors } = stats.compilation;
+      expect(errors.length).toBe(1);
+      const [{ message }] = errors;
+      expect(message).toEqual(expect.stringMatching('entry.scss'));
+      expect(message).toEqual(expect.stringMatching('leaf.scss'));
 
       next = thirdPass;
+
       writeFileSync(target2, '#stuff { display: "block"; }\n');
     }
 
@@ -63,7 +68,11 @@ describe('watch', () => {
       expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
-      expect(stats.compilation.errors.length).toBe(1);
+      const { errors } = stats.compilation;
+      expect(errors.length).toBe(1);
+      const [{ message }] = errors;
+      expect(message).toEqual(expect.stringMatching('entry.scss'));
+      expect(message).not.toEqual(expect.stringMatching('leaf.scss'));
 
       next = finish;
 
