@@ -113,8 +113,6 @@ class StylelintWebpackPlugin {
         for (const file of filteredFiles) {
           files.push(file);
 
-          // TODO: disable threads, not working with stylelint
-          /* istanbul ignore if */
           if (threads > 1) {
             lint(file);
           }
@@ -189,7 +187,6 @@ class StylelintWebpackPlugin {
     }
 
     // webpack 4
-    // TODO: remove on major version
     /* istanbul ignore next */
     else if (buildInfo && buildInfo.fileDependencies) {
       files = Array.from(buildInfo.fileDependencies);

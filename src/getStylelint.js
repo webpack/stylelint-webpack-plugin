@@ -56,20 +56,11 @@ export function loadStylelintThreaded(key, poolSize, options) {
   const context = {
     ...local,
     threads: poolSize,
-    lintFiles: async (files) => {
-      // TODO: disable threads, not working with stylelint
-      /* istanbul ignore next */
-      if (worker) {
-        return worker.lintFiles(files);
-      }
-
-      /* istanbul ignore next */
-      return local.lintFiles(files);
-    },
+    lintFiles: async (files) =>
+      worker ? worker.lintFiles(files) : local.lintFiles(files),
     cleanup: async () => {
       cache[cacheKey] = local;
       context.lintFiles = (files) => local.lintFiles(files);
-      /* istanbul ignore next */
       if (worker) {
         worker.end();
         worker = null;
@@ -86,23 +77,17 @@ export function loadStylelintThreaded(key, poolSize, options) {
  * @returns {Linter}
  */
 export default function getStylelint(key, { threads, ...options }) {
-  let max =
-    /* istanbul ignore next */
+  const max =
     typeof threads !== 'number'
-      ? /* istanbul ignore next */
-        threads
+      ? threads
         ? cpus().length - 1
         : 1
       : /* istanbul ignore next */
         threads;
 
-  // TODO: disable threads, not working with stylelint
-  max = 1;
-
   const cacheKey = getCacheKey(key, { threads, ...options });
   if (!cache[cacheKey]) {
     cache[cacheKey] =
-      /* istanbul ignore next */
       max > 1
         ? loadStylelintThreaded(key, max, options)
         : loadStylelint(options);

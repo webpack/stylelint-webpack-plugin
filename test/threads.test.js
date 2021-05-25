@@ -18,16 +18,15 @@ describe('Threading', () => {
     threaded.cleanup();
   });
 
-  // TODO: disable threads, not working with stylelint
-  test.skip('Threaded should lint files', async () => {
+  test('Threaded should lint files', async () => {
     const threaded = loadStylelintThreaded('bar', 1, {});
     try {
       const [good, bad] = await Promise.all([
         threaded.lintFiles(join(__dirname, 'fixtures/good/test.scss')),
         threaded.lintFiles(join(__dirname, 'fixtures/error/test.scss')),
       ]);
-      expect(good).toBe(false);
-      expect(bad).toBe(true);
+      expect(good[0].errored).toBe(false);
+      expect(bad[0].errored).toBe(true);
     } finally {
       threaded.cleanup();
     }

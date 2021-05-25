@@ -18,7 +18,6 @@ let linterOptions;
  * @param {Partial<StylelintOptions>} stylelintOptions
  */
 function setup(options, stylelintOptions) {
-  // eslint-disable-next-line global-require,import/no-dynamic-require
   stylelint = require(options.stylelintPath || 'stylelint');
   linterOptions = stylelintOptions;
 
@@ -34,5 +33,15 @@ async function lintFiles(files) {
     files,
   });
 
-  return results;
+  // Reset result to work with worker
+  return results.map((result) => {
+    return {
+      source: result.source,
+      errored: result.errored,
+      ignored: result.ignored,
+      warnings: result.warnings,
+      deprecations: result.deprecations,
+      invalidOptionWarnings: result.invalidOptionWarnings,
+    };
+  });
 }
