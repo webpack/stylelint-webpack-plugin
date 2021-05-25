@@ -38,19 +38,21 @@ describe('Threading', () => {
     });
 
     test('worker can start', async () => {
+      const { setup, lintFiles } = require('../src/worker');
       const mockThread = { parentPort: { on: jest.fn() }, workerData: {} };
       const mockLintFiles = jest.fn().mockReturnValue({
         results: [],
       });
+
+      jest.mock('worker_threads', () => mockThread);
       jest.mock('stylelint', () => {
         return { lint: mockLintFiles };
       });
-      jest.mock('worker_threads', () => mockThread);
-      // eslint-disable-next-line global-require,import/no-dynamic-require
-      const { setup, lintFiles } = require('../src/worker');
 
       setup({});
+
       await lintFiles('foo');
+
       expect(mockLintFiles).toHaveBeenCalledWith({ files: 'foo' });
     });
   });
