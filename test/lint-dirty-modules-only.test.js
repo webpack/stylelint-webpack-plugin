@@ -5,7 +5,7 @@ import { removeSync } from 'fs-extra';
 
 import pack from './utils/pack';
 
-const target = join(__dirname, 'fixtures', 'lint-dirty-modules-only/test.scss');
+const target = join(__dirname, 'fixtures/lint-dirty-modules-only/test.scss');
 
 describe('lint dirty modules only', () => {
   let watch;

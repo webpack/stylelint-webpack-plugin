@@ -12,7 +12,7 @@ describe('emit warning', () => {
   });
 
   it('should emit warnings if emitWarning is undefined', (done) => {
-    const compiler = pack('warning', {});
+    const compiler = pack('warning');
 
     compiler.run((err, stats) => {
       expect(err).toBeNull();
