@@ -4,7 +4,9 @@ import pack from './utils/pack';
 
 describe('context', () => {
   it('absolute', (done) => {
-    const compiler = pack('good', { context: join(__dirname, 'fixtures') });
+    const compiler = pack('good', {
+      context: join(__dirname, 'fixtures/good'),
+    });
 
     compiler.run((err, stats) => {
       expect(stats.hasWarnings()).toBe(false);
@@ -14,7 +16,7 @@ describe('context', () => {
   });
 
   it('relative', (done) => {
-    const compiler = pack('good', { context: '../fixtures/' });
+    const compiler = pack('good', { context: '../good/' });
 
     compiler.run((err, stats) => {
       expect(stats.hasWarnings()).toBe(false);
