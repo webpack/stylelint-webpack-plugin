@@ -70,7 +70,7 @@ describe('watch', () => {
     function finish(err, stats) {
       expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(false);
+      expect(stats.hasErrors()).toBe(true);
       done();
     }
   });
