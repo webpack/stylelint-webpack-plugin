@@ -62,6 +62,7 @@ class StylelintWebpackPlugin {
    */
   async run(compiler) {
     // Do not re-hook
+    /* istanbul ignore if */
     if (
       // @ts-ignore
       compiler.hooks.thisCompilation.taps.find(({ name }) => name === this.key)
