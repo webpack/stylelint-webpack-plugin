@@ -22,7 +22,7 @@ const cache = {};
  * @param {Options} options
  * @returns {Linter}
  */
-export function loadStylelint(options) {
+function loadStylelint(options) {
   const stylelint = setup(options, getStylelintOptions(options));
 
   return {
@@ -39,7 +39,7 @@ export function loadStylelint(options) {
  * @param {Options} options
  * @returns {Linter}
  */
-export function loadStylelintThreaded(key, poolSize, options) {
+function loadStylelintThreaded(key, poolSize, options) {
   const cacheKey = getCacheKey(key, options);
   const source = require.resolve('./worker');
   const workerOptions = {
@@ -59,10 +59,12 @@ export function loadStylelintThreaded(key, poolSize, options) {
     ...local,
     threads: poolSize,
     lintFiles: async (files) =>
+      /* istanbul ignore next */
       worker ? worker.lintFiles(files) : local.lintFiles(files),
     cleanup: async () => {
       cache[cacheKey] = local;
       context.lintFiles = (files) => local.lintFiles(files);
+      /* istanbul ignore next */
       if (worker) {
         worker.end();
         worker = null;
@@ -80,12 +82,7 @@ export function loadStylelintThreaded(key, poolSize, options) {
  */
 export default function getStylelint(key, { threads, ...options }) {
   const max =
-    typeof threads !== 'number'
-      ? threads
-        ? cpus().length - 1
-        : 1
-      : /* istanbul ignore next */
-        threads;
+    typeof threads !== 'number' ? (threads ? cpus().length - 1 : 1) : threads;
 
   const cacheKey = getCacheKey(key, { threads, ...options });
   if (!cache[cacheKey]) {
