@@ -177,28 +177,28 @@ class StylelintWebpackPlugin {
    * @param {Module} module
    * @returns {string[]}
    */
-  getFiles({ fileTimestamps }, { buildInfo }) {
+  getFiles(compiler, module) {
     /** @type {string[]} */
     let files = [];
 
     // webpack 5
-    if (buildInfo && buildInfo.snapshot && buildInfo.snapshot.fileTimestamps) {
-      console.log(buildInfo.snapshot.fileTimestamps)
-      files = this.getChangedFiles(buildInfo.snapshot.fileTimestamps);
+    if (module.buildInfo && module.buildInfo.snapshot && module.buildInfo.snapshot.fileTimestamps) {
+      console.log(module.buildInfo.snapshot.fileTimestamps)
+      files = this.getChangedFiles(module.buildInfo.snapshot.fileTimestamps);
       console.log(files)
     }
 
     // webpack 4
     /* istanbul ignore next */
-    else if (buildInfo && buildInfo.fileDependencies) {
-      console.log(buildInfo.fileDependencies)
-      files = Array.from(buildInfo.fileDependencies);
+    else if (module.buildInfo && module.buildInfo.fileDependencies) {
+      console.log(module.buildInfo.fileDependencies)
+      files = Array.from(module.buildInfo.fileDependencies);
       console.log(files)
 
-      if (fileTimestamps && fileTimestamps.size > 0) {
+      if (compiler.fileTimestamps && compiler.fileTimestamps.size > 0) {
         const fileDependencies = new Map();
 
-        for (const [filename, timestamp] of fileTimestamps.entries()) {
+        for (const [filename, timestamp] of compiler.fileTimestamps.entries()) {
           if (files.includes(filename)) {
             fileDependencies.set(filename, timestamp);
           }
@@ -208,7 +208,7 @@ class StylelintWebpackPlugin {
       }
     }
 
-    return files;
+    return parseFiles(files, this.getContext(compiler));
   }
 
   /**
