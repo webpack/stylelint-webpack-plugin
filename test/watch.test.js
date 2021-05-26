@@ -77,7 +77,6 @@ describe('watch', () => {
 
       next = finish;
       writeFileSync(target, '@import "./leaf.scss";\n');
-      writeFileSync(target2, '#stuff { display: "block"; }\n');
     }
 
     function finish(err, stats) {

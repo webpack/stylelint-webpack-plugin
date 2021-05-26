@@ -101,7 +101,7 @@ class StylelintWebpackPlugin {
 
       // Add the file to be linted
       compilation.hooks.succeedModule.tap(this.key, (module) => {
-        const filteredFiles = this.getFiles(compiler, module).filter(
+        const filteredFiles = this.getFiles(options, compiler, module).filter(
           (file) =>
             !files.includes(file) &&
             isMatch(file, wanted, { dot: true }) &&
@@ -171,29 +171,33 @@ class StylelintWebpackPlugin {
   }
 
   /**
+   * @param {Options} options
    * @param {Compiler} compiler
    * @param {Module} module
    * @returns {string[]}
    */
-  getFiles(compiler, module) {
-    /** @type {string[]} */
-    let files = [];
+  // eslint-disable-next-line no-unused-vars
+  getFiles(options, compiler, module) {
+    // TODO: how to get module dependencies on css files?
+    // Temporaly lint all css files on start webpack
+    // on watch lint only modified files
+    // maybe implemented on next major version v3
+    // on webpack 5 not safe to use `module.buildInfo.snapshot`
+    // on webpack `module.buildInfo.fileDependencies` not working correclty
 
     // webpack 5
+    /*
     if (
       module.buildInfo &&
       module.buildInfo.snapshot &&
       module.buildInfo.snapshot.fileTimestamps
     ) {
       files = this.getChangedFiles(module.buildInfo.snapshot.fileTimestamps);
-      console.log(files)
     }
 
     // webpack 4
-    /* istanbul ignore next */
     else if (module.buildInfo && module.buildInfo.fileDependencies) {
       files = Array.from(module.buildInfo.fileDependencies);
-      console.log(files)
 
       if (compiler.fileTimestamps && compiler.fileTimestamps.size > 0) {
         const fileDependencies = new Map();
@@ -206,6 +210,22 @@ class StylelintWebpackPlugin {
 
         files = this.getChangedFiles(fileDependencies);
       }
+    }
+    */
+
+    /** @type {string[]} */
+    // @ts-ignore
+    let { files } = options;
+
+    // webpack 5
+    if (compiler.modifiedFiles) {
+      files = Array.from(compiler.modifiedFiles);
+    }
+
+    // webpack 4
+    /* istanbul ignore next */
+    else if (compiler.fileTimestamps && compiler.fileTimestamps.size > 0) {
+      files = this.getChangedFiles(compiler.fileTimestamps);
     }
 
     return files;
