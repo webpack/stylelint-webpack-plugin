@@ -67,14 +67,12 @@ class StylelintWebpackPlugin {
       return;
     }
 
+    const context = this.getContext(compiler);
     const options = {
       ...this.options,
-      exclude: parseFiles(
-        this.options.exclude || [],
-        this.getContext(compiler)
-      ),
+      exclude: parseFiles(this.options.exclude || [], context),
       extensions: arrify(this.options.extensions),
-      files: parseFiles(this.options.files || '', this.getContext(compiler)),
+      files: parseFiles(this.options.files || '', context),
     };
 
     const wanted = parseFoldersToGlobs(options.files, options.extensions);
@@ -114,7 +112,7 @@ class StylelintWebpackPlugin {
           files.push(file);
 
           if (threads > 1) {
-            lint(file);
+            lint(parseFiles(file, context));
           }
         }
       });
@@ -122,7 +120,7 @@ class StylelintWebpackPlugin {
       // Lint all files added
       compilation.hooks.finishModules.tap(this.key, () => {
         if (files.length > 0 && threads <= 1) {
-          lint(files);
+          lint(parseFiles(files, context));
         }
       });
 
@@ -182,18 +180,18 @@ class StylelintWebpackPlugin {
     let files = [];
 
     // webpack 5
-    if (module.buildInfo && module.buildInfo.snapshot && module.buildInfo.snapshot.fileTimestamps) {
-      console.log(module.buildInfo.snapshot.fileTimestamps)
+    if (
+      module.buildInfo &&
+      module.buildInfo.snapshot &&
+      module.buildInfo.snapshot.fileTimestamps
+    ) {
       files = this.getChangedFiles(module.buildInfo.snapshot.fileTimestamps);
-      console.log(files)
     }
 
     // webpack 4
     /* istanbul ignore next */
     else if (module.buildInfo && module.buildInfo.fileDependencies) {
-      console.log(module.buildInfo.fileDependencies)
       files = Array.from(module.buildInfo.fileDependencies);
-      console.log(files)
 
       if (compiler.fileTimestamps && compiler.fileTimestamps.size > 0) {
         const fileDependencies = new Map();
@@ -208,7 +206,7 @@ class StylelintWebpackPlugin {
       }
     }
 
-    return parseFiles(files, this.getContext(compiler));
+    return files;
   }
 
   /**
