@@ -1,14 +1,13 @@
 import { join } from 'path';
-import { writeFileSync } from 'fs';
 
-import { removeSync } from 'fs-extra';
+import { writeFileSync, removeSync } from 'fs-extra';
 
 import pack from './utils/pack';
 
 const target = join(__dirname, 'fixtures', 'watch', 'entry.scss');
 const target2 = join(__dirname, 'fixtures', 'watch', 'leaf.scss');
 
-describe.skip('watch', () => {
+describe('watch', () => {
   let watch;
   afterEach(() => {
     if (watch) {
@@ -42,9 +41,9 @@ describe.skip('watch', () => {
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
       const { errors } = stats.compilation;
-
       expect(errors.length).toBe(1);
       const [{ message }] = errors;
+      console.log(message);
       expect(message).toEqual(expect.stringMatching('entry.scss'));
       expect(message).not.toEqual(expect.stringMatching('leaf.scss'));
 
@@ -61,6 +60,7 @@ describe.skip('watch', () => {
       const { errors } = stats.compilation;
       expect(errors.length).toBe(1);
       const [{ message }] = errors;
+      console.log(message);
       expect(message).toEqual(expect.stringMatching('entry.scss'));
       expect(message).toEqual(expect.stringMatching('leaf.scss'));
 
@@ -75,6 +75,7 @@ describe.skip('watch', () => {
       const { errors } = stats.compilation;
       expect(errors.length).toBe(1);
       const [{ message }] = errors;
+      console.log(message);
       expect(message).toEqual(expect.stringMatching('entry.scss'));
       expect(message).not.toEqual(expect.stringMatching('leaf.scss'));
 
