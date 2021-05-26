@@ -186,12 +186,14 @@ class StylelintWebpackPlugin {
       module.buildInfo.snapshot.fileTimestamps
     ) {
       files = this.getChangedFiles(module.buildInfo.snapshot.fileTimestamps);
+      console.log(files)
     }
 
     // webpack 4
     /* istanbul ignore next */
     else if (module.buildInfo && module.buildInfo.fileDependencies) {
       files = Array.from(module.buildInfo.fileDependencies);
+      console.log(files)
 
       if (compiler.fileTimestamps && compiler.fileTimestamps.size > 0) {
         const fileDependencies = new Map();

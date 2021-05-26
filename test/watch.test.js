@@ -40,6 +40,11 @@ describe('watch', () => {
       expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
+      const { errors } = stats.compilation;
+      expect(errors.length).toBe(1);
+      const [{ message }] = errors;
+      expect(message).toEqual(expect.stringMatching('entry.scss'));
+      expect(message).not.toEqual(expect.stringMatching('leaf.scss'));
 
       next = secondPass;
 
@@ -51,9 +56,13 @@ describe('watch', () => {
       expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
+      const { errors } = stats.compilation;
+      expect(errors.length).toBe(1);
+      const [{ message }] = errors;
+      expect(message).toEqual(expect.stringMatching('entry.scss'));
+      expect(message).toEqual(expect.stringMatching('leaf.scss'));
 
       next = thirdPass;
-
       writeFileSync(target2, '#stuff { display: "block"; }\n');
     }
 
@@ -61,6 +70,11 @@ describe('watch', () => {
       expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
+      const { errors } = stats.compilation;
+      expect(errors.length).toBe(1);
+      const [{ message }] = errors;
+      expect(message).toEqual(expect.stringMatching('entry.scss'));
+      expect(message).not.toEqual(expect.stringMatching('leaf.scss'));
 
       next = finish;
 
@@ -70,7 +84,7 @@ describe('watch', () => {
     function finish(err, stats) {
       expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(true);
+      expect(stats.hasErrors()).toBe(false);
       done();
     }
   });
