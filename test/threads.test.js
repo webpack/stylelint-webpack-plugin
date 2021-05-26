@@ -3,17 +3,29 @@ import { join } from 'path';
 // @ts-ignore
 import normalizePath from 'normalize-path';
 
-import { loadStylelint, loadStylelintThreaded } from '../src/getStylelint';
+import getStylelint from '../src/getStylelint';
+
+import pack from './utils/pack';
 
 describe('Threading', () => {
+  it("should don't throw error if file is ok with threads", (done) => {
+    const compiler = pack('good', { threads: 2 });
+
+    compiler.run((err, stats) => {
+      expect(err).toBeNull();
+      expect(stats.hasWarnings()).toBe(false);
+      expect(stats.hasErrors()).toBe(false);
+      done();
+    });
+  });
+
   test('Threaded interface should look like non-threaded interface', async () => {
-    const single = loadStylelint({});
-    const threaded = loadStylelintThreaded('foo', 1, {});
+    const single = getStylelint('single', {});
+    const threaded = getStylelint('threaded', { threads: 2 });
     for (const key of Object.keys(single)) {
       expect(typeof single[key]).toEqual(typeof threaded[key]);
     }
 
-    // expect(single.stylelint).not.toBe(threaded.stylelint);
     expect(single.lintFiles).not.toBe(threaded.lintFiles);
     expect(single.cleanup).not.toBe(threaded.cleanup);
 
@@ -22,7 +34,7 @@ describe('Threading', () => {
   });
 
   test('Threaded should lint files', async () => {
-    const threaded = loadStylelintThreaded('bar', 1, {});
+    const threaded = getStylelint('bar', { threads: true });
     try {
       const [good, bad] = await Promise.all([
         threaded.lintFiles(
