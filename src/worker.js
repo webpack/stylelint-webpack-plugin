@@ -28,6 +28,7 @@ function setup(options, stylelintOptions) {
  * @param {string | string[]} files
  */
 async function lintFiles(files) {
+  console.log(files)
   const { results } = await stylelint.lint({
     ...linterOptions,
     files,
