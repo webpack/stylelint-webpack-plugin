@@ -48,6 +48,7 @@
   "dependencies": {
     "@types/stylelint": "^9.10.1",
     "arrify": "^2.0.1",
+    "fast-glob": "^3.2.5",
     "jest-worker": "^26.6.2",
     "micromatch": "^4.0.4",
     "normalize-path": "^3.0.0",

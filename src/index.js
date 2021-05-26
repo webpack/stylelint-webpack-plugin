@@ -2,6 +2,8 @@ import { isAbsolute, join } from 'path';
 
 // @ts-ignore
 import arrify from 'arrify';
+// @ts-ignore
+import fastGlob from 'fast-glob';
 import { isMatch } from 'micromatch';
 
 import { getOptions } from './options';
@@ -213,27 +215,25 @@ class StylelintWebpackPlugin {
     }
     */
 
-    /** @type {string[]} */
-    let files = glob;
-
     // webpack 5
     if (compiler.modifiedFiles) {
-      files = Array.from(compiler.modifiedFiles);
+      return Array.from(compiler.modifiedFiles);
     }
 
     // webpack 4
     /* istanbul ignore next */
-    else if (compiler.fileTimestamps && compiler.fileTimestamps.size > 0) {
-      files = this.getChangedFiles(compiler.fileTimestamps);
+    if (compiler.fileTimestamps && compiler.fileTimestamps.size > 0) {
+      return this.getChangedFiles(compiler.fileTimestamps);
     }
 
-    return files;
+    return fastGlob.sync(glob, { dot: true });
   }
 
   /**
    * @param {Map<string, null | FileSystemInfoEntry | "ignore">} fileTimestamps
    * @returns {string[]}
    */
+  /* istanbul ignore next */
   getChangedFiles(fileTimestamps) {
     /**
      * @param {null | FileSystemInfoEntry | "ignore"} fileSystemInfoEntry
