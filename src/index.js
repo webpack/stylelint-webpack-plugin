@@ -223,11 +223,7 @@ class StylelintWebpackPlugin {
     // webpack 4
     /* istanbul ignore next */
     if (compiler.fileTimestamps && compiler.fileTimestamps.size > 0) {
-      const changedFiles = this.getChangedFiles(compiler.fileTimestamps);
-
-      this.prevTimestamps = compiler.fileTimestamps;
-
-      return changedFiles;
+      return this.getChangedFiles(compiler.fileTimestamps);
     }
 
     return fastGlob.sync(glob, { dot: true });
@@ -273,6 +269,8 @@ class StylelintWebpackPlugin {
         changedFiles.push(filename);
       }
     }
+
+    this.prevTimestamps = fileTimestamps;
 
     return changedFiles;
   }
