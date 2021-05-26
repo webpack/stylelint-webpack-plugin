@@ -101,7 +101,7 @@ class StylelintWebpackPlugin {
 
       // Add the file to be linted
       compilation.hooks.succeedModule.tap(this.key, (module) => {
-        const filteredFiles = this.getFiles(options, compiler, module).filter(
+        const filteredFiles = this.getFiles(wanted, compiler, module).filter(
           (file) =>
             !files.includes(file) &&
             isMatch(file, wanted, { dot: true }) &&
@@ -171,17 +171,17 @@ class StylelintWebpackPlugin {
   }
 
   /**
-   * @param {Options} options
+   * @param {string[]} glob
    * @param {Compiler} compiler
    * @param {Module} module
    * @returns {string[]}
    */
   // eslint-disable-next-line no-unused-vars
-  getFiles(options, compiler, module) {
+  getFiles(glob, compiler, module) {
     // TODO: how to get module dependencies on css files?
+    // maybe implemented on next major version v3
     // Temporaly lint all css files on start webpack
     // on watch lint only modified files
-    // maybe implemented on next major version v3
     // on webpack 5 not safe to use `module.buildInfo.snapshot`
     // on webpack `module.buildInfo.fileDependencies` not working correclty
 
@@ -214,8 +214,7 @@ class StylelintWebpackPlugin {
     */
 
     /** @type {string[]} */
-    // @ts-ignore
-    let { files } = options;
+    let files = glob;
 
     // webpack 5
     if (compiler.modifiedFiles) {
