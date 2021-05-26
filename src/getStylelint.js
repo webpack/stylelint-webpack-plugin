@@ -23,7 +23,7 @@ const cache = {};
  * @returns {Linter}
  */
 export function loadStylelint(options) {
-  const stylelint = setup(options, getStylelintOptions(options))
+  const stylelint = setup(options, getStylelintOptions(options));
 
   return {
     stylelint,
