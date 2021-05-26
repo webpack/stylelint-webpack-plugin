@@ -1,7 +1,6 @@
 import { join } from 'path';
-import { writeFileSync } from 'fs';
 
-import { removeSync } from 'fs-extra';
+import { writeFileSync, removeSync } from 'fs-extra';
 
 import pack from './utils/pack';
 
