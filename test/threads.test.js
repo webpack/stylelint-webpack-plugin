@@ -1,5 +1,8 @@
 import { join } from 'path';
 
+// @ts-ignore
+import normalizePath from 'normalize-path';
+
 import { loadStylelint, loadStylelintThreaded } from '../src/getStylelint';
 
 describe('Threading', () => {
@@ -22,8 +25,8 @@ describe('Threading', () => {
     const threaded = loadStylelintThreaded('bar', 1, {});
     try {
       const [good, bad] = await Promise.all([
-        threaded.lintFiles(join(__dirname, 'fixtures/good/test.scss')),
-        threaded.lintFiles(join(__dirname, 'fixtures/error/test.scss')),
+        threaded.lintFiles(normalizePath(join(__dirname, 'fixtures/good/test.scss'))),
+        threaded.lintFiles(normalizePath(join(__dirname, 'fixtures/error/test.scss'))),
       ]);
       expect(good[0].errored).toBe(false);
       expect(bad[0].errored).toBe(true);
