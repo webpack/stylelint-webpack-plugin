@@ -1,47 +1,34 @@
-/** @typedef {import('stylelint').LinterResult} LinterResult */
-/** @typedef {import('stylelint').LintResult} LintResult */
-/** @typedef {import('webpack').Compiler} Compiler */
-/** @typedef {import('./getOptions').Options} Options */
 /**
- * @callback Lint
+ * @param {string|undefined} key
  * @param {Options} options
- * @returns {Promise<LinterResult>}
- */
-/**
- * @callback LinterCallback
- * @param {StylelintError | null=} error
- * @returns {void}
- */
-/**
- * @param {Lint} lint
- * @param {Options} options
- * @param {Compiler} compiler
- * @param {LinterCallback} callback
- * @returns {void}
+ * @param {Compilation} compilation
+ * @returns {{lint: Linter, report: Reporter, threads: number}}
  */
 export default function linter(
-  lint: Lint,
+  key: string | undefined,
   options: Options,
-  compiler: Compiler,
-  callback: LinterCallback
-): void;
-export type LinterResult = import('stylelint').LinterResult;
+  compilation: Compilation
+): {
+  lint: Linter;
+  report: Reporter;
+  threads: number;
+};
+export type Stylelint = typeof import('stylelint');
 export type LintResult = import('stylelint').LintResult;
 export type Compiler = import('webpack').Compiler;
-export type Options = {
-  context?: string | undefined;
-  emitError?: boolean | undefined;
-  emitWarning?: boolean | undefined;
-  failOnError?: boolean | undefined;
-  failOnWarning?: boolean | undefined;
-  files: string | string[];
-  formatter: TimerHandler;
-  lintDirtyModulesOnly?: boolean | undefined;
-  quiet?: boolean | undefined;
-  stylelintPath: string;
+export type Compilation = import('webpack').Compilation;
+export type Options = import('./options').Options;
+export type FormatterType = import('./options').FormatterType;
+export type FormatterFunction = (results: LintResult[]) => string;
+export type GenerateReport = (compilation: Compilation) => Promise<void>;
+export type Report = {
+  errors?: StylelintError;
+  warnings?: StylelintError;
+  generateReportAsset?: GenerateReport;
 };
-export type Lint = (options: Options) => Promise<LinterResult>;
-export type LinterCallback = (
-  error?: (StylelintError | null) | undefined
-) => void;
+export type Reporter = () => Promise<Report>;
+export type Linter = (files: string | string[]) => void;
+export type LintResultMap = {
+  [files: string]: import('stylelint').LintResult;
+};
 import StylelintError from './StylelintError';
