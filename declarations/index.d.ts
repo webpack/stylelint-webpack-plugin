@@ -33,11 +33,12 @@ declare class StylelintWebpackPlugin {
    */
   getContext(compiler: Compiler): string;
   /**
+   * @param {string[]} glob
    * @param {Compiler} compiler
    * @param {Module} module
    * @returns {string[]}
    */
-  getFiles({ fileTimestamps }: Compiler, { buildInfo }: Module): string[];
+  getFiles(glob: string[], compiler: Compiler, module: Module): string[];
   /**
    * @param {Map<string, null | FileSystemInfoEntry | "ignore">} fileTimestamps
    * @returns {string[]}
