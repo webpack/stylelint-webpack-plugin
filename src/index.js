@@ -3,7 +3,7 @@ import { isAbsolute, join } from 'path';
 // @ts-ignore
 import arrify from 'arrify';
 // @ts-ignore
-import fastGlob from 'fast-glob';
+import globby from 'globby';
 import { isMatch } from 'micromatch';
 
 import { getOptions } from './options';
@@ -187,7 +187,7 @@ class StylelintWebpackPlugin {
       );
     }
 
-    return fastGlob.sync(wanted, { dot: true, ignore: exclude });
+    return globby.sync(wanted, { dot: true, ignore: exclude });
   }
 
   /**
