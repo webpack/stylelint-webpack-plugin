@@ -73,16 +73,19 @@ class StylelintWebpackPlugin {
     const context = this.getContext(compiler);
     const options = {
       ...this.options,
-      exclude: parseFiles(this.options.exclude || [], context),
+      exclude: parseFiles(
+        this.options.exclude || [
+          '**/node_modules/**',
+          compiler.options.output.path,
+        ],
+        context
+      ),
       extensions: arrify(this.options.extensions),
       files: parseFiles(this.options.files || '', context),
     };
 
     const wanted = parseFoldersToGlobs(options.files, options.extensions);
-    const exclude = parseFoldersToGlobs(
-      this.options.exclude ? options.exclude : '**/node_modules/**',
-      []
-    );
+    const exclude = parseFoldersToGlobs(options.exclude);
 
     compiler.hooks.thisCompilation.tap(this.key, (compilation) => {
       /** @type {import('./linter').Linter} */
