@@ -3,7 +3,7 @@ import { isAbsolute, join } from 'path';
 // @ts-ignore
 import arrify from 'arrify';
 // @ts-ignore
-import fastGlob from 'fast-glob';
+import globby from 'globby';
 import { isMatch } from 'micromatch';
 
 import { getOptions } from './options';
@@ -73,16 +73,19 @@ class StylelintWebpackPlugin {
     const context = this.getContext(compiler);
     const options = {
       ...this.options,
-      exclude: parseFiles(this.options.exclude || [], context),
+      exclude: parseFiles(
+        this.options.exclude || [
+          '**/node_modules/**',
+          compiler.options.output.path,
+        ],
+        context
+      ),
       extensions: arrify(this.options.extensions),
       files: parseFiles(this.options.files || '', context),
     };
 
     const wanted = parseFoldersToGlobs(options.files, options.extensions);
-    const exclude = parseFoldersToGlobs(
-      this.options.exclude ? options.exclude : '**/node_modules/**',
-      []
-    );
+    const exclude = parseFoldersToGlobs(options.exclude);
 
     compiler.hooks.thisCompilation.tap(this.key, (compilation) => {
       /** @type {import('./linter').Linter} */
@@ -99,30 +102,14 @@ class StylelintWebpackPlugin {
         return;
       }
 
-      /** @type {string[]} */
-      const files = [];
+      compilation.hooks.finishModules.tap(this.key, () => {
+        const files = this.getFiles(compiler, wanted, exclude);
 
-      // Add the file to be linted
-      compilation.hooks.succeedModule.tap(this.key, (module) => {
-        const filteredFiles = this.getFiles(wanted, compiler, module).filter(
-          (file) =>
-            !files.includes(file) &&
-            isMatch(file, wanted, { dot: true }) &&
-            !isMatch(file, exclude, { dot: true })
-        );
-
-        for (const file of filteredFiles) {
-          files.push(file);
-
-          if (threads > 1) {
+        if (threads > 1) {
+          for (const file of files) {
             lint(parseFiles(file, context));
           }
-        }
-      });
-
-      // Lint all files added
-      compilation.hooks.finishModules.tap(this.key, () => {
-        if (files.length > 0 && threads <= 1) {
+        } else if (files.length > 0) {
           lint(parseFiles(files, context));
         }
       });
@@ -174,60 +161,33 @@ class StylelintWebpackPlugin {
   }
 
   /**
-   * @param {string[]} glob
    * @param {Compiler} compiler
-   * @param {Module} module
+   * @param {string[]} wanted
+   * @param {string[]} exclude
    * @returns {string[]}
    */
   // eslint-disable-next-line no-unused-vars
-  getFiles(glob, compiler, module) {
-    // TODO: how to get module dependencies on css files?
-    // maybe implemented on next major version v3
-    // Temporaly lint all css files on start webpack
-    // on watch lint only modified files
-    // on webpack 5 not safe to use `module.buildInfo.snapshot`
-    // on webpack `module.buildInfo.fileDependencies` not working correclty
-
-    // webpack 5
-    /*
-    if (
-      module.buildInfo &&
-      module.buildInfo.snapshot &&
-      module.buildInfo.snapshot.fileTimestamps
-    ) {
-      files = this.getChangedFiles(module.buildInfo.snapshot.fileTimestamps);
-    }
-
-    // webpack 4
-    else if (module.buildInfo && module.buildInfo.fileDependencies) {
-      files = Array.from(module.buildInfo.fileDependencies);
-
-      if (compiler.fileTimestamps && compiler.fileTimestamps.size > 0) {
-        const fileDependencies = new Map();
-
-        for (const [filename, timestamp] of compiler.fileTimestamps.entries()) {
-          if (files.includes(filename)) {
-            fileDependencies.set(filename, timestamp);
-          }
-        }
-
-        files = this.getChangedFiles(fileDependencies);
-      }
-    }
-    */
-
+  getFiles(compiler, wanted, exclude) {
     // webpack 5
     if (compiler.modifiedFiles) {
-      return Array.from(compiler.modifiedFiles);
+      return Array.from(compiler.modifiedFiles).filter(
+        (file) =>
+          isMatch(file, wanted, { dot: true }) &&
+          !isMatch(file, exclude, { dot: true })
+      );
     }
 
     // webpack 4
     /* istanbul ignore next */
     if (compiler.fileTimestamps && compiler.fileTimestamps.size > 0) {
-      return this.getChangedFiles(compiler.fileTimestamps);
+      return this.getChangedFiles(compiler.fileTimestamps).filter(
+        (file) =>
+          isMatch(file, wanted, { dot: true }) &&
+          !isMatch(file, exclude, { dot: true })
+      );
     }
 
-    return fastGlob.sync(glob, { dot: true });
+    return globby.sync(wanted, { dot: true, ignore: exclude });
   }
 
   /**

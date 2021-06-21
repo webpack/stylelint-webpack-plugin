@@ -7,14 +7,14 @@ import normalizePath from 'normalize-path';
 import arrify from 'arrify';
 
 /**
- * @param {string|string[]} files
+ * @param {string|(string|undefined)[]} files
  * @param {string} context
  * @returns {string[]}
  */
 export function parseFiles(files, context) {
-  return arrify(files).map((/** @type {string} */ file) =>
-    normalizePath(resolve(context, file))
-  );
+  return arrify(files)
+    .filter((/** @type {string} */ file) => typeof file === 'string')
+    .map((/** @type {string} */ file) => normalizePath(resolve(context, file)));
 }
 
 /**
