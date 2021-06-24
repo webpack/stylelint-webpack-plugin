@@ -1,6 +1,6 @@
 {
   "name": "stylelint-webpack-plugin",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "A Stylelint plugin for webpack",
   "license": "MIT",
   "repository": "webpack-contrib/stylelint-webpack-plugin",
