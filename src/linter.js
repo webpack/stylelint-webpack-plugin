@@ -187,30 +187,26 @@ function parseResults(options, results) {
   const warnings = [];
 
   results.forEach((file) => {
-    if (fileHasErrors(file)) {
-      const messages = file.warnings.filter(
-        (message) => options.emitError && message.severity === 'error'
-      );
+    const fileErrors = file.warnings.filter(
+      (message) => options.emitError && message.severity === 'error'
+    );
 
-      if (messages.length > 0) {
-        errors.push({
-          ...file,
-          warnings: messages,
-        });
-      }
+    if (fileErrors.length > 0) {
+      errors.push({
+        ...file,
+        warnings: fileErrors,
+      });
     }
 
-    if (fileHasWarnings(file)) {
-      const messages = file.warnings.filter(
-        (message) => options.emitWarning && message.severity === 'warning'
-      );
+    const fileWarnings = file.warnings.filter(
+      (message) => options.emitWarning && message.severity === 'warning'
+    );
 
-      if (messages.length > 0) {
-        warnings.push({
-          ...file,
-          warnings: messages,
-        });
-      }
+    if (fileWarnings.length > 0) {
+      warnings.push({
+        ...file,
+        warnings: fileWarnings,
+      });
     }
   });
 
@@ -218,22 +214,6 @@ function parseResults(options, results) {
     errors,
     warnings,
   };
-}
-
-/**
- * @param {LintResult} file
- * @returns {boolean}
- */
-function fileHasErrors(file) {
-  return !!file.errored;
-}
-
-/**
- * @param {LintResult} file
- * @returns {boolean}
- */
-function fileHasWarnings(file) {
-  return file.warnings && file.warnings.length > 0;
 }
 
 /**
