@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v3.0.0...v3.0.1) (2021-07-20)
+
+
+### Bug Fixes
+
+* crash with `ERR_REQUIRE_ESM` error ([#240](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/240)) ([643cede](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/643cedeb8ad56ad44df4bf24306fe1b9f84e417e))
+
 ## [3.0.0](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v2.2.2...v3.0.0) (2021-07-19)
 
 
