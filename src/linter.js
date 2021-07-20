@@ -1,10 +1,8 @@
 import { dirname, isAbsolute, join } from 'path';
 
-// @ts-ignore
-import arrify from 'arrify';
-
 import StylelintError from './StylelintError';
 import getStylelint from './getStylelint';
+import { arrify } from './utils';
 
 /** @typedef {import('stylelint')} Stylelint */
 /** @typedef {import('stylelint').LintResult} LintResult */
