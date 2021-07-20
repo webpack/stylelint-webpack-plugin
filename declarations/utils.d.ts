@@ -1,4 +1,30 @@
 /**
+ * @template T
+ * @param {T} value
+ * @return {
+   T extends (null | undefined)
+     ? []
+     : T extends string
+       ? [string]
+       : T extends readonly unknown[]
+         ? T
+         : T extends Iterable<infer T>
+           ? T[]
+           : [T]
+ }
+ */
+export function arrify<T>(
+  value: T
+): T extends null | undefined
+  ? []
+  : T extends string
+  ? [string]
+  : T extends readonly unknown[]
+  ? T
+  : T extends Iterable<infer T_1>
+  ? T_1[]
+  : [T];
+/**
  * @param {string|string[]} files
  * @param {string} context
  * @returns {string[]}

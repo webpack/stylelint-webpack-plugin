@@ -47,7 +47,6 @@
   },
   "dependencies": {
     "@types/stylelint": "^13.13.1",
-    "arrify": "^3.0.0",
     "jest-worker": "^27.0.6",
     "globby": "^11.0.4",
     "micromatch": "^4.0.4",

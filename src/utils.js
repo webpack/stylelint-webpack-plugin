@@ -1,10 +1,50 @@
 import { resolve } from 'path';
 import { statSync } from 'fs';
 
-import arrify from 'arrify';
-
 // @ts-ignore
 import normalizePath from 'normalize-path';
+
+/**
+ * @template T
+ * @param {T} value
+ * @return {
+   T extends (null | undefined)
+     ? []
+     : T extends string
+       ? [string]
+       : T extends readonly unknown[]
+         ? T
+         : T extends Iterable<infer T>
+           ? T[]
+           : [T]
+ }
+ */
+export function arrify(value) {
+  // eslint-disable-next-line no-undefined
+  if (value === null || value === undefined) {
+    // @ts-ignore
+    return [];
+  }
+
+  if (Array.isArray(value)) {
+    // @ts-ignore
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    // @ts-ignore
+    return [value];
+  }
+
+  // @ts-ignore
+  if (typeof value[Symbol.iterator] === 'function') {
+    // @ts-ignore
+    return [...value];
+  }
+
+  // @ts-ignore
+  return [value];
+}
 
 /**
  * @param {string|string[]} files
