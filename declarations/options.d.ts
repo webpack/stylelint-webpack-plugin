@@ -28,35 +28,35 @@
  * @param {Options} pluginOptions
  * @returns {Partial<PluginOptions>}
  */
-export function getOptions(pluginOptions: Options): Partial<PluginOptions>;
+export function getOptions(pluginOptions: Options): Partial<PluginOptions>
 /**
  * @param {Options} pluginOptions
  * @returns {Partial<StylelintOptions>}
  */
 export function getStylelintOptions(
-  pluginOptions: Options
-): Partial<StylelintOptions>;
-export type stylelint = typeof import('stylelint');
-export type StylelintOptions = import('stylelint').LinterOptions;
-export type FormatterType = import('stylelint').FormatterType;
+	pluginOptions: Options
+): Partial<StylelintOptions>
+export type stylelint = typeof import('stylelint')
+export type StylelintOptions = import('stylelint').LinterOptions
+export type FormatterType = import('stylelint').FormatterType
 export type OutputReport = {
-  filePath?: string | undefined;
-  formatter?: FormatterType | undefined;
-};
+	filePath?: string | undefined
+	formatter?: FormatterType | undefined
+}
 export type PluginOptions = {
-  context: string;
-  emitError: boolean;
-  emitWarning: boolean;
-  exclude?: (string | string[]) | undefined;
-  extensions: string | string[];
-  failOnError: boolean;
-  failOnWarning: boolean;
-  files: string | string[];
-  formatter: FormatterType;
-  lintDirtyModulesOnly: boolean;
-  quiet: boolean;
-  stylelintPath: string;
-  outputReport: OutputReport;
-  threads?: (number | boolean) | undefined;
-};
-export type Options = Partial<PluginOptions & StylelintOptions>;
+	context: string
+	emitError: boolean
+	emitWarning: boolean
+	exclude?: (string | string[]) | undefined
+	extensions: string | string[]
+	failOnError: boolean
+	failOnWarning: boolean
+	files: string | string[]
+	formatter: FormatterType
+	lintDirtyModulesOnly: boolean
+	quiet: boolean
+	stylelintPath: string
+	outputReport: OutputReport
+	threads?: (number | boolean) | undefined
+}
+export type Options = Partial<PluginOptions & StylelintOptions>

@@ -1,7 +1,7 @@
-import { validate } from 'schema-utils';
+import { validate } from 'schema-utils'
 
 // @ts-ignore
-import schema from './options.json';
+import schema from './options.json'
 
 /** @typedef {import("stylelint")} stylelint */
 /** @typedef {import("stylelint").LinterOptions} StylelintOptions */
@@ -38,22 +38,22 @@ import schema from './options.json';
  * @returns {Partial<PluginOptions>}
  */
 export function getOptions(pluginOptions) {
-  const options = {
-    extensions: ['css', 'scss', 'sass'],
-    emitError: true,
-    emitWarning: true,
-    failOnError: true,
-    ...pluginOptions,
-    ...(pluginOptions.quiet ? { emitError: true, emitWarning: false } : {}),
-  };
+	const options = {
+		extensions: ['css', 'scss', 'sass'],
+		emitError: true,
+		emitWarning: true,
+		failOnError: true,
+		...pluginOptions,
+		...(pluginOptions.quiet ? { emitError: true, emitWarning: false } : {})
+	}
 
-  // @ts-ignore
-  validate(schema, options, {
-    name: 'Stylelint Webpack Plugin',
-    baseDataPath: 'options',
-  });
+	// @ts-ignore
+	validate(schema, options, {
+		name: 'Stylelint Webpack Plugin',
+		baseDataPath: 'options'
+	})
 
-  return options;
+	return options
 }
 
 /**
@@ -61,17 +61,17 @@ export function getOptions(pluginOptions) {
  * @returns {Partial<StylelintOptions>}
  */
 export function getStylelintOptions(pluginOptions) {
-  const stylelintOptions = { ...pluginOptions };
+	const stylelintOptions = { ...pluginOptions }
 
-  // Keep the files and formatter option because it is common to both the plugin and Stylelint.
-  const { files, formatter, ...stylelintOnlyOptions } = schema.properties;
+	// Keep the files and formatter option because it is common to both the plugin and Stylelint.
+	const { files, formatter, ...stylelintOnlyOptions } = schema.properties
 
-  // No need to guard the for-in because schema.properties has hardcoded keys.
-  // eslint-disable-next-line guard-for-in
-  for (const option in stylelintOnlyOptions) {
-    // @ts-ignore
-    delete stylelintOptions[option];
-  }
+	// No need to guard the for-in because schema.properties has hardcoded keys.
+	// eslint-disable-next-line guard-for-in
+	for (const option in stylelintOnlyOptions) {
+		// @ts-ignore
+		delete stylelintOptions[option]
+	}
 
-  return stylelintOptions;
+	return stylelintOptions
 }

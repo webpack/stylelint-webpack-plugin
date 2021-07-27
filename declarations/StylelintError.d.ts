@@ -1,2 +1,2 @@
-export default StylelintError;
+export default StylelintError
 declare class StylelintError extends Error {}

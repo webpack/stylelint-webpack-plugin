@@ -32,13 +32,13 @@ npm install stylelint --save-dev
 Then add the plugin to your webpack config. For example:
 
 ```js
-const StylelintPlugin = require('stylelint-webpack-plugin');
+const StylelintPlugin = require('stylelint-webpack-plugin')
 
 module.exports = {
-  // ...
-  plugins: [new StylelintPlugin(options)],
-  // ...
-};
+	// ...
+	plugins: [new StylelintPlugin(options)]
+	// ...
+}
 ```
 
 ## Options
@@ -168,8 +168,8 @@ You can pass in a different formatter for the output file, if none is passed in 
 
 ```js
 {
-  filePath: 'path/to/file';
-  formatter: 'json';
+	filePath: 'path/to/file'
+	formatter: 'json'
 }
 ```
 

@@ -1,14 +1,14 @@
-import { cpus } from 'os';
+import { cpus } from 'os'
 
-import { Worker as JestWorker } from 'jest-worker';
+import { Worker as JestWorker } from 'jest-worker'
 
 // @ts-ignore
-import { setup, lintFiles } from './worker';
-import { jsonStringifyReplacerSortKeys } from './utils';
-import { getStylelintOptions } from './options';
+import { setup, lintFiles } from './worker'
+import { jsonStringifyReplacerSortKeys } from './utils'
+import { getStylelintOptions } from './options'
 
 /** @type {{[key: string]: any}} */
-const cache = {};
+const cache = {}
 
 /** @typedef {import('stylelint')} Stylelint */
 /** @typedef {import('stylelint').LintResult} LintResult */
@@ -23,14 +23,14 @@ const cache = {};
  * @returns {Linter}
  */
 function loadStylelint(options) {
-  const stylelint = setup(options, getStylelintOptions(options));
+	const stylelint = setup(options, getStylelintOptions(options))
 
-  return {
-    stylelint,
-    lintFiles,
-    cleanup: async () => {},
-    threads: 1,
-  };
+	return {
+		stylelint,
+		lintFiles,
+		cleanup: async () => {},
+		threads: 1
+	}
 }
 
 /**
@@ -40,39 +40,39 @@ function loadStylelint(options) {
  * @returns {Linter}
  */
 function loadStylelintThreaded(key, poolSize, options) {
-  const cacheKey = getCacheKey(key, options);
-  const source = require.resolve('./worker');
-  const workerOptions = {
-    enableWorkerThreads: true,
-    numWorkers: poolSize,
-    setupArgs: [options, getStylelintOptions(options)],
-  };
+	const cacheKey = getCacheKey(key, options)
+	const source = require.resolve('./worker')
+	const workerOptions = {
+		enableWorkerThreads: true,
+		numWorkers: poolSize,
+		setupArgs: [options, getStylelintOptions(options)]
+	}
 
-  const local = loadStylelint(options);
+	const local = loadStylelint(options)
 
-  /** @type {Worker?} */
-  // prettier-ignore
-  let worker = (/** @type {Worker} */ new JestWorker(source, workerOptions));
+	/** @type {Worker?} */
+	// prettier-ignore
+	let worker = (/** @type {Worker} */ new JestWorker(source, workerOptions));
 
-  /** @type {Linter} */
-  const context = {
-    ...local,
-    threads: poolSize,
-    lintFiles: async (files) =>
-      /* istanbul ignore next */
-      worker ? worker.lintFiles(files) : local.lintFiles(files),
-    cleanup: async () => {
-      cache[cacheKey] = local;
-      context.lintFiles = (files) => local.lintFiles(files);
-      /* istanbul ignore next */
-      if (worker) {
-        worker.end();
-        worker = null;
-      }
-    },
-  };
+	/** @type {Linter} */
+	const context = {
+		...local,
+		threads: poolSize,
+		lintFiles: async files =>
+			/* istanbul ignore next */
+			worker ? worker.lintFiles(files) : local.lintFiles(files),
+		cleanup: async () => {
+			cache[cacheKey] = local
+			context.lintFiles = files => local.lintFiles(files)
+			/* istanbul ignore next */
+			if (worker) {
+				worker.end()
+				worker = null
+			}
+		}
+	}
 
-  return context;
+	return context
 }
 
 /**
@@ -81,17 +81,17 @@ function loadStylelintThreaded(key, poolSize, options) {
  * @returns {Linter}
  */
 export default function getStylelint(key, { threads, ...options }) {
-  const max =
-    typeof threads !== 'number' ? (threads ? cpus().length - 1 : 1) : threads;
+	const max =
+		typeof threads !== 'number' ? (threads ? cpus().length - 1 : 1) : threads
 
-  const cacheKey = getCacheKey(key, { threads, ...options });
-  if (!cache[cacheKey]) {
-    cache[cacheKey] =
-      max > 1
-        ? loadStylelintThreaded(key, max, options)
-        : loadStylelint(options);
-  }
-  return cache[cacheKey];
+	const cacheKey = getCacheKey(key, { threads, ...options })
+	if (!cache[cacheKey]) {
+		cache[cacheKey] =
+			max > 1
+				? loadStylelintThreaded(key, max, options)
+				: loadStylelint(options)
+	}
+	return cache[cacheKey]
 }
 
 /**
@@ -100,5 +100,5 @@ export default function getStylelint(key, { threads, ...options }) {
  * @returns {string}
  */
 function getCacheKey(key, options) {
-  return JSON.stringify({ key, options }, jsonStringifyReplacerSortKeys);
+	return JSON.stringify({ key, options }, jsonStringifyReplacerSortKeys)
 }

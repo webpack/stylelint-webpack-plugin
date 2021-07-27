@@ -3,45 +3,45 @@
 /** @typedef {import('./options').Options} Options */
 
 Object.assign(module.exports, {
-  lintFiles,
-  setup,
-});
+	lintFiles,
+	setup
+})
 
 /** @type {Stylelint} */
-let stylelint;
+let stylelint
 
 /** @type {Partial<StylelintOptions>} */
-let linterOptions;
+let linterOptions
 
 /**
  * @param {Options} options
  * @param {Partial<StylelintOptions>} stylelintOptions
  */
 function setup(options, stylelintOptions) {
-  stylelint = require(options.stylelintPath || 'stylelint');
-  linterOptions = stylelintOptions;
+	stylelint = require(options.stylelintPath || 'stylelint')
+	linterOptions = stylelintOptions
 
-  return stylelint;
+	return stylelint
 }
 
 /**
  * @param {string | string[]} files
  */
 async function lintFiles(files) {
-  const { results } = await stylelint.lint({
-    ...linterOptions,
-    files,
-  });
+	const { results } = await stylelint.lint({
+		...linterOptions,
+		files
+	})
 
-  // Reset result to work with worker
-  return results.map((result) => {
-    return {
-      source: result.source,
-      errored: result.errored,
-      ignored: result.ignored,
-      warnings: result.warnings,
-      deprecations: result.deprecations,
-      invalidOptionWarnings: result.invalidOptionWarnings,
-    };
-  });
+	// Reset result to work with worker
+	return results.map(result => {
+		return {
+			source: result.source,
+			errored: result.errored,
+			ignored: result.ignored,
+			warnings: result.warnings,
+			deprecations: result.deprecations,
+			invalidOptionWarnings: result.invalidOptionWarnings
+		}
+	})
 }

@@ -1,8 +1,8 @@
-import StylelintWebpackPlugin from '../src';
-import CJSStylelintWebpackPlugin from '../src/cjs';
+import StylelintWebpackPlugin from '../src'
+import CJSStylelintWebpackPlugin from '../src/cjs'
 
 describe('cjs', () => {
-  it('should exported plugin', () => {
-    expect(CJSStylelintWebpackPlugin).toEqual(StylelintWebpackPlugin);
-  });
-});
+	it('should exported plugin', () => {
+		expect(CJSStylelintWebpackPlugin).toEqual(StylelintWebpackPlugin)
+	})
+})

@@ -1,14 +1,14 @@
-import pack from './utils/pack';
+import pack from './utils/pack'
 
 describe('ok', () => {
-  it("should don't throw error if file is ok", (done) => {
-    const compiler = pack('good');
+	it("should don't throw error if file is ok", done => {
+		const compiler = pack('good')
 
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(false);
-      done();
-    });
-  });
-});
+		compiler.run((err, stats) => {
+			expect(err).toBeNull()
+			expect(stats.hasWarnings()).toBe(false)
+			expect(stats.hasErrors()).toBe(false)
+			done()
+		})
+	})
+})
