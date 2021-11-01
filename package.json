@@ -42,7 +42,7 @@
     "declarations"
   ],
   "peerDependencies": {
-    "stylelint": "^13.0.0|^14.0.0",
+    "stylelint": "^13.0.0 || ^14.0.0",
     "webpack": "^5.0.0"
   },
   "dependencies": {
