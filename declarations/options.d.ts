@@ -37,7 +37,7 @@ export function getOptions(pluginOptions: Options): Partial<PluginOptions>;
 export function getStylelintOptions(
   pluginOptions: Options
 ): Partial<StylelintOptions>;
-export type stylelint = import('stylelint/node_modules/postcss').PluginCreator<
+export type stylelint = import('postcss').PluginCreator<
   import('stylelint').PostcssPluginOptions
 > & {
   lint: (
@@ -77,11 +77,9 @@ export type stylelint = import('stylelint/node_modules/postcss').PluginCreator<
       options: {
         ruleName: string;
         ruleSettings: import('stylelint').ConfigRuleSettings<T_1, O>;
-        root: import('stylelint/node_modules/postcss').Root;
+        root: import('postcss').Root;
       },
-      callback: (
-        warning: import('stylelint/node_modules/postcss').Warning
-      ) => void
+      callback: (warning: import('postcss').Warning) => void
     ) => void;
   };
 };
