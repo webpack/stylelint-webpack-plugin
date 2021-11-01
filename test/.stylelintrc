@@ -1,9 +1,13 @@
 {
+  "customSyntax": "postcss-scss",
   "rules": {
-    "at-rule-empty-line-before": [ "always", {
-      "except": [ "blockless-after-blockless", "first-nested" ],
-      "ignore": ["after-comment"],
-    } ],
+    "at-rule-empty-line-before": [
+      "always",
+      {
+        "except": ["blockless-after-blockless", "first-nested"],
+        "ignore": ["after-comment"]
+      }
+    ],
     "block-closing-brace-newline-after": "always",
     "block-closing-brace-newline-before": "always-multi-line",
     "block-closing-brace-space-before": "always-single-line",
@@ -11,14 +15,16 @@
     "block-opening-brace-newline-after": "always-multi-line",
     "block-opening-brace-space-after": "always-single-line",
     "block-opening-brace-space-before": "always",
-    "color-hex-case": [ "lower", { "severity": "warning" }
-    ],
+    "color-hex-case": ["lower", { "severity": "warning" }],
     "color-hex-length": "short",
     "color-no-invalid-hex": true,
-    "comment-empty-line-before": [ "always", {
-      "except": ["first-nested"],
-      "ignore": ["stylelint-commands"],
-    } ],
+    "comment-empty-line-before": [
+      "always",
+      {
+        "except": ["first-nested"],
+        "ignore": ["stylelint-commands"]
+      }
+    ],
     "comment-whitespace-inside": "always",
     "declaration-bang-space-after": "never",
     "declaration-bang-space-before": "always",
@@ -65,6 +71,6 @@
     "string-quotes": "double",
     "value-list-comma-newline-after": "always-multi-line",
     "value-list-comma-space-after": "always-single-line",
-    "value-list-comma-space-before": "never",
-  },
+    "value-list-comma-space-before": "never"
+  }
 }

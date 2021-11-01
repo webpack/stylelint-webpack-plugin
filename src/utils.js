@@ -19,6 +19,7 @@ import normalizePath from 'normalize-path';
            : [T]
  }
  */
+/* istanbul ignore next */
 export function arrify(value) {
   // eslint-disable-next-line no-undefined
   if (value === null || value === undefined) {
