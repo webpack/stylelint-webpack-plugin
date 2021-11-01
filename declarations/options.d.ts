@@ -1,3 +1,4 @@
+/// <reference types="stylelint" />
 /** @typedef {import("stylelint")} stylelint */
 /** @typedef {import("stylelint").LinterOptions} StylelintOptions */
 /** @typedef {import("stylelint").FormatterType} FormatterType */
@@ -36,7 +37,54 @@ export function getOptions(pluginOptions: Options): Partial<PluginOptions>;
 export function getStylelintOptions(
   pluginOptions: Options
 ): Partial<StylelintOptions>;
-export type stylelint = typeof import('stylelint');
+export type stylelint = import('stylelint/node_modules/postcss').PluginCreator<
+  import('stylelint').PostcssPluginOptions
+> & {
+  lint: (
+    options: import('stylelint').LinterOptions
+  ) => Promise<import('stylelint').LinterResult>;
+  rules: {
+    [k: string]: import('stylelint').Rule<any, any>;
+  };
+  formatters: {
+    [k: string]: import('stylelint').Formatter;
+  };
+  createPlugin: (
+    ruleName: string,
+    plugin: import('stylelint').Plugin<any, any>
+  ) => {
+    ruleName: string;
+    rule: import('stylelint').Rule<any, any>;
+  };
+  createLinter: (
+    options: import('stylelint').LinterOptions
+  ) => import('stylelint').InternalApi;
+  utils: {
+    report: (problem: import('stylelint').Problem) => void;
+    ruleMessages: <
+      T extends import('stylelint').RuleMessages,
+      R extends { [K in keyof T]: T[K] }
+    >(
+      ruleName: string,
+      messages: T
+    ) => R;
+    validateOptions: (
+      result: import('stylelint').PostcssResult,
+      ruleName: string,
+      ...optionDescriptions: import('stylelint').RuleOptions[]
+    ) => boolean;
+    checkAgainstRule: <T_1, O extends Object>(
+      options: {
+        ruleName: string;
+        ruleSettings: import('stylelint').ConfigRuleSettings<T_1, O>;
+        root: import('stylelint/node_modules/postcss').Root;
+      },
+      callback: (
+        warning: import('stylelint/node_modules/postcss').Warning
+      ) => void
+    ) => void;
+  };
+};
 export type StylelintOptions = import('stylelint').LinterOptions;
 export type FormatterType = import('stylelint').FormatterType;
 export type OutputReport = {

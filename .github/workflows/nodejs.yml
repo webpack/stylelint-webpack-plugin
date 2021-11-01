@@ -43,8 +43,8 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      #- name: Security audit
-      #  run: npm run security
+      - name: Security audit
+        run: npm run security
 
       - name: Check commit message
         uses: wagoid/commitlint-github-action@v4
@@ -56,6 +56,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         node-version: [12.x, 14.x, 16.x]
+        stylelint-version: [13.x, 14.x]
         webpack-version: [latest]
 
     runs-on: ${{ matrix.os }}
@@ -86,6 +87,9 @@ jobs:
 
       - name: Install webpack ${{ matrix.webpack-version }}
         run: npm i webpack@${{ matrix.webpack-version }}
+
+      - name: Install stylelint ${{ matrix.stylelint-version }}
+        run: npm i stylelint@${{ matrix.stylelint-version }}
 
       - name: Run tests for webpack version ${{ matrix.webpack-version }}
         run: npm run test:coverage -- --ci
