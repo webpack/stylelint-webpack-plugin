@@ -88,6 +88,9 @@ jobs:
       - name: Install webpack ${{ matrix.webpack-version }}
         run: npm i webpack@${{ matrix.webpack-version }}
 
+      - name: Install stylelint ${{ matrix.stylelint-version }}
+        run: npm i stylelint@${{ matrix.stylelint-version }}
+
       - name: Run tests for webpack version ${{ matrix.webpack-version }}
         run: npm run test:coverage -- --ci
 
