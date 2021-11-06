@@ -56,10 +56,9 @@ jobs:
         node-version: [10.x, 12.x, 14.x, 16.x]
         stylelint-version: [13.x, 14.x]
         webpack-version: [4, latest]
-
-      exclude:
-        - node-version: 10.x
-          stylelint-version: 14.x
+        exclude:
+          - node-version: 10.x
+            stylelint-version: 14.x
 
     runs-on: ${{ matrix.os }}
 
