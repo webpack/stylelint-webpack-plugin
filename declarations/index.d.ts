@@ -20,7 +20,11 @@ declare class StylelintWebpackPlugin {
    */
   run(compiler: Compiler): Promise<void>;
   startTime: number;
-  prevTimestamps: Map<any, any>;
+  /** @type {ReadonlyMap<string, null | FileSystemInfoEntry | "ignore" | undefined>} */
+  prevTimestamps: ReadonlyMap<
+    string,
+    'ignore' | FileSystemInfoEntry | null | undefined
+  >;
   /**
    * @param {Compiler} compiler
    * @returns {void}
@@ -40,10 +44,13 @@ declare class StylelintWebpackPlugin {
    */
   getFiles(compiler: Compiler, wanted: string[], exclude: string[]): string[];
   /**
-   * @param {Map<string, null | FileSystemInfoEntry | "ignore">} fileTimestamps
+   * @param {ReadonlyMap<string, null | FileSystemInfoEntry | "ignore" | undefined>} fileTimestamps
    * @returns {string[]}
    */
   getChangedFiles(
-    fileTimestamps: Map<string, 'ignore' | FileSystemInfoEntry | null>
+    fileTimestamps: ReadonlyMap<
+      string,
+      'ignore' | FileSystemInfoEntry | null | undefined
+    >
   ): string[];
 }
