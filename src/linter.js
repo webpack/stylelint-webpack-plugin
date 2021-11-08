@@ -83,7 +83,7 @@ export default function linter(key, options, compilation) {
     await cleanup();
 
     for (const result of results) {
-      crossRunResultStorage[result.source] = result;
+      crossRunResultStorage[String(result.source)] = result;
     }
 
     results = Object.values(crossRunResultStorage);

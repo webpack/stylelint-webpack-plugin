@@ -27,6 +27,8 @@ class StylelintWebpackPlugin {
     this.options = getOptions(options);
     this.run = this.run.bind(this);
     this.startTime = Date.now();
+
+    /** @type {ReadonlyMap<string, null | FileSystemInfoEntry | "ignore" | undefined>} */
     this.prevTimestamps = new Map();
   }
 
@@ -191,13 +193,13 @@ class StylelintWebpackPlugin {
   }
 
   /**
-   * @param {Map<string, null | FileSystemInfoEntry | "ignore">} fileTimestamps
+   * @param {ReadonlyMap<string, null | FileSystemInfoEntry | "ignore" | undefined>} fileTimestamps
    * @returns {string[]}
    */
   /* istanbul ignore next */
   getChangedFiles(fileTimestamps) {
     /**
-     * @param {null | FileSystemInfoEntry | "ignore"} fileSystemInfoEntry
+     * @param {null | FileSystemInfoEntry | "ignore" | undefined} fileSystemInfoEntry
      * @returns {Partial<number>}
      */
     const getTimestamps = (fileSystemInfoEntry) => {
@@ -213,7 +215,7 @@ class StylelintWebpackPlugin {
 
     /**
      * @param {string} filename
-     * @param {null | FileSystemInfoEntry | "ignore"} fileSystemInfoEntry
+     * @param {null | FileSystemInfoEntry | "ignore" | undefined} fileSystemInfoEntry
      * @returns {boolean}
      */
     const hasFileChanged = (filename, fileSystemInfoEntry) => {
