@@ -13,6 +13,8 @@
 
 # stylelint-webpack-plugin
 
+> This is stylelint-webpack-plugin 3.0 which works only with webpack 5. For the webpack 4, see the [2.x branch](https://github.com/webpack-contrib/stylelint-webpack-plugin/tree/2.x).
+
 This plugin uses [`stylelint`](https://stylelint.io/) that helps you avoid errors and enforce conventions in your styles.
 
 ## Getting Started
