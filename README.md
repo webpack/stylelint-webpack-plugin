@@ -18,7 +18,7 @@
 ## Install
 
 ```bash
-npm install stylelint-webpack-plugin --save-dev
+npm install stylelint-webpack-plugin@2 --save-dev
 ```
 
 **Note**: You also need to install `stylelint` from npm, if you haven't already:
@@ -181,16 +181,16 @@ You can pass in a different formatter for the output file, if none is passed in 
 
 [MIT](./LICENSE)
 
-[npm]: https://img.shields.io/npm/v/stylelint-webpack-plugin.svg
-[npm-url]: https://npmjs.com/package/stylelint-webpack-plugin
-[node]: https://img.shields.io/node/v/stylelint-webpack-plugin.svg
+[npm]: https://img.shields.io/npm/v/stylelint-webpack-plugin/2x.svg
+[npm-url]: https://npmjs.com/package/stylelint-webpack-plugin/v/2x
+[node]: https://img.shields.io/node/v/stylelint-webpack-plugin/2x.svg
 [node-url]: https://nodejs.org
 [deps]: https://david-dm.org/webpack-contrib/stylelint-webpack-plugin.svg
 [deps-url]: https://david-dm.org/webpack-contrib/stylelint-webpack-plugin
-[tests]: https://github.com/webpack-contrib/stylelint-webpack-plugin/workflows/stylelint-webpack-plugin/badge.svg
+[tests]: https://github.com/webpack-contrib/stylelint-webpack-plugin/workflows/stylelint-webpack-plugin/badge.svg?branch=2.x
 [tests-url]: https://github.com/webpack-contrib/stylelint-webpack-plugin/actions
-[cover]: https://codecov.io/gh/webpack-contrib/stylelint-webpack-plugin/branch/master/graph/badge.svg
-[cover-url]: https://codecov.io/gh/webpack-contrib/stylelint-webpack-plugin
+[cover]: https://codecov.io/gh/webpack-contrib/stylelint-webpack-plugin/branch/2.x/graph/badge.svg
+[cover-url]: https://codecov.io/gh/webpack-contrib/stylelint-webpack-plugin/branch/2.x
 [chat]: https://badges.gitter.im/webpack/webpack.svg
 [chat-url]: https://gitter.im/webpack/webpack
 [size]: https://packagephobia.now.sh/badge?p=stylelint-webpack-plugin
