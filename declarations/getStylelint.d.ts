@@ -64,3 +64,6 @@ export type Linter = {
   cleanup: AsyncTask;
   threads: number;
 };
+export type Worker = import('jest-worker').Worker & {
+  lintFiles: LintTask;
+};
