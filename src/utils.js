@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { statSync } from 'fs';
+import { statSync, existsSync, readFileSync } from 'fs';
 
 // @ts-ignore
 import normalizePath from 'normalize-path';
@@ -109,4 +109,25 @@ export const jsonStringifyReplacerSortKeys = (_, value) => {
   return value instanceof Object && !(value instanceof Array)
     ? Object.keys(value).sort().reduce(insert, {})
     : value;
+};
+
+/**
+ * @param {string} context
+ * @returns {string[]}
+ */
+export const parseStyleLintIgnoreFile = (context) => {
+  const ignoreFilePath = resolve(context, '.stylelintignore');
+
+  if (!existsSync(ignoreFilePath)) {
+    return [];
+  }
+
+  const ignoreContent = readFileSync(ignoreFilePath, 'utf8').split('\n');
+
+  return ignoreContent.filter((lineRaw) => {
+    const line = lineRaw.trim();
+
+    // remove empty and comment line
+    return line !== '' && !line.startsWith('#');
+  });
 };

@@ -7,7 +7,12 @@ import { isMatch } from 'micromatch';
 
 import { getOptions } from './options';
 import linter from './linter';
-import { arrify, parseFiles, parseFoldersToGlobs } from './utils';
+import {
+  arrify,
+  parseFiles,
+  parseFoldersToGlobs,
+  parseStyleLintIgnoreFile,
+} from './utils';
 
 /** @typedef {import('webpack').Compiler} Compiler */
 /** @typedef {import('webpack').Module} Module */
@@ -70,10 +75,13 @@ class StylelintWebpackPlugin {
     }
 
     const context = this.getContext(compiler);
-    const excludeDefault = [
-      '**/node_modules/**',
-      String(compiler.options.output.path),
-    ];
+    const excludeDefault = Array.from(
+      new Set([
+        '**/node_modules/**',
+        String(compiler.options.output.path),
+        ...parseStyleLintIgnoreFile(context),
+      ])
+    );
 
     const options = {
       ...this.options,
