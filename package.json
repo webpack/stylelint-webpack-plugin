@@ -46,10 +46,9 @@
     "webpack": "^4.0.0 || ^5.0.0"
   },
   "dependencies": {
-    "@types/stylelint": "^13.13.3",
     "arrify": "^2.0.1",
-    "jest-worker": "^27.3.1",
     "globby": "^11.0.4",
+    "jest-worker": "^27.3.1",
     "micromatch": "^4.0.4",
     "normalize-path": "^3.0.0",
     "schema-utils": "^3.1.1"
