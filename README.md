@@ -31,6 +31,8 @@ npm install stylelint-webpack-plugin --save-dev
 npm install stylelint --save-dev
 ```
 
+**Note**: If you are using Stylelint 13 rather than 14+, you might also need to install `@types/stylelint` as a dev dependency if getting stylelint related type errors.
+
 Then add the plugin to your webpack config. For example:
 
 ```js
