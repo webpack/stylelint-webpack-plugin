@@ -1,6 +1,6 @@
 {
   "name": "stylelint-webpack-plugin",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "A Stylelint plugin for webpack",
   "license": "MIT",
   "repository": "webpack-contrib/stylelint-webpack-plugin",
@@ -46,9 +46,8 @@
     "webpack": "^5.0.0"
   },
   "dependencies": {
-    "@types/stylelint": "^13.13.3",
-    "globby": "^11.0.4",
     "jest-worker": "^27.3.1",
+    "globby": "^11.0.4",
     "micromatch": "^4.0.4",
     "normalize-path": "^3.0.0",
     "schema-utils": "^4.0.0"
