@@ -11,16 +11,16 @@
     "type": "opencollective",
     "url": "https://opencollective.com/webpack"
   },
-  "main": "dist/cjs.js",
-  "types": "declarations/index.d.ts",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
   "engines": {
     "node": ">= 12.13.0"
   },
   "scripts": {
     "start": "npm run build -- -w",
-    "clean": "del-cli dist declarations",
+    "clean": "del-cli dist types",
     "prebuild": "npm run clean",
-    "build:types": "tsc --declaration --emitDeclarationOnly --outDir declarations && prettier \"declarations/**/*.ts\" --write",
+    "build:types": "tsc --declaration --emitDeclarationOnly --outDir types && prettier \"types/**/*.ts\" --write",
     "build:code": "cross-env NODE_ENV=production babel src -d dist --copy-files",
     "build": "npm-run-all -p \"build:**\"",
     "commitlint": "commitlint --from=master",
@@ -39,7 +39,7 @@
   },
   "files": [
     "dist",
-    "declarations"
+    "types"
   ],
   "peerDependencies": {
     "stylelint": "^13.0.0 || ^14.0.0",

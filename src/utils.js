@@ -1,8 +1,7 @@
-import { resolve } from 'path';
-import { statSync } from 'fs';
+const { resolve } = require('path');
+const { statSync } = require('fs');
 
-// @ts-ignore
-import normalizePath from 'normalize-path';
+const normalizePath = require('normalize-path');
 
 /**
  * @template T
@@ -20,7 +19,7 @@ import normalizePath from 'normalize-path';
  }
  */
 /* istanbul ignore next */
-export function arrify(value) {
+function arrify(value) {
   // eslint-disable-next-line no-undefined
   if (value === null || value === undefined) {
     // @ts-ignore
@@ -52,7 +51,7 @@ export function arrify(value) {
  * @param {string} context
  * @returns {string[]}
  */
-export function parseFiles(files, context) {
+function parseFiles(files, context) {
   return arrify(files).map((/** @type {string} */ file) =>
     normalizePath(resolve(context, file))
   );
@@ -63,7 +62,7 @@ export function parseFiles(files, context) {
  * @param {string|string[]} extensions
  * @returns {string[]}
  */
-export function parseFoldersToGlobs(patterns, extensions = []) {
+function parseFoldersToGlobs(patterns, extensions = []) {
   const extensionsList = arrify(extensions);
   const [prefix, postfix] = extensionsList.length > 1 ? ['{', '}'] : ['', ''];
   const extensionsGlob = extensionsList
@@ -95,7 +94,7 @@ export function parseFoldersToGlobs(patterns, extensions = []) {
  * @param {string} _ key, but unused
  * @param {any} value
  */
-export const jsonStringifyReplacerSortKeys = (_, value) => {
+const jsonStringifyReplacerSortKeys = (_, value) => {
   /**
    * @param {{ [x: string]: any; }} sorted
    * @param {string | number} key
@@ -109,4 +108,11 @@ export const jsonStringifyReplacerSortKeys = (_, value) => {
   return value instanceof Object && !(value instanceof Array)
     ? Object.keys(value).sort().reduce(insert, {})
     : value;
+};
+
+module.exports = {
+  arrify,
+  parseFiles,
+  parseFoldersToGlobs,
+  jsonStringifyReplacerSortKeys,
 };
