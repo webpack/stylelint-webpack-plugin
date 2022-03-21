@@ -80,7 +80,7 @@ function loadStylelintThreaded(key, poolSize, options) {
  * @param {Options} options
  * @returns {Linter}
  */
-module.exports = function getStylelint(key, { threads, ...options }) {
+function getStylelint(key, { threads, ...options }) {
   const max =
     typeof threads !== 'number' ? (threads ? cpus().length - 1 : 1) : threads;
 
@@ -92,7 +92,7 @@ module.exports = function getStylelint(key, { threads, ...options }) {
         : loadStylelint(options);
   }
   return cache[cacheKey];
-};
+}
 
 /**
  * @param {string|undefined} key
@@ -102,3 +102,5 @@ module.exports = function getStylelint(key, { threads, ...options }) {
 function getCacheKey(key, options) {
   return JSON.stringify({ key, options }, jsonStringifyReplacerSortKeys);
 }
+
+module.exports = getStylelint;

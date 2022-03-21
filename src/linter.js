@@ -27,7 +27,7 @@ const resultStorage = new WeakMap();
  * @param {Compilation} compilation
  * @returns {{api: InternalApi, lint: Linter, report: Reporter, threads: number}}
  */
-module.exports = function linter(key, options, compilation) {
+function linter(key, options, compilation) {
   /** @type {Stylelint} */
   let stylelint;
 
@@ -156,7 +156,7 @@ module.exports = function linter(key, options, compilation) {
       await save(filePath, content);
     }
   }
-};
+}
 
 /**
  * @param {FormatterFunction} formatter
@@ -275,3 +275,5 @@ function getResultStorage({ compiler }) {
   }
   return storage;
 }
+
+module.exports = linter;

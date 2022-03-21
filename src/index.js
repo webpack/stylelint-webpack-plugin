@@ -108,6 +108,8 @@ class StylelintWebpackPlugin {
       }
 
       compilation.hooks.finishModules.tapPromise(this.key, async () => {
+        /** @type {string[]} */
+        // @ts-ignore
         const files = (
           await Promise.all(
             (compiler.modifiedFiles
@@ -117,7 +119,7 @@ class StylelintWebpackPlugin {
                     !isMatch(file, exclude, { dot: true })
                 )
               : globby.sync(wanted, { dot: true, ignore: exclude })
-            ).map(async (/** @type {string | undefined} */ file) => {
+            ).map(async (file) => {
               try {
                 return (await api.isPathIgnored(file)) ? false : file;
               } catch (e) {

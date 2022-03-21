@@ -1,10 +1,34 @@
 /// <reference types="stylelint" />
-declare function _exports(
+export = getStylelint;
+/**
+ * @param {string|undefined} key
+ * @param {Options} options
+ * @returns {Linter}
+ */
+declare function getStylelint(
   key: string | undefined,
   { threads, ...options }: Options
 ): Linter;
-export = _exports;
-export type Stylelint = import('postcss').PluginCreator<
+declare namespace getStylelint {
+  export {
+    Stylelint,
+    LintResult,
+    Options,
+    AsyncTask,
+    LintTask,
+    Linter,
+    Worker,
+  };
+}
+type Options = import('./options').Options;
+type Linter = {
+  api: import('stylelint').InternalApi;
+  stylelint: Stylelint;
+  lintFiles: LintTask;
+  cleanup: AsyncTask;
+  threads: number;
+};
+type Stylelint = import('postcss').PluginCreator<
   import('stylelint').PostcssPluginOptions
 > & {
   lint: (
@@ -26,6 +50,15 @@ export type Stylelint = import('postcss').PluginCreator<
   createLinter: (
     options: import('stylelint').LinterOptions
   ) => import('stylelint').InternalApi;
+  resolveConfig: (
+    filePath: string,
+    options?:
+      | Pick<
+          import('stylelint').LinterOptions,
+          'cwd' | 'config' | 'configFile' | 'configBasedir'
+        >
+      | undefined
+  ) => Promise<import('stylelint').Config | undefined>;
   utils: {
     report: (problem: import('stylelint').Problem) => void;
     ruleMessages: <
@@ -50,16 +83,9 @@ export type Stylelint = import('postcss').PluginCreator<
     ) => void;
   };
 };
-export type LintResult = import('stylelint').LintResult;
-export type Options = import('./options').Options;
-export type AsyncTask = () => Promise<void>;
-export type LintTask = (files: string | string[]) => Promise<LintResult[]>;
-export type Linter = {
-  stylelint: Stylelint;
-  lintFiles: LintTask;
-  cleanup: AsyncTask;
-  threads: number;
-};
-export type Worker = import('jest-worker').Worker & {
+type LintResult = import('stylelint').LintResult;
+type AsyncTask = () => Promise<void>;
+type LintTask = (files: string | string[]) => Promise<LintResult[]>;
+type Worker = import('jest-worker').Worker & {
   lintFiles: LintTask;
 };
