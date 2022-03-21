@@ -88,26 +88,46 @@ class StylelintWebpackPlugin {
     compiler.hooks.thisCompilation.tap(this.key, (compilation) => {
       /** @type {import('./linter').Linter} */
       let lint;
+
+      /** @type {import('stylelint').InternalApi} */
+      let api;
+
       /** @type {import('./linter').Reporter} */
       let report;
+
       /** @type number */
       let threads;
 
       try {
-        ({ lint, report, threads } = linter(this.key, options, compilation));
+        ({ lint, api, report, threads } = linter(
+          this.key,
+          options,
+          compilation
+        ));
       } catch (e) {
         compilation.errors.push(e);
         return;
       }
 
-      compilation.hooks.finishModules.tap(this.key, () => {
-        const files = compiler.modifiedFiles
-          ? Array.from(compiler.modifiedFiles).filter(
-              (file) =>
-                isMatch(file, wanted, { dot: true }) &&
-                !isMatch(file, exclude, { dot: true })
-            )
-          : globby.sync(wanted, { dot: true, ignore: exclude });
+      compilation.hooks.finishModules.tapPromise(this.key, async () => {
+        const files = (
+          await Promise.all(
+            (compiler.modifiedFiles
+              ? Array.from(compiler.modifiedFiles).filter(
+                  (file) =>
+                    isMatch(file, wanted, { dot: true }) &&
+                    !isMatch(file, exclude, { dot: true })
+                )
+              : globby.sync(wanted, { dot: true, ignore: exclude })
+            ).map(async (/** @type {string | undefined} */ file) => {
+              try {
+                return (await api.isPathIgnored(file)) ? false : file;
+              } catch (e) {
+                return file;
+              }
+            })
+          )
+        ).filter((file) => file !== false);
 
         if (threads > 1) {
           for (const file of files) {
