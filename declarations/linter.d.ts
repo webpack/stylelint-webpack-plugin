@@ -36,6 +36,15 @@ export type Stylelint = import('postcss').PluginCreator<
   createLinter: (
     options: import('stylelint').LinterOptions
   ) => import('stylelint').InternalApi;
+  resolveConfig: (
+    filePath: string,
+    options?:
+      | Pick<
+          import('stylelint').LinterOptions,
+          'cwd' | 'config' | 'configFile' | 'configBasedir'
+        >
+      | undefined
+  ) => Promise<import('stylelint').Config | undefined>;
   utils: {
     report: (problem: import('stylelint').Problem) => void;
     ruleMessages: <
