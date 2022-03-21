@@ -1,2 +1,8 @@
 export default StylelintError;
-declare class StylelintError extends Error {}
+declare class StylelintError extends Error {
+  /**
+   * @param {string=} messages
+   */
+  constructor(messages?: string | undefined);
+  stack: string;
+}

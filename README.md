@@ -21,14 +21,38 @@ This plugin uses [`stylelint`](https://stylelint.io/) that helps you avoid error
 
 To begin, you'll need to install `stylelint-webpack-plugin`:
 
-```bash
+```console
 npm install stylelint-webpack-plugin --save-dev
+```
+
+or
+
+```console
+yarn add -D install stylelint-webpack-plugin
+```
+
+or
+
+```console
+pnpm add -D stylelint-webpack-plugin
 ```
 
 **Note**: You also need to install `stylelint >= 13` from npm, if you haven't already:
 
-```bash
+```console
 npm install stylelint --save-dev
+```
+
+or
+
+```console
+yarn add -D stylelint
+```
+
+or
+
+```console
+pnpm add -D stylelint
 ```
 
 **Note**: If you are using Stylelint 13 rather than 14+, you might also need to install `@types/stylelint` as a dev dependency if getting stylelint related type errors.
@@ -51,7 +75,12 @@ See [stylelint's options](https://stylelint.io/user-guide/usage/node-api#options
 
 ### `configFile`
 
-- Type: `String`
+- Type:
+
+```ts
+type context = string;
+```
+
 - Default: `undefined`
 
 Specify the config file location to be used by `stylelint`.
@@ -60,63 +89,110 @@ Specify the config file location to be used by `stylelint`.
 
 ### `context`
 
-- Type: `String`
+- Type:
+
+```ts
+type context = string;
+```
+
 - Default: `compiler.context`
 
 A string indicating the root of your files.
 
 ### `exclude`
 
-- Type: `String|Array[String]`
+- Type:
+
+```ts
+type exclude = string | Array<string>;
+```
+
 - Default: `['node_modules', compiler.options.output.path]`
 
 Specify the files and/or directories to exclude. Must be relative to `options.context`.
 
 ### `extensions`
 
-- Type: `String|Array[String]`
+- Type:
+
+```ts
+type extensions = string | Array<string>;
+```
+
 - Default: `['css', 'scss', 'sass']`
 
 Specify extensions that should be checked.
 
 ### `files`
 
-- Type: `String|Array[String]`
+- Type:
+
+```ts
+type files = string | Array<string>;
+```
+
 - Default: `null`
 
-Specify directories, files, or globs. Must be relative to `options.context`. Directories are traveresed recursively looking for files matching `options.extensions`. File and glob patterns ignore `options.extensions`.
+Specify directories, files, or globs. Must be relative to `options.context`. Directories are traversed recursively looking for files matching `options.extensions`. File and glob patterns ignore `options.extensions`.
 
 ### `fix`
 
-- Type: `Boolean`
+- Type:
+
+```ts
+type fix = boolean;
+```
+
 - Default: `false`
 
 If `true`, `stylelint` will fix as many errors as possible. The fixes are made to the actual source files. All unfixed errors will be reported. See [Autofixing errors](https://stylelint.io/user-guide/usage/options#fix) docs.
 
 ### `formatter`
 
-- Type: `String|Function`
+- Type:
+
+```ts
+type formatter = string | (
+  results: Array<import('stylelint').LintResult>
+) => string
+```
+
 - Default: `'string'`
 
 Specify the formatter that you would like to use to format your results. See [formatter option](https://stylelint.io/user-guide/usage/options#formatter).
 
 ### `lintDirtyModulesOnly`
 
-- Type: `Boolean`
+- Type:
+
+```ts
+type lintDirtyModulesOnly = boolean;
+```
+
 - Default: `false`
 
 Lint only changed files, skip lint on start.
 
 ### `stylelintPath`
 
-- Type: `String`
+- Type:
+
+```ts
+type stylelintPath = string;
+```
+
 - Default: `stylelint`
 
 Path to `stylelint` instance that will be used for linting.
 
 ### `threads`
 
-- Type: `Boolean | Number`
+- Type:
+
+```ts
+type threads = boolean | number;
+```
+
 - Default: `false`
 
 Set to true for an auto-selected pool size based on number of cpus. Set to a number greater than 1 to set an explicit pool size. Set to false, 1, or less to disable and only run in main process.
@@ -128,42 +204,84 @@ You can still force this behavior by using `emitError` **or** `emitWarning` opti
 
 #### `emitError`
 
-- Type: `Boolean`
+- Type:
+
+```ts
+type emitError = boolean;
+```
+
 - Default: `true`
 
 The errors found will always be emitted, to disable set to `false`.
 
 #### `emitWarning`
 
-- Type: `Boolean`
+- Type:
+
+```ts
+type emitWarning = boolean;
+```
+
 - Default: `true`
 
 The warnings found will always be emitted, to disable set to `false`.
 
 #### `failOnError`
 
-- Type: `Boolean`
+- Type:
+
+```ts
+type failOnError = boolean;
+```
+
 - Default: `true`
 
 Will cause the module build to fail if there are any errors, to disable set to `false`.
 
 #### `failOnWarning`
 
-- Type: `Boolean`
+- Type:
+
+```ts
+type failOnWarning = boolean;
+```
+
 - Default: `false`
 
 Will cause the module build to fail if there are any warnings, if set to `true`.
 
 #### `quiet`
 
-- Type: `Boolean`
+- Type:
+
+```ts
+type quiet = boolean;
+```
+
 - Default: `false`
 
 Will process and report errors only and ignore warnings, if set to `true`.
 
 #### `outputReport`
 
-- Type: `Boolean|Object`
+- Type:
+
+```ts
+type outputReport =
+  | boolean
+  | {
+      filePath?: string | undefined;
+      formatter?:
+        | (
+            | string
+            | ((
+                results: Array<import('stylelint').LintResult>
+              ) => string)
+          )
+        | undefined;
+    };
+```
+
 - Default: `false`
 
 Write the output of the errors to a file, for example a `json` file for use for reporting.
