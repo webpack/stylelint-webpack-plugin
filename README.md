@@ -274,9 +274,7 @@ type outputReport =
       formatter?:
         | (
             | string
-            | ((
-                results: Array<import('stylelint').LintResult>
-              ) => string)
+            | ((results: Array<import('stylelint').LintResult>) => string)
           )
         | undefined;
     };
