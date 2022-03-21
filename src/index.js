@@ -1,13 +1,11 @@
-import { isAbsolute, join } from 'path';
+const { isAbsolute, join } = require('path');
 
-// @ts-ignore
-import globby from 'globby';
+const globby = require('globby');
+const { isMatch } = require('micromatch');
 
-import { isMatch } from 'micromatch';
-
-import { getOptions } from './options';
-import linter from './linter';
-import { arrify, parseFiles, parseFoldersToGlobs } from './utils';
+const { getOptions } = require('./options');
+const linter = require('./linter');
+const { arrify, parseFiles, parseFoldersToGlobs } = require('./utils');
 
 /** @typedef {import('webpack').Compiler} Compiler */
 /** @typedef {import('webpack').Module} Module */
@@ -110,6 +108,8 @@ class StylelintWebpackPlugin {
       }
 
       compilation.hooks.finishModules.tapPromise(this.key, async () => {
+        /** @type {string[]} */
+        // @ts-ignore
         const files = (
           await Promise.all(
             (compiler.modifiedFiles
@@ -119,7 +119,7 @@ class StylelintWebpackPlugin {
                     !isMatch(file, exclude, { dot: true })
                 )
               : globby.sync(wanted, { dot: true, ignore: exclude })
-            ).map(async (/** @type {string | undefined} */ file) => {
+            ).map(async (file) => {
               try {
                 return (await api.isPathIgnored(file)) ? false : file;
               } catch (e) {
@@ -185,4 +185,4 @@ class StylelintWebpackPlugin {
   }
 }
 
-export default StylelintWebpackPlugin;
+module.exports = StylelintWebpackPlugin;

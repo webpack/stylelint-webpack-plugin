@@ -1,13 +1,4 @@
-export default StylelintWebpackPlugin;
-export type Compiler = import('webpack').Compiler;
-export type Module = import('webpack').Module;
-export type Options = import('./options').Options;
-export type FileSystemInfoEntry = Partial<
-  | {
-      timestamp: number;
-    }
-  | number
->;
+export = StylelintWebpackPlugin;
 declare class StylelintWebpackPlugin {
   /**
    * @param {Options} options
@@ -33,3 +24,15 @@ declare class StylelintWebpackPlugin {
    */
   getContext(compiler: Compiler): string;
 }
+declare namespace StylelintWebpackPlugin {
+  export { Compiler, Module, Options, FileSystemInfoEntry };
+}
+type Compiler = import('webpack').Compiler;
+type Options = import('./options').Options;
+type Module = import('webpack').Module;
+type FileSystemInfoEntry = Partial<
+  | {
+      timestamp: number;
+    }
+  | number
+>;
