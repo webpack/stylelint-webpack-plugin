@@ -28,7 +28,7 @@ npm install stylelint-webpack-plugin --save-dev
 or
 
 ```console
-yarn add -D install stylelint-webpack-plugin
+yarn add -D stylelint-webpack-plugin
 ```
 
 or
