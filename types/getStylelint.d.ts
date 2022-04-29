@@ -86,6 +86,7 @@ type Stylelint = import('postcss').PluginCreator<
 type LintResult = import('stylelint').LintResult;
 type AsyncTask = () => Promise<void>;
 type LintTask = (files: string | string[]) => Promise<LintResult[]>;
-type Worker = import('jest-worker').Worker & {
+type Worker = JestWorker & {
   lintFiles: LintTask;
 };
+import { Worker as JestWorker } from 'jest-worker';
