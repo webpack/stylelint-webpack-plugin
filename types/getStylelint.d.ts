@@ -1,14 +1,33 @@
 /// <reference types="stylelint" />
+export = getStylelint;
 /**
  * @param {string|undefined} key
  * @param {Options} options
  * @returns {Linter}
  */
-export default function getStylelint(
+declare function getStylelint(
   key: string | undefined,
   { threads, ...options }: Options
 ): Linter;
-export type Stylelint = import('postcss').PluginCreator<
+declare namespace getStylelint {
+  export {
+    Stylelint,
+    LintResult,
+    Options,
+    AsyncTask,
+    LintTask,
+    Linter,
+    Worker,
+  };
+}
+type Options = import('./options').Options;
+type Linter = {
+  stylelint: Stylelint;
+  lintFiles: LintTask;
+  cleanup: AsyncTask;
+  threads: number;
+};
+type Stylelint = import('postcss').PluginCreator<
   import('stylelint').PostcssPluginOptions
 > & {
   lint: (
@@ -63,17 +82,10 @@ export type Stylelint = import('postcss').PluginCreator<
     ) => void;
   };
 };
-export type LintResult = import('stylelint').LintResult;
-export type Options = import('./options').Options;
-export type AsyncTask = () => Promise<void>;
-export type LintTask = (files: string | string[]) => Promise<LintResult[]>;
-export type Linter = {
-  stylelint: Stylelint;
-  lintFiles: LintTask;
-  cleanup: AsyncTask;
-  threads: number;
-};
-export type Worker = JestWorker & {
+type LintResult = import('stylelint').LintResult;
+type AsyncTask = () => Promise<void>;
+type LintTask = (files: string | string[]) => Promise<LintResult[]>;
+type Worker = JestWorker & {
   lintFiles: LintTask;
 };
 import { Worker as JestWorker } from 'jest-worker';

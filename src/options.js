@@ -1,7 +1,7 @@
-import { validate } from 'schema-utils';
+const { validate } = require('schema-utils');
 
 // @ts-ignore
-import schema from './options.json';
+const schema = require('./options.json');
 
 /** @typedef {import("stylelint")} stylelint */
 /** @typedef {import("stylelint").LinterOptions} StylelintOptions */
@@ -37,7 +37,7 @@ import schema from './options.json';
  * @param {Options} pluginOptions
  * @returns {Partial<PluginOptions>}
  */
-export function getOptions(pluginOptions) {
+function getOptions(pluginOptions) {
   const options = {
     extensions: ['css', 'scss', 'sass'],
     emitError: true,
@@ -60,7 +60,7 @@ export function getOptions(pluginOptions) {
  * @param {Options} pluginOptions
  * @returns {Partial<StylelintOptions>}
  */
-export function getStylelintOptions(pluginOptions) {
+function getStylelintOptions(pluginOptions) {
   const stylelintOptions = { ...pluginOptions };
 
   // Keep the files and formatter option because it is common to both the plugin and Stylelint.
@@ -75,3 +75,8 @@ export function getStylelintOptions(pluginOptions) {
 
   return stylelintOptions;
 }
+
+module.exports = {
+  getOptions,
+  getStylelintOptions,
+};
