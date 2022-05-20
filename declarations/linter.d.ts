@@ -14,7 +14,7 @@ export default function linter(
   report: Reporter;
   threads: number;
 };
-export type Stylelint = import('stylelint/node_modules/postcss').PluginCreator<
+export type Stylelint = import('postcss').PluginCreator<
   import('stylelint').PostcssPluginOptions
 > & {
   lint: (
@@ -36,6 +36,15 @@ export type Stylelint = import('stylelint/node_modules/postcss').PluginCreator<
   createLinter: (
     options: import('stylelint').LinterOptions
   ) => import('stylelint').InternalApi;
+  resolveConfig: (
+    filePath: string,
+    options?:
+      | Pick<
+          import('stylelint').LinterOptions,
+          'cwd' | 'config' | 'configFile' | 'configBasedir'
+        >
+      | undefined
+  ) => Promise<import('stylelint').Config | undefined>;
   utils: {
     report: (problem: import('stylelint').Problem) => void;
     ruleMessages: <
@@ -54,11 +63,9 @@ export type Stylelint = import('stylelint/node_modules/postcss').PluginCreator<
       options: {
         ruleName: string;
         ruleSettings: import('stylelint').ConfigRuleSettings<T_1, O>;
-        root: import('stylelint/node_modules/postcss').Root;
+        root: import('postcss').Root;
       },
-      callback: (
-        warning: import('stylelint/node_modules/postcss').Warning
-      ) => void
+      callback: (warning: import('postcss').Warning) => void
     ) => void;
   };
 };
