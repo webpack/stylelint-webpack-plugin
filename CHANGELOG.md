@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v2.3.2...v2.4.0) (2022-05-20)
+
+
+### Features
+
+* add stylelint prefix to CLI output ([#279](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/279)) ([9e14831](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/9e148314ec1d4c5a13b0210edbaee1fba25c4ca5))
+* removed cjs wrapper ([#281](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/281)) ([1ccd8bf](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/1ccd8bf5cfe32dc0ca24261b2d2ee6ab9f99df7b))
+
+
+### Bug Fixes
+
+* ignore file ([#282](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/282)) ([999efe8](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/999efe8adc7eb9ef170ad3b06aa568ef7f965695))
+
 ### [2.3.2](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v2.3.1...v2.3.2) (2022-01-13)
 
 
