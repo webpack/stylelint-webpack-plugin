@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.3.0](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v3.2.0...v3.3.0) (2022-05-20)
+
+
+### Features
+
+* add stylelint prefix to CLI output for better debugging ([#273](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/273)) ([4ce7da3](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/4ce7da3f543a25f18d34b8529ee554773d9b810f))
+
+
+### Bug Fixes
+
+* types ([#274](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/274)) ([da40303](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/da403032d903b85a50cecb86e3dd1aba062f6ef6))
+
 ## [3.2.0](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v3.1.1...v3.2.0) (2022-03-21)
 
 
