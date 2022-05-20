@@ -3,13 +3,14 @@
  * @param {string|undefined} key
  * @param {Options} options
  * @param {Compilation} compilation
- * @returns {{lint: Linter, report: Reporter, threads: number}}
+ * @returns {{api: InternalApi, lint: Linter, report: Reporter, threads: number}}
  */
 export default function linter(
   key: string | undefined,
   options: Options,
   compilation: Compilation
 ): {
+  api: InternalApi;
   lint: Linter;
   report: Reporter;
   threads: number;
@@ -70,6 +71,7 @@ export type Stylelint = import('postcss').PluginCreator<
   };
 };
 export type LintResult = import('stylelint').LintResult;
+export type InternalApi = import('stylelint').InternalApi;
 export type Compiler = import('webpack').Compiler;
 export type Compilation = import('webpack').Compilation;
 export type Options = import('./options').Options;

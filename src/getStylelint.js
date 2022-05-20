@@ -15,7 +15,7 @@ const cache = {};
 /** @typedef {import('./options').Options} Options */
 /** @typedef {() => Promise<void>} AsyncTask */
 /** @typedef {(files: string|string[]) => Promise<LintResult[]>} LintTask */
-/** @typedef {{stylelint: Stylelint, lintFiles: LintTask, cleanup: AsyncTask, threads: number, }} Linter */
+/** @typedef {{api: import('stylelint').InternalApi, stylelint: Stylelint, lintFiles: LintTask, cleanup: AsyncTask, threads: number, }} Linter */
 /** @typedef {JestWorker & {lintFiles: LintTask}} Worker */
 
 /**
@@ -23,10 +23,12 @@ const cache = {};
  * @returns {Linter}
  */
 function loadStylelint(options) {
-  const stylelint = setup(options, getStylelintOptions(options));
+  const stylelintOptions = getStylelintOptions(options);
+  const stylelint = setup(options, stylelintOptions);
 
   return {
     stylelint,
+    api: stylelint.createLinter(stylelintOptions),
     lintFiles,
     cleanup: async () => {},
     threads: 1,

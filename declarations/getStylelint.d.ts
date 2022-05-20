@@ -68,6 +68,7 @@ export type Options = import('./options').Options;
 export type AsyncTask = () => Promise<void>;
 export type LintTask = (files: string | string[]) => Promise<LintResult[]>;
 export type Linter = {
+  api: import('stylelint').InternalApi;
   stylelint: Stylelint;
   lintFiles: LintTask;
   cleanup: AsyncTask;
