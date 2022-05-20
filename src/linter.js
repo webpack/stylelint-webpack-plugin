@@ -7,6 +7,7 @@ const getStylelint = require('./getStylelint');
 
 /** @typedef {import('stylelint')} Stylelint */
 /** @typedef {import('stylelint').LintResult} LintResult */
+/** @typedef {import('stylelint').InternalApi} InternalApi */
 /** @typedef {import('webpack').Compiler} Compiler */
 /** @typedef {import('webpack').Compilation} Compilation */
 /** @typedef {import('./options').Options} Options */
@@ -25,11 +26,14 @@ const resultStorage = new WeakMap();
  * @param {string|undefined} key
  * @param {Options} options
  * @param {Compilation} compilation
- * @returns {{lint: Linter, report: Reporter, threads: number}}
+ * @returns {{api: InternalApi, lint: Linter, report: Reporter, threads: number}}
  */
 function linter(key, options, compilation) {
   /** @type {Stylelint} */
   let stylelint;
+
+  /** @type {InternalApi} */
+  let api;
 
   /** @type {(files: string|string[]) => Promise<LintResult[]>} */
   let lintFiles;
@@ -46,13 +50,17 @@ function linter(key, options, compilation) {
   const crossRunResultStorage = getResultStorage(compilation);
 
   try {
-    ({ stylelint, lintFiles, cleanup, threads } = getStylelint(key, options));
+    ({ stylelint, api, lintFiles, cleanup, threads } = getStylelint(
+      key,
+      options
+    ));
   } catch (e) {
     throw new StylelintError(e.message);
   }
 
   return {
     lint,
+    api,
     report,
     threads,
   };

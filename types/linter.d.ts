@@ -4,13 +4,14 @@ export = linter;
  * @param {string|undefined} key
  * @param {Options} options
  * @param {Compilation} compilation
- * @returns {{lint: Linter, report: Reporter, threads: number}}
+ * @returns {{api: InternalApi, lint: Linter, report: Reporter, threads: number}}
  */
 declare function linter(
   key: string | undefined,
   options: Options,
   compilation: Compilation
 ): {
+  api: InternalApi;
   lint: Linter;
   report: Reporter;
   threads: number;
@@ -19,6 +20,7 @@ declare namespace linter {
   export {
     Stylelint,
     LintResult,
+    InternalApi,
     Compiler,
     Compilation,
     Options,
@@ -33,6 +35,7 @@ declare namespace linter {
 }
 type Options = import('./options').Options;
 type Compilation = import('webpack').Compilation;
+type InternalApi = import('stylelint').InternalApi;
 type Linter = (files: string | string[]) => void;
 type Reporter = () => Promise<Report>;
 type Stylelint = import('postcss').PluginCreator<

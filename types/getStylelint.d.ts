@@ -22,6 +22,7 @@ declare namespace getStylelint {
 }
 type Options = import('./options').Options;
 type Linter = {
+  api: import('stylelint').InternalApi;
   stylelint: Stylelint;
   lintFiles: LintTask;
   cleanup: AsyncTask;
