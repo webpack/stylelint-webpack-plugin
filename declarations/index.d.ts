@@ -17,8 +17,16 @@ declare class StylelintWebpackPlugin {
   options: Partial<import('./options').PluginOptions>;
   /**
    * @param {Compiler} compiler
+   * @param {Options} options
+   * @param {string[]} wanted
+   * @param {string[]} exclude
    */
-  run(compiler: Compiler): Promise<void>;
+  run(
+    compiler: Compiler,
+    options: Options,
+    wanted: string[],
+    exclude: string[]
+  ): Promise<void>;
   startTime: number;
   /** @type {ReadonlyMap<string, null | FileSystemInfoEntry | "ignore" | undefined>} */
   prevTimestamps: ReadonlyMap<

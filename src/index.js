@@ -41,10 +41,29 @@ class StylelintWebpackPlugin {
     // this differentiates one from the other when being cached.
     this.key = compiler.name || `${this.key}_${(counter += 1)}`;
 
+    const context = this.getContext(compiler);
+    const excludeDefault = [
+      '**/node_modules/**',
+      String(compiler.options.output.path),
+    ];
+
+    const options = {
+      ...this.options,
+      context,
+      exclude: parseFiles(this.options.exclude || excludeDefault, context),
+      extensions: arrify(this.options.extensions),
+      files: parseFiles(this.options.files || '', context),
+    };
+
+    const wanted = parseFoldersToGlobs(options.files, options.extensions);
+    const exclude = parseFoldersToGlobs(options.exclude);
+
     // If `lintDirtyModulesOnly` is disabled,
     // execute the linter on the build
     if (!this.options.lintDirtyModulesOnly) {
-      compiler.hooks.run.tapPromise(this.key, this.run);
+      compiler.hooks.run.tapPromise(this.key, (c) =>
+        this.run(c, options, wanted, exclude)
+      );
     }
 
     let isFirstRun = this.options.lintDirtyModulesOnly;
@@ -55,14 +74,17 @@ class StylelintWebpackPlugin {
         return Promise.resolve();
       }
 
-      return this.run(c);
+      return this.run(c, options, wanted, exclude);
     });
   }
 
   /**
    * @param {Compiler} compiler
+   * @param {Options} options
+   * @param {string[]} wanted
+   * @param {string[]} exclude
    */
-  async run(compiler) {
+  async run(compiler, options, wanted, exclude) {
     // Do not re-hook
     /* istanbul ignore if */
     if (
@@ -71,23 +93,6 @@ class StylelintWebpackPlugin {
     ) {
       return;
     }
-
-    const context = this.getContext(compiler);
-    const options = {
-      ...this.options,
-      exclude: parseFiles(
-        this.options.exclude || [
-          '**/node_modules/**',
-          compiler.options.output.path,
-        ],
-        context
-      ),
-      extensions: arrify(this.options.extensions),
-      files: parseFiles(this.options.files || '', context),
-    };
-
-    const wanted = parseFoldersToGlobs(options.files, options.extensions);
-    const exclude = parseFoldersToGlobs(options.exclude);
 
     compiler.hooks.thisCompilation.tap(this.key, (compilation) => {
       /** @type {import('./linter').Linter} */
@@ -109,10 +114,10 @@ class StylelintWebpackPlugin {
 
         if (threads > 1) {
           for (const file of files) {
-            lint(parseFiles(file, context));
+            lint(parseFiles(file, options.context || ''));
           }
         } else if (files.length > 0) {
-          lint(parseFiles(files, context));
+          lint(parseFiles(files, options.context || ''));
         }
       });
 
