@@ -1,11 +1,11 @@
-import { cpus } from 'os';
+const { cpus } = require('os');
 
-import { Worker as JestWorker } from 'jest-worker';
+const { Worker: JestWorker } = require('jest-worker');
 
 // @ts-ignore
-import { setup, lintFiles } from './worker';
-import { jsonStringifyReplacerSortKeys } from './utils';
-import { getStylelintOptions } from './options';
+const { setup, lintFiles } = require('./worker');
+const { jsonStringifyReplacerSortKeys } = require('./utils');
+const { getStylelintOptions } = require('./options');
 
 /** @type {{[key: string]: any}} */
 const cache = {};
@@ -78,7 +78,7 @@ function loadStylelintThreaded(key, poolSize, options) {
  * @param {Options} options
  * @returns {Linter}
  */
-export default function getStylelint(key, { threads, ...options }) {
+function getStylelint(key, { threads, ...options }) {
   const max =
     typeof threads !== 'number' ? (threads ? cpus().length - 1 : 1) : threads;
 
@@ -100,3 +100,5 @@ export default function getStylelint(key, { threads, ...options }) {
 function getCacheKey(key, options) {
   return JSON.stringify({ key, options }, jsonStringifyReplacerSortKeys);
 }
+
+module.exports = getStylelint;

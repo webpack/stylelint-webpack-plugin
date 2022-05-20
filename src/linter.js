@@ -1,10 +1,9 @@
-import { dirname, isAbsolute, join } from 'path';
+const { dirname, isAbsolute, join } = require('path');
 
-// @ts-ignore
-import arrify from 'arrify';
+const arrify = require('arrify');
 
-import StylelintError from './StylelintError';
-import getStylelint from './getStylelint';
+const StylelintError = require('./StylelintError');
+const getStylelint = require('./getStylelint');
 
 /** @typedef {import('stylelint')} Stylelint */
 /** @typedef {import('stylelint').LintResult} LintResult */
@@ -28,7 +27,7 @@ const resultStorage = new WeakMap();
  * @param {Compilation} compilation
  * @returns {{lint: Linter, report: Reporter, threads: number}}
  */
-export default function linter(key, options, compilation) {
+function linter(key, options, compilation) {
   /** @type {Stylelint} */
   let stylelint;
 
@@ -270,3 +269,5 @@ function getResultStorage({ compiler }) {
   }
   return storage;
 }
+
+module.exports = linter;
