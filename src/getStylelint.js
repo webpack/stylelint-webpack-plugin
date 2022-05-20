@@ -16,7 +16,7 @@ const cache = {};
 /** @typedef {() => Promise<void>} AsyncTask */
 /** @typedef {(files: string|string[]) => Promise<LintResult[]>} LintTask */
 /** @typedef {{api: import('stylelint').InternalApi, stylelint: Stylelint, lintFiles: LintTask, cleanup: AsyncTask, threads: number, }} Linter */
-/** @typedef {import('jest-worker').Worker & {lintFiles: LintTask}} Worker */
+/** @typedef {JestWorker & {lintFiles: LintTask}} Worker */
 
 /**
  * @param {Options} options
