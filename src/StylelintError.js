@@ -9,4 +9,4 @@ class StylelintError extends Error {
   }
 }
 
-export default StylelintError;
+module.exports = StylelintError;

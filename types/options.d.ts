@@ -1,42 +1,4 @@
 /// <reference types="stylelint" />
-/** @typedef {import("stylelint")} stylelint */
-/** @typedef {import("stylelint").LinterOptions} StylelintOptions */
-/** @typedef {import("stylelint").FormatterType} FormatterType */
-/**
- * @typedef {Object} OutputReport
- * @property {string=} filePath
- * @property {FormatterType=} formatter
- */
-/**
- * @typedef {Object} PluginOptions
- * @property {string} context
- * @property {boolean} emitError
- * @property {boolean} emitWarning
- * @property {string|string[]=} exclude
- * @property {string|string[]} extensions
- * @property {boolean} failOnError
- * @property {boolean} failOnWarning
- * @property {string|string[]} files
- * @property {FormatterType} formatter
- * @property {boolean} lintDirtyModulesOnly
- * @property {boolean} quiet
- * @property {string} stylelintPath
- * @property {OutputReport} outputReport
- * @property {number|boolean=} threads
- */
-/** @typedef {Partial<PluginOptions & StylelintOptions>} Options */
-/**
- * @param {Options} pluginOptions
- * @returns {Partial<PluginOptions>}
- */
-export function getOptions(pluginOptions: Options): Partial<PluginOptions>;
-/**
- * @param {Options} pluginOptions
- * @returns {Partial<StylelintOptions>}
- */
-export function getStylelintOptions(
-  pluginOptions: Options
-): Partial<StylelintOptions>;
 export type stylelint = import('postcss').PluginCreator<
   import('stylelint').PostcssPluginOptions
 > & {
@@ -115,3 +77,41 @@ export type PluginOptions = {
   threads?: (number | boolean) | undefined;
 };
 export type Options = Partial<PluginOptions & StylelintOptions>;
+/** @typedef {import("stylelint")} stylelint */
+/** @typedef {import("stylelint").LinterOptions} StylelintOptions */
+/** @typedef {import("stylelint").FormatterType} FormatterType */
+/**
+ * @typedef {Object} OutputReport
+ * @property {string=} filePath
+ * @property {FormatterType=} formatter
+ */
+/**
+ * @typedef {Object} PluginOptions
+ * @property {string} context
+ * @property {boolean} emitError
+ * @property {boolean} emitWarning
+ * @property {string|string[]=} exclude
+ * @property {string|string[]} extensions
+ * @property {boolean} failOnError
+ * @property {boolean} failOnWarning
+ * @property {string|string[]} files
+ * @property {FormatterType} formatter
+ * @property {boolean} lintDirtyModulesOnly
+ * @property {boolean} quiet
+ * @property {string} stylelintPath
+ * @property {OutputReport} outputReport
+ * @property {number|boolean=} threads
+ */
+/** @typedef {Partial<PluginOptions & StylelintOptions>} Options */
+/**
+ * @param {Options} pluginOptions
+ * @returns {Partial<PluginOptions>}
+ */
+export function getOptions(pluginOptions: Options): Partial<PluginOptions>;
+/**
+ * @param {Options} pluginOptions
+ * @returns {Partial<StylelintOptions>}
+ */
+export function getStylelintOptions(
+  pluginOptions: Options
+): Partial<StylelintOptions>;

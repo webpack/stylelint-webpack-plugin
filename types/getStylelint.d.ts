@@ -1,21 +1,34 @@
 /// <reference types="stylelint" />
+export = getStylelint;
 /**
  * @param {string|undefined} key
  * @param {Options} options
- * @param {Compilation} compilation
- * @returns {{api: InternalApi, lint: Linter, report: Reporter, threads: number}}
+ * @returns {Linter}
  */
-export default function linter(
+declare function getStylelint(
   key: string | undefined,
-  options: Options,
-  compilation: Compilation
-): {
-  api: InternalApi;
-  lint: Linter;
-  report: Reporter;
+  { threads, ...options }: Options
+): Linter;
+declare namespace getStylelint {
+  export {
+    Stylelint,
+    LintResult,
+    Options,
+    AsyncTask,
+    LintTask,
+    Linter,
+    Worker,
+  };
+}
+type Options = import('./options').Options;
+type Linter = {
+  api: import('stylelint').InternalApi;
+  stylelint: Stylelint;
+  lintFiles: LintTask;
+  cleanup: AsyncTask;
   threads: number;
 };
-export type Stylelint = import('postcss').PluginCreator<
+type Stylelint = import('postcss').PluginCreator<
   import('stylelint').PostcssPluginOptions
 > & {
   lint: (
@@ -70,22 +83,10 @@ export type Stylelint = import('postcss').PluginCreator<
     ) => void;
   };
 };
-export type LintResult = import('stylelint').LintResult;
-export type InternalApi = import('stylelint').InternalApi;
-export type Compiler = import('webpack').Compiler;
-export type Compilation = import('webpack').Compilation;
-export type Options = import('./options').Options;
-export type FormatterType = import('./options').FormatterType;
-export type FormatterFunction = (results: LintResult[]) => string;
-export type GenerateReport = (compilation: Compilation) => Promise<void>;
-export type Report = {
-  errors?: StylelintError;
-  warnings?: StylelintError;
-  generateReportAsset?: GenerateReport;
+type LintResult = import('stylelint').LintResult;
+type AsyncTask = () => Promise<void>;
+type LintTask = (files: string | string[]) => Promise<LintResult[]>;
+type Worker = JestWorker & {
+  lintFiles: LintTask;
 };
-export type Reporter = () => Promise<Report>;
-export type Linter = (files: string | string[]) => void;
-export type LintResultMap = {
-  [files: string]: import('stylelint').LintResult;
-};
-import StylelintError from './StylelintError';
+import { Worker as JestWorker } from 'jest-worker';

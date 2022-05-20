@@ -1,14 +1,44 @@
 /// <reference types="stylelint" />
+export = linter;
 /**
  * @param {string|undefined} key
  * @param {Options} options
- * @returns {Linter}
+ * @param {Compilation} compilation
+ * @returns {{api: InternalApi, lint: Linter, report: Reporter, threads: number}}
  */
-export default function getStylelint(
+declare function linter(
   key: string | undefined,
-  { threads, ...options }: Options
-): Linter;
-export type Stylelint = import('postcss').PluginCreator<
+  options: Options,
+  compilation: Compilation
+): {
+  api: InternalApi;
+  lint: Linter;
+  report: Reporter;
+  threads: number;
+};
+declare namespace linter {
+  export {
+    Stylelint,
+    LintResult,
+    InternalApi,
+    Compiler,
+    Compilation,
+    Options,
+    FormatterType,
+    FormatterFunction,
+    GenerateReport,
+    Report,
+    Reporter,
+    Linter,
+    LintResultMap,
+  };
+}
+type Options = import('./options').Options;
+type Compilation = import('webpack').Compilation;
+type InternalApi = import('stylelint').InternalApi;
+type Linter = (files: string | string[]) => void;
+type Reporter = () => Promise<Report>;
+type Stylelint = import('postcss').PluginCreator<
   import('stylelint').PostcssPluginOptions
 > & {
   lint: (
@@ -63,18 +93,17 @@ export type Stylelint = import('postcss').PluginCreator<
     ) => void;
   };
 };
-export type LintResult = import('stylelint').LintResult;
-export type Options = import('./options').Options;
-export type AsyncTask = () => Promise<void>;
-export type LintTask = (files: string | string[]) => Promise<LintResult[]>;
-export type Linter = {
-  api: import('stylelint').InternalApi;
-  stylelint: Stylelint;
-  lintFiles: LintTask;
-  cleanup: AsyncTask;
-  threads: number;
+type LintResult = import('stylelint').LintResult;
+type Compiler = import('webpack').Compiler;
+type FormatterType = import('./options').FormatterType;
+type FormatterFunction = (results: LintResult[]) => string;
+type GenerateReport = (compilation: Compilation) => Promise<void>;
+type Report = {
+  errors?: StylelintError;
+  warnings?: StylelintError;
+  generateReportAsset?: GenerateReport;
 };
-export type Worker = JestWorker & {
-  lintFiles: LintTask;
+type LintResultMap = {
+  [files: string]: import('stylelint').LintResult;
 };
-import { Worker as JestWorker } from 'jest-worker';
+import StylelintError = require('./StylelintError');
