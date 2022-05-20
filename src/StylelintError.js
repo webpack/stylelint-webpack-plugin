@@ -3,7 +3,7 @@ class StylelintError extends Error {
    * @param {string=} messages
    */
   constructor(messages) {
-    super(messages);
+    super(`[stylelint] ${messages}`);
     this.name = 'StylelintError';
     this.stack = '';
   }
