@@ -5,7 +5,6 @@
 
 [![npm][npm]][npm-url]
 [![node][node]][node-url]
-[![deps][deps]][deps-url]
 [![tests][tests]][tests-url]
 [![coverage][cover]][cover-url]
 [![chat][chat]][chat-url]
@@ -305,8 +304,6 @@ You can pass in a different formatter for the output file, if none is passed in 
 [npm-url]: https://npmjs.com/package/stylelint-webpack-plugin
 [node]: https://img.shields.io/node/v/stylelint-webpack-plugin.svg
 [node-url]: https://nodejs.org
-[deps]: https://david-dm.org/webpack-contrib/stylelint-webpack-plugin.svg
-[deps-url]: https://david-dm.org/webpack-contrib/stylelint-webpack-plugin
 [tests]: https://github.com/webpack-contrib/stylelint-webpack-plugin/workflows/stylelint-webpack-plugin/badge.svg
 [tests-url]: https://github.com/webpack-contrib/stylelint-webpack-plugin/actions
 [cover]: https://codecov.io/gh/webpack-contrib/stylelint-webpack-plugin/branch/master/graph/badge.svg
