@@ -36,7 +36,9 @@ or
 pnpm add -D stylelint-webpack-plugin
 ```
 
-**Note**: You also need to install `stylelint >= 13` from npm, if you haven't already:
+> **Note**: 
+>
+> You also need to install `stylelint >= 13` from npm, if you haven't already:
 
 ```console
 npm install stylelint --save-dev
@@ -54,7 +56,9 @@ or
 pnpm add -D stylelint
 ```
 
-**Note**: If you are using Stylelint 13 rather than 14+, you might also need to install `@types/stylelint` as a dev dependency if getting stylelint related type errors.
+> **Note**: 
+>
+>If you are using Stylelint 13 rather than 14+, you might also need to install `@types/stylelint` as a dev dependency if getting stylelint related type errors.
 
 Then add the plugin to your webpack config. For example:
 
@@ -84,7 +88,9 @@ type context = string;
 
 Specify the config file location to be used by `stylelint`.
 
-**Note:** By default this is [handled by `stylelint`](https://stylelint.io/user-guide/configure).
+> **Note:** 
+>
+> By default this is [handled by `stylelint`](https://stylelint.io/user-guide/configure).
 
 ### `context`
 
