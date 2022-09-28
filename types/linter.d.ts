@@ -20,12 +20,13 @@ declare namespace linter {
   export {
     Stylelint,
     LintResult,
+    LinterResult,
     InternalApi,
+    Formatter,
+    FormatterType,
     Compiler,
     Compilation,
     Options,
-    FormatterType,
-    FormatterFunction,
     GenerateReport,
     Report,
     Reporter,
@@ -52,7 +53,7 @@ type Stylelint = import('postcss').PluginCreator<
   };
   createPlugin: (
     ruleName: string,
-    plugin: import('stylelint').Plugin<any, any>
+    rule: import('stylelint').Rule<any, any>
   ) => {
     ruleName: string;
     rule: import('stylelint').Rule<any, any>;
@@ -92,11 +93,15 @@ type Stylelint = import('postcss').PluginCreator<
       callback: (warning: import('postcss').Warning) => void
     ) => void;
   };
+  reference: {
+    longhandSubPropertiesOfShorthandProperties: import('stylelint').LonghandSubPropertiesOfShorthandProperties;
+  };
 };
 type LintResult = import('stylelint').LintResult;
+type LinterResult = import('stylelint').LinterResult;
+type Formatter = import('stylelint').Formatter;
+type FormatterType = import('stylelint').FormatterType;
 type Compiler = import('webpack').Compiler;
-type FormatterType = import('./options').FormatterType;
-type FormatterFunction = (results: LintResult[]) => string;
 type GenerateReport = (compilation: Compilation) => Promise<void>;
 type Report = {
   errors?: StylelintError;

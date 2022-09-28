@@ -6,12 +6,13 @@ const { arrify } = require('./utils');
 
 /** @typedef {import('stylelint')} Stylelint */
 /** @typedef {import('stylelint').LintResult} LintResult */
+/** @typedef {import('stylelint').LinterResult} LinterResult */
 /** @typedef {import('stylelint').InternalApi} InternalApi */
+/** @typedef {import('stylelint').Formatter} Formatter */
+/** @typedef {import('stylelint').FormatterType} FormatterType */
 /** @typedef {import('webpack').Compiler} Compiler */
 /** @typedef {import('webpack').Compilation} Compilation */
 /** @typedef {import('./options').Options} Options */
-/** @typedef {import('./options').FormatterType} FormatterType */
-/** @typedef {((results: LintResult[]) => string)} FormatterFunction */
 /** @typedef {(compilation: Compilation) => Promise<void>} GenerateReport */
 /** @typedef {{errors?: StylelintError, warnings?: StylelintError, generateReportAsset?: GenerateReport}} Report */
 /** @typedef {() => Promise<Report>} Reporter */
@@ -101,9 +102,22 @@ function linter(key, options, compilation) {
     }
 
     const formatter = loadFormatter(stylelint, options.formatter);
+
+    /** @type {LinterResult} */
+    const returnValue = {
+      // @ts-ignore
+      cwd: options.cwd,
+      errored: false,
+      results: [],
+      output: '',
+      reportedDisables: [],
+      ruleMetadata: getRuleMetadata(results),
+    };
+
     const { errors, warnings } = formatResults(
       formatter,
-      parseResults(options, results)
+      parseResults(options, results),
+      returnValue
     );
 
     return {
@@ -145,34 +159,35 @@ function linter(key, options, compilation) {
         return;
       }
 
-      const content = outputReport.formatter
-        ? loadFormatter(stylelint, outputReport.formatter)(results)
-        : formatter(results);
+      const content = outputReport.formatter;
+      loadFormatter(stylelint, outputReport.formatter)(results, returnValue);
+      formatter(results, returnValue);
 
       let { filePath } = outputReport;
       if (!isAbsolute(filePath)) {
         filePath = join(compiler.outputPath, filePath);
       }
 
-      await save(filePath, content);
+      await save(filePath, content || '');
     }
   }
 }
 
 /**
- * @param {FormatterFunction} formatter
+ * @param {Formatter} formatter
  * @param {{ errors: LintResult[]; warnings: LintResult[]; }} results
+ * @param {LinterResult} returnValue
  * @returns {{errors?: StylelintError, warnings?: StylelintError}}
  */
-function formatResults(formatter, results) {
+function formatResults(formatter, results, returnValue) {
   let errors;
   let warnings;
   if (results.warnings.length > 0) {
-    warnings = new StylelintError(formatter(results.warnings));
+    warnings = new StylelintError(formatter(results.warnings, returnValue));
   }
 
   if (results.errors.length > 0) {
-    errors = new StylelintError(formatter(results.errors));
+    errors = new StylelintError(formatter(results.errors, returnValue));
   }
 
   return {
@@ -226,7 +241,7 @@ function parseResults(options, results) {
 /**
  * @param {Stylelint} stylelint
  * @param {FormatterType=} formatter
- * @returns {FormatterFunction}
+ * @returns {Formatter}
  */
 function loadFormatter(stylelint, formatter) {
   if (typeof formatter === 'function') {
@@ -275,6 +290,22 @@ function getResultStorage({ compiler }) {
     resultStorage.set(compiler, (storage = {}));
   }
   return storage;
+}
+
+/**
+ * @param {LintResult[]} lintResults
+ */
+function getRuleMetadata(lintResults) {
+  const [lintResult] = lintResults;
+
+  // eslint-disable-next-line no-undefined
+  if (lintResult === undefined) return {};
+
+  // eslint-disable-next-line no-underscore-dangle, no-undefined
+  if (lintResult._postcssResult === undefined) return {};
+
+  // eslint-disable-next-line no-underscore-dangle
+  return lintResult._postcssResult.stylelint.ruleMetadata;
 }
 
 module.exports = linter;

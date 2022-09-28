@@ -13,7 +13,7 @@ export type stylelint = import('postcss').PluginCreator<
   };
   createPlugin: (
     ruleName: string,
-    plugin: import('stylelint').Plugin<any, any>
+    rule: import('stylelint').Rule<any, any>
   ) => {
     ruleName: string;
     rule: import('stylelint').Rule<any, any>;
@@ -52,6 +52,9 @@ export type stylelint = import('postcss').PluginCreator<
       },
       callback: (warning: import('postcss').Warning) => void
     ) => void;
+  };
+  reference: {
+    longhandSubPropertiesOfShorthandProperties: import('stylelint').LonghandSubPropertiesOfShorthandProperties;
   };
 };
 export type StylelintOptions = import('stylelint').LinterOptions;

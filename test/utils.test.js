@@ -32,12 +32,12 @@ test('parseFoldersToGlobs should return globs for folders', () => {
   const withSlash = `${withoutSlash}/`;
 
   expect(parseFoldersToGlobs(withoutSlash, 'css')).toMatchInlineSnapshot(`
-    Array [
+    [
       "/path/to/code/**/*.css",
     ]
   `);
   expect(parseFoldersToGlobs(withSlash, 'scss')).toMatchInlineSnapshot(`
-    Array [
+    [
       "/path/to/code/**/*.scss",
     ]
   `);
@@ -48,7 +48,7 @@ test('parseFoldersToGlobs should return globs for folders', () => {
       ['scss', 'css', 'sass']
     )
   ).toMatchInlineSnapshot(`
-    Array [
+    [
       "/path/to/code/**/*.{scss,css,sass}",
       "/path/to/code/**/*.{scss,css,sass}",
       "/some/file.scss",
@@ -56,13 +56,13 @@ test('parseFoldersToGlobs should return globs for folders', () => {
   `);
 
   expect(parseFoldersToGlobs(withoutSlash)).toMatchInlineSnapshot(`
-    Array [
+    [
       "/path/to/code/**",
     ]
   `);
 
   expect(parseFoldersToGlobs(withSlash)).toMatchInlineSnapshot(`
-    Array [
+    [
       "/path/to/code/**",
     ]
   `);
@@ -70,7 +70,7 @@ test('parseFoldersToGlobs should return globs for folders', () => {
 
 test('parseFoldersToGlobs should return unmodified globs for globs (ignoring extensions)', () => {
   expect(parseFoldersToGlobs('**.notcss', 'css')).toMatchInlineSnapshot(`
-    Array [
+    [
       "**.notcss",
     ]
   `);
