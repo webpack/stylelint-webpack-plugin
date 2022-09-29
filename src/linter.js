@@ -168,7 +168,7 @@ function linter(key, options, compilation) {
         filePath = join(compiler.outputPath, filePath);
       }
 
-      await save(filePath, content || '');
+      await save(filePath, String(content));
     }
   }
 }
@@ -295,6 +295,7 @@ function getResultStorage({ compiler }) {
 /**
  * @param {LintResult[]} lintResults
  */
+/* istanbul ignore next */
 function getRuleMetadata(lintResults) {
   const [lintResult] = lintResults;
 
