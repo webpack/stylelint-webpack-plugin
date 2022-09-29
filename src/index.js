@@ -137,10 +137,10 @@ class StylelintWebpackPlugin {
 
         if (threads > 1) {
           for (const file of files) {
-            lint(parseFiles(file, options.context || ''));
+            lint(parseFiles(file, String(options.context)));
           }
         } else if (files.length > 0) {
-          lint(parseFiles(files, options.context || ''));
+          lint(parseFiles(files, String(options.context)));
         }
       });
 
