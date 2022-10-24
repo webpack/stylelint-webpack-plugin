@@ -1,6 +1,5 @@
 const { isAbsolute, join } = require('path');
 
-const globby = require('globby');
 const { isMatch } = require('micromatch');
 
 const { getOptions } = require('./options');
@@ -93,54 +92,53 @@ class StylelintWebpackPlugin {
       /** @type {import('./linter').Linter} */
       let lint;
 
-      /** @type {import('stylelint').InternalApi} */
-      let api;
-
       /** @type {import('./linter').Reporter} */
       let report;
 
       /** @type number */
       let threads;
 
+      /** @type {string[]} */
+      const files = [];
+
       try {
-        ({ lint, api, report, threads } = linter(
-          this.key,
-          options,
-          compilation
-        ));
+        ({ lint, report, threads } = linter(this.key, options, compilation));
       } catch (e) {
         compilation.errors.push(e);
         return;
       }
 
-      compilation.hooks.finishModules.tapPromise(this.key, async () => {
-        /** @type {string[]} */
-        // @ts-ignore
-        const files = (
-          await Promise.all(
-            (compiler.modifiedFiles
-              ? Array.from(compiler.modifiedFiles).filter(
-                  (file) =>
-                    isMatch(file, wanted, { dot: true }) &&
-                    !isMatch(file, exclude, { dot: true })
-                )
-              : globby.sync(wanted, { dot: true, ignore: exclude })
-            ).map(async (file) => {
-              try {
-                return (await api.isPathIgnored(file)) ? false : file;
-              } catch (e) {
-                return file;
-              }
-            })
-          )
-        ).filter((file) => file !== false);
+      // @ts-ignore
+      compilation.hooks.succeedModule.tap(this.key, ({ resource }) => {
+        if (resource) {
+          const [file] = resource.split('?');
 
+          if (
+            file &&
+            !files.includes(file) &&
+            isMatch(file, wanted, {
+              dot: true,
+            }) &&
+            !isMatch(file, exclude, {
+              dot: true,
+            })
+          ) {
+            files.push(file);
+
+            if (threads > 1) {
+              lint(file);
+            }
+          }
+        }
+      });
+
+      compilation.hooks.finishModules.tap(this.key, () => {
         if (threads > 1) {
           for (const file of files) {
-            lint(parseFiles(file, String(options.context)));
+            lint(parseFiles(file, options.context || ''));
           }
         } else if (files.length > 0) {
-          lint(parseFiles(files, String(options.context)));
+          lint(parseFiles(files, options.context || ''));
         }
       });
 
