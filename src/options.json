@@ -31,7 +31,7 @@
       "type": "boolean"
     },
     "files": {
-      "description": "Specify directories, files, or globs. Must be relative to `options.context`. Directories are traveresed recursively looking for files matching `options.extensions`. File and glob patterns ignore `options.extensions`.",
+      "description": "Specify directories, files, or globs. Must be relative to `options.context`. Directories are traversed recursively looking for files matching `options.extensions`. File and glob patterns ignore `options.extensions`.",
       "anyOf": [{ "type": "string" }, { "type": "array" }]
     },
     "formatter": {
