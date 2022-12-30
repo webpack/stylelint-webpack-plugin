@@ -9,12 +9,11 @@ describe('stylelint lint', () => {
     jest.mock('stylelint', () => {
       return {
         lint: mockLintFiles,
-        createLinter: () => {
-          return {
-            isPathIgnored: () => false,
-          };
-        },
       };
+    });
+
+    jest.mock('stylelint/lib/isPathIgnored', () => {
+      throw new Error();
     });
   });
 

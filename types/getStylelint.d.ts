@@ -14,6 +14,7 @@ declare namespace getStylelint {
     Stylelint,
     LintResult,
     Options,
+    isPathIgnored,
     AsyncTask,
     LintTask,
     Linter,
@@ -22,8 +23,8 @@ declare namespace getStylelint {
 }
 type Options = import('./options').Options;
 type Linter = {
-  api: import('stylelint').InternalApi;
   stylelint: Stylelint;
+  isPathIgnored: isPathIgnored;
   lintFiles: LintTask;
   cleanup: AsyncTask;
   threads: number;
@@ -87,6 +88,10 @@ type Stylelint = import('postcss').PluginCreator<
   };
 };
 type LintResult = import('stylelint').LintResult;
+type isPathIgnored = (
+  stylelint: Stylelint,
+  filePath: string
+) => Promise<boolean>;
 type AsyncTask = () => Promise<void>;
 type LintTask = (files: string | string[]) => Promise<LintResult[]>;
 type Worker = JestWorker & {
