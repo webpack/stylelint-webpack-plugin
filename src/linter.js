@@ -7,12 +7,12 @@ const { arrify } = require('./utils');
 /** @typedef {import('stylelint')} Stylelint */
 /** @typedef {import('stylelint').LintResult} LintResult */
 /** @typedef {import('stylelint').LinterResult} LinterResult */
-/** @typedef {import('stylelint').InternalApi} InternalApi */
 /** @typedef {import('stylelint').Formatter} Formatter */
 /** @typedef {import('stylelint').FormatterType} FormatterType */
 /** @typedef {import('webpack').Compiler} Compiler */
 /** @typedef {import('webpack').Compilation} Compilation */
 /** @typedef {import('./options').Options} Options */
+/** @typedef {import('./getStylelint').isPathIgnored} isPathIgnored */
 /** @typedef {(compilation: Compilation) => Promise<void>} GenerateReport */
 /** @typedef {{errors?: StylelintError, warnings?: StylelintError, generateReportAsset?: GenerateReport}} Report */
 /** @typedef {() => Promise<Report>} Reporter */
@@ -26,14 +26,14 @@ const resultStorage = new WeakMap();
  * @param {string|undefined} key
  * @param {Options} options
  * @param {Compilation} compilation
- * @returns {{api: InternalApi, lint: Linter, report: Reporter, threads: number}}
+ * @returns {{stylelint: Stylelint, isPathIgnored: isPathIgnored, lint: Linter, report: Reporter, threads: number}}
  */
 function linter(key, options, compilation) {
   /** @type {Stylelint} */
   let stylelint;
 
-  /** @type {InternalApi} */
-  let api;
+  /** @type {isPathIgnored} */
+  let isPathIgnored;
 
   /** @type {(files: string|string[]) => Promise<LintResult[]>} */
   let lintFiles;
@@ -50,7 +50,7 @@ function linter(key, options, compilation) {
   const crossRunResultStorage = getResultStorage(compilation);
 
   try {
-    ({ stylelint, api, lintFiles, cleanup, threads } = getStylelint(
+    ({ stylelint, isPathIgnored, lintFiles, cleanup, threads } = getStylelint(
       key,
       options
     ));
@@ -59,8 +59,9 @@ function linter(key, options, compilation) {
   }
 
   return {
+    stylelint,
     lint,
-    api,
+    isPathIgnored,
     report,
     threads,
   };

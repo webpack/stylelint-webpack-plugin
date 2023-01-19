@@ -24,12 +24,4 @@ module.exports = {
       ],
     };
   },
-
-  createLinter() {
-    return {
-      isPathIgnored() {
-        return false;
-      },
-    };
-  },
 };

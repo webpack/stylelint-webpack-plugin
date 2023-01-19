@@ -4,14 +4,15 @@ export = linter;
  * @param {string|undefined} key
  * @param {Options} options
  * @param {Compilation} compilation
- * @returns {{api: InternalApi, lint: Linter, report: Reporter, threads: number}}
+ * @returns {{stylelint: Stylelint, isPathIgnored: isPathIgnored, lint: Linter, report: Reporter, threads: number}}
  */
 declare function linter(
   key: string | undefined,
   options: Options,
   compilation: Compilation
 ): {
-  api: InternalApi;
+  stylelint: Stylelint;
+  isPathIgnored: getStylelint.isPathIgnored;
   lint: Linter;
   report: Reporter;
   threads: number;
@@ -21,12 +22,12 @@ declare namespace linter {
     Stylelint,
     LintResult,
     LinterResult,
-    InternalApi,
     Formatter,
     FormatterType,
     Compiler,
     Compilation,
     Options,
+    isPathIgnored,
     GenerateReport,
     Report,
     Reporter,
@@ -36,9 +37,6 @@ declare namespace linter {
 }
 type Options = import('./options').Options;
 type Compilation = import('webpack').Compilation;
-type InternalApi = import('stylelint').InternalApi;
-type Linter = (files: string | string[]) => void;
-type Reporter = () => Promise<Report>;
 type Stylelint = import('postcss').PluginCreator<
   import('stylelint').PostcssPluginOptions
 > & {
@@ -97,11 +95,15 @@ type Stylelint = import('postcss').PluginCreator<
     longhandSubPropertiesOfShorthandProperties: import('stylelint').LonghandSubPropertiesOfShorthandProperties;
   };
 };
+type Linter = (files: string | string[]) => void;
+type Reporter = () => Promise<Report>;
+import getStylelint = require('./getStylelint');
 type LintResult = import('stylelint').LintResult;
 type LinterResult = import('stylelint').LinterResult;
 type Formatter = import('stylelint').Formatter;
 type FormatterType = import('stylelint').FormatterType;
 type Compiler = import('webpack').Compiler;
+type isPathIgnored = import('./getStylelint').isPathIgnored;
 type GenerateReport = (compilation: Compilation) => Promise<void>;
 type Report = {
   errors?: StylelintError;

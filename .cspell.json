@@ -19,8 +19,10 @@
   "ignorePaths": [
     "CHANGELOG.md",
     "package.json",
+    "coverage/**",
     "dist/**",
     "**/__snapshots__/**",
-    "package-lock.json"
+    "package-lock.json",
+    "/test/output"
   ]
 }
