@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v3.3.0...v4.0.0) (2023-02-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop node v12 ([#284](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/284)) ([1d0a5a8](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/1d0a5a8be39ceabcc170a3b7709d2587c0dd3a62))
+
+### Bug Fixes
+
+* path ignored ([#312](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/312)) ([805b54c](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/805b54c1b9a48f603f018ad7cfde9daee71944e4))
+
+
 ## [3.3.0](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v3.2.0...v3.3.0) (2022-05-20)
 
 
