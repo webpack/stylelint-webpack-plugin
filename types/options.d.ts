@@ -49,6 +49,8 @@ export type stylelint = import('postcss').PluginCreator<
         ruleName: string;
         ruleSettings: import('stylelint').ConfigRuleSettings<T_1, O>;
         root: import('postcss').Root;
+        result?: import('stylelint').PostcssResult | undefined;
+        context?: import('stylelint').RuleContext | undefined;
       },
       callback: (warning: import('postcss').Warning) => void
     ) => void;
