@@ -4,15 +4,15 @@ const StylelintError = require('./StylelintError');
 const getStylelint = require('./getStylelint');
 const { arrify } = require('./utils');
 
-/** @typedef {import('stylelint')} Stylelint */
-/** @typedef {import('stylelint').LintResult} LintResult */
-/** @typedef {import('stylelint').LinterResult} LinterResult */
-/** @typedef {import('stylelint').Formatter} Formatter */
-/** @typedef {import('stylelint').FormatterType} FormatterType */
 /** @typedef {import('webpack').Compiler} Compiler */
 /** @typedef {import('webpack').Compilation} Compilation */
-/** @typedef {import('./options').Options} Options */
+/** @typedef {import('./getStylelint').Stylelint} Stylelint */
+/** @typedef {import('./getStylelint').LintResult} LintResult */
+/** @typedef {import('./getStylelint').LinterResult} LinterResult */
+/** @typedef {import('./getStylelint').Formatter} Formatter */
+/** @typedef {import('./getStylelint').FormatterType} FormatterType */
 /** @typedef {import('./getStylelint').isPathIgnored} isPathIgnored */
+/** @typedef {import('./options').Options} Options */
 /** @typedef {(compilation: Compilation) => Promise<void>} GenerateReport */
 /** @typedef {{errors?: StylelintError, warnings?: StylelintError, generateReportAsset?: GenerateReport}} Report */
 /** @typedef {() => Promise<Report>} Reporter */

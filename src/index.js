@@ -90,7 +90,7 @@ class StylelintWebpackPlugin {
     }
 
     compiler.hooks.thisCompilation.tap(this.key, (compilation) => {
-      /** @type {import('stylelint')} */
+      /** @type {import('./getStylelint').Stylelint} */
       let stylelint;
 
       /** @type {import('./linter').Linter} */
