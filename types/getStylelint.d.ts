@@ -13,6 +13,10 @@ declare namespace getStylelint {
   export {
     Stylelint,
     LintResult,
+    LinterOptions,
+    LinterResult,
+    Formatter,
+    FormatterType,
     Options,
     isPathIgnored,
     AsyncTask,
@@ -29,67 +33,17 @@ type Linter = {
   cleanup: AsyncTask;
   threads: number;
 };
-type Stylelint = import('postcss').PluginCreator<
-  import('stylelint').PostcssPluginOptions
-> & {
-  lint: (
-    options: import('stylelint').LinterOptions
-  ) => Promise<import('stylelint').LinterResult>;
-  rules: {
-    [k: string]: import('stylelint').Rule<any, any>;
-  };
+type Stylelint = {
+  lint: (options: LinterOptions) => Promise<LinterResult>;
   formatters: {
     [k: string]: import('stylelint').Formatter;
   };
-  createPlugin: (
-    ruleName: string,
-    rule: import('stylelint').Rule<any, any>
-  ) => {
-    ruleName: string;
-    rule: import('stylelint').Rule<any, any>;
-  };
-  createLinter: (
-    options: import('stylelint').LinterOptions
-  ) => import('stylelint').InternalApi;
-  resolveConfig: (
-    filePath: string,
-    options?:
-      | Pick<
-          import('stylelint').LinterOptions,
-          'cwd' | 'config' | 'configFile' | 'configBasedir'
-        >
-      | undefined
-  ) => Promise<import('stylelint').Config | undefined>;
-  utils: {
-    report: (problem: import('stylelint').Problem) => void;
-    ruleMessages: <
-      T extends import('stylelint').RuleMessages,
-      R extends { [K in keyof T]: T[K] }
-    >(
-      ruleName: string,
-      messages: T
-    ) => R;
-    validateOptions: (
-      result: import('stylelint').PostcssResult,
-      ruleName: string,
-      ...optionDescriptions: import('stylelint').RuleOptions[]
-    ) => boolean;
-    checkAgainstRule: <T_1, O extends Object>(
-      options: {
-        ruleName: string;
-        ruleSettings: import('stylelint').ConfigRuleSettings<T_1, O>;
-        root: import('postcss').Root;
-        result?: import('stylelint').PostcssResult | undefined;
-        context?: import('stylelint').RuleContext | undefined;
-      },
-      callback: (warning: import('postcss').Warning) => void
-    ) => void;
-  };
-  reference: {
-    longhandSubPropertiesOfShorthandProperties: import('stylelint').LonghandSubPropertiesOfShorthandProperties;
-  };
 };
 type LintResult = import('stylelint').LintResult;
+type LinterOptions = import('stylelint').LinterOptions;
+type LinterResult = import('stylelint').LinterResult;
+type Formatter = import('stylelint').Formatter;
+type FormatterType = import('stylelint').FormatterType;
 type isPathIgnored = (
   stylelint: Stylelint,
   filePath: string

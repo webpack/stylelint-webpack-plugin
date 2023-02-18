@@ -10,8 +10,12 @@ const { getStylelintOptions } = require('./options');
 /** @type {{[key: string]: any}} */
 const cache = {};
 
-/** @typedef {import('stylelint')} Stylelint */
+/** @typedef {{lint: (options: LinterOptions) => Promise<LinterResult>, formatters: { [k: string]: Formatter }}} Stylelint */
 /** @typedef {import('stylelint').LintResult} LintResult */
+/** @typedef {import('stylelint').LinterOptions} LinterOptions */
+/** @typedef {import('stylelint').LinterResult} LinterResult */
+/** @typedef {import('stylelint').Formatter} Formatter */
+/** @typedef {import('stylelint').FormatterType} FormatterType */
 /** @typedef {import('./options').Options} Options */
 /** @typedef {(stylelint: Stylelint, filePath: string) => Promise<boolean>} isPathIgnored */
 /** @typedef {() => Promise<void>} AsyncTask */

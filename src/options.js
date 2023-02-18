@@ -2,9 +2,8 @@ const { validate } = require('schema-utils');
 
 const schema = require('./options.json');
 
-/** @typedef {import("stylelint")} stylelint */
-/** @typedef {import("stylelint").LinterOptions} StylelintOptions */
-/** @typedef {import("stylelint").FormatterType} FormatterType */
+/** @typedef {import('./getStylelint').LinterOptions} StylelintOptions */
+/** @typedef {import('./getStylelint').FormatterType} FormatterType */
 
 /**
  * @typedef {Object} OutputReport
