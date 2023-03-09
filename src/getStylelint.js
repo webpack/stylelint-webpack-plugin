@@ -10,12 +10,17 @@ const { getStylelintOptions } = require('./options');
 /** @type {{[key: string]: any}} */
 const cache = {};
 
-/** @typedef {import('stylelint')} Stylelint */
+/** @typedef {{lint: (options: LinterOptions) => Promise<LinterResult>, formatters: { [k: string]: Formatter }}} Stylelint */
 /** @typedef {import('stylelint').LintResult} LintResult */
+/** @typedef {import('stylelint').LinterOptions} LinterOptions */
+/** @typedef {import('stylelint').LinterResult} LinterResult */
+/** @typedef {import('stylelint').Formatter} Formatter */
+/** @typedef {import('stylelint').FormatterType} FormatterType */
 /** @typedef {import('./options').Options} Options */
+/** @typedef {(stylelint: Stylelint, filePath: string) => Promise<boolean>} isPathIgnored */
 /** @typedef {() => Promise<void>} AsyncTask */
 /** @typedef {(files: string|string[]) => Promise<LintResult[]>} LintTask */
-/** @typedef {{api: import('stylelint').InternalApi, stylelint: Stylelint, lintFiles: LintTask, cleanup: AsyncTask, threads: number, }} Linter */
+/** @typedef {{stylelint: Stylelint, isPathIgnored: isPathIgnored, lintFiles: LintTask, cleanup: AsyncTask, threads: number }} Linter */
 /** @typedef {JestWorker & {lintFiles: LintTask}} Worker */
 
 /**
@@ -26,9 +31,23 @@ function loadStylelint(options) {
   const stylelintOptions = getStylelintOptions(options);
   const stylelint = setup(options, stylelintOptions);
 
+  /** @type {isPathIgnored} */
+  let isPathIgnored;
+
+  try {
+    isPathIgnored = require(`${options.stylelintPath}/lib/isPathIgnored`);
+  } catch (e) {
+    try {
+      // @ts-ignore
+      isPathIgnored = require('stylelint/lib/isPathIgnored');
+    } catch (_) {
+      isPathIgnored = () => Promise.resolve(false);
+    }
+  }
+
   return {
     stylelint,
-    api: stylelint.createLinter(stylelintOptions),
+    isPathIgnored,
     lintFiles,
     cleanup: async () => {},
     threads: 1,
