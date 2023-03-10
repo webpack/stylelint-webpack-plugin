@@ -5,14 +5,15 @@ const arrify = require('arrify');
 const StylelintError = require('./StylelintError');
 const getStylelint = require('./getStylelint');
 
-/** @typedef {import('stylelint')} Stylelint */
-/** @typedef {import('stylelint').LintResult} LintResult */
-/** @typedef {import('stylelint').InternalApi} InternalApi */
 /** @typedef {import('webpack').Compiler} Compiler */
 /** @typedef {import('webpack').Compilation} Compilation */
+/** @typedef {import('./getStylelint').Stylelint} Stylelint */
+/** @typedef {import('./getStylelint').LintResult} LintResult */
+/** @typedef {import('./getStylelint').LinterResult} LinterResult */
+/** @typedef {import('./getStylelint').Formatter} Formatter */
+/** @typedef {import('./getStylelint').FormatterType} FormatterType */
+/** @typedef {import('./getStylelint').isPathIgnored} isPathIgnored */
 /** @typedef {import('./options').Options} Options */
-/** @typedef {import('./options').FormatterType} FormatterType */
-/** @typedef {((results: LintResult[]) => string)} FormatterFunction */
 /** @typedef {(compilation: Compilation) => Promise<void>} GenerateReport */
 /** @typedef {{errors?: StylelintError, warnings?: StylelintError, generateReportAsset?: GenerateReport}} Report */
 /** @typedef {() => Promise<Report>} Reporter */
@@ -26,14 +27,14 @@ const resultStorage = new WeakMap();
  * @param {string|undefined} key
  * @param {Options} options
  * @param {Compilation} compilation
- * @returns {{api: InternalApi, lint: Linter, report: Reporter, threads: number}}
+ * @returns {{stylelint: Stylelint, isPathIgnored: isPathIgnored, lint: Linter, report: Reporter, threads: number}}
  */
 function linter(key, options, compilation) {
   /** @type {Stylelint} */
   let stylelint;
 
-  /** @type {InternalApi} */
-  let api;
+  /** @type {isPathIgnored} */
+  let isPathIgnored;
 
   /** @type {(files: string|string[]) => Promise<LintResult[]>} */
   let lintFiles;
@@ -50,7 +51,7 @@ function linter(key, options, compilation) {
   const crossRunResultStorage = getResultStorage(compilation);
 
   try {
-    ({ stylelint, api, lintFiles, cleanup, threads } = getStylelint(
+    ({ stylelint, isPathIgnored, lintFiles, cleanup, threads } = getStylelint(
       key,
       options
     ));
@@ -59,8 +60,9 @@ function linter(key, options, compilation) {
   }
 
   return {
+    stylelint,
     lint,
-    api,
+    isPathIgnored,
     report,
     threads,
   };
@@ -102,9 +104,22 @@ function linter(key, options, compilation) {
     }
 
     const formatter = loadFormatter(stylelint, options.formatter);
+
+    /** @type {LinterResult} */
+    const returnValue = {
+      // @ts-ignore
+      cwd: options.cwd,
+      errored: false,
+      results: [],
+      output: '',
+      reportedDisables: [],
+      ruleMetadata: getRuleMetadata(results),
+    };
+
     const { errors, warnings } = formatResults(
       formatter,
-      parseResults(options, results)
+      parseResults(options, results),
+      returnValue
     );
 
     return {
@@ -146,34 +161,35 @@ function linter(key, options, compilation) {
         return;
       }
 
-      const content = outputReport.formatter
-        ? loadFormatter(stylelint, outputReport.formatter)(results)
-        : formatter(results);
+      const content = outputReport.formatter;
+      loadFormatter(stylelint, outputReport.formatter)(results, returnValue);
+      formatter(results, returnValue);
 
       let { filePath } = outputReport;
       if (!isAbsolute(filePath)) {
         filePath = join(compiler.outputPath, filePath);
       }
 
-      await save(filePath, content);
+      await save(filePath, String(content));
     }
   }
 }
 
 /**
- * @param {FormatterFunction} formatter
+ * @param {Formatter} formatter
  * @param {{ errors: LintResult[]; warnings: LintResult[]; }} results
+ * @param {LinterResult} returnValue
  * @returns {{errors?: StylelintError, warnings?: StylelintError}}
  */
-function formatResults(formatter, results) {
+function formatResults(formatter, results, returnValue) {
   let errors;
   let warnings;
   if (results.warnings.length > 0) {
-    warnings = new StylelintError(formatter(results.warnings));
+    warnings = new StylelintError(formatter(results.warnings, returnValue));
   }
 
   if (results.errors.length > 0) {
-    errors = new StylelintError(formatter(results.errors));
+    errors = new StylelintError(formatter(results.errors, returnValue));
   }
 
   return {
@@ -181,7 +197,6 @@ function formatResults(formatter, results) {
     warnings,
   };
 }
-
 /**
  * @param {Options} options
  * @param {LintResult[]} results
@@ -227,7 +242,7 @@ function parseResults(options, results) {
 /**
  * @param {Stylelint} stylelint
  * @param {FormatterType=} formatter
- * @returns {FormatterFunction}
+ * @returns {Formatter}
  */
 function loadFormatter(stylelint, formatter) {
   if (typeof formatter === 'function') {
@@ -276,6 +291,23 @@ function getResultStorage({ compiler }) {
     resultStorage.set(compiler, (storage = {}));
   }
   return storage;
+}
+
+/**
+ * @param {LintResult[]} lintResults
+ */
+/* istanbul ignore next */
+function getRuleMetadata(lintResults) {
+  const [lintResult] = lintResults;
+
+  // eslint-disable-next-line no-undefined
+  if (lintResult === undefined) return {};
+
+  // eslint-disable-next-line no-underscore-dangle, no-undefined
+  if (lintResult._postcssResult === undefined) return {};
+
+  // eslint-disable-next-line no-underscore-dangle
+  return lintResult._postcssResult.stylelint.ruleMetadata;
 }
 
 module.exports = linter;

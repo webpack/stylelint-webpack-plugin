@@ -1,5 +1,5 @@
-/** @typedef {import('stylelint')} Stylelint */
-/** @typedef {import("stylelint").LinterOptions} StylelintOptions */
+/** @typedef {import('./getStylelint').Stylelint} Stylelint */
+/** @typedef {import('./getStylelint').LinterOptions} StylelintOptions */
 /** @typedef {import('./options').Options} Options */
 
 Object.assign(module.exports, {

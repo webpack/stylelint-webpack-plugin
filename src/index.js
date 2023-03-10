@@ -93,11 +93,14 @@ class StylelintWebpackPlugin {
     }
 
     compiler.hooks.thisCompilation.tap(this.key, (compilation) => {
+      /** @type {import('./getStylelint').Stylelint} */
+      let stylelint;
+
       /** @type {import('./linter').Linter} */
       let lint;
 
-      /** @type {import('stylelint').InternalApi} */
-      let api;
+      /** @type {import('./linter').isPathIgnored} */
+      let isPathIgnored;
 
       /** @type {import('./linter').Reporter} */
       let report;
@@ -106,7 +109,7 @@ class StylelintWebpackPlugin {
       let threads;
 
       try {
-        ({ lint, api, report, threads } = linter(
+        ({ stylelint, lint, isPathIgnored, report, threads } = linter(
           this.key,
           options,
           compilation
@@ -122,9 +125,9 @@ class StylelintWebpackPlugin {
         const files = (
           await Promise.all(
             this.getFiles(compiler, wanted, exclude).map(
-              async (/** @type {string | undefined} */ file) => {
+              async (/** @type {string} */ file) => {
                 try {
-                  return (await api.isPathIgnored(file)) ? false : file;
+                  return (await isPathIgnored(stylelint, file)) ? false : file;
                 } catch (e) {
                   return file;
                 }
