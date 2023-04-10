@@ -27,7 +27,7 @@ describe('stylelint lint', () => {
     compiler.run((err) => {
       const files = [expect.stringMatching('test.scss')];
       expect(mockLintFiles).toHaveBeenCalledWith({
-        cache: true,
+        cache: false,
         cacheLocation:
           'node_modules/.cache/stylelint-webpack-plugin/.stylelintcache',
         configFile: null,
@@ -47,7 +47,7 @@ describe('stylelint lint', () => {
         expect.stringMatching(/test[12]\.scss$/),
       ];
       expect(mockLintFiles).toHaveBeenCalledWith({
-        cache: true,
+        cache: false,
         cacheLocation:
           'node_modules/.cache/stylelint-webpack-plugin/.stylelintcache',
         configFile: null,
