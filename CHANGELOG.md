@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.1.1](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v4.1.0...v4.1.1) (2023-04-10)
+
+
+### Performance
+
+* enable `cache` by default ([#327](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/327))
+
 ## [4.1.0](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v4.0.0...v4.1.0) (2023-02-18)
 
 
