@@ -38,7 +38,7 @@ const schema = require('./options.json');
 function getOptions(pluginOptions) {
   const options = {
     cache: true,
-    cacheLocation: 'node_modules/.cache/.stylelintcache',
+    cacheLocation: 'node_modules/.cache/stylelint-webpack-plugin/.stylelintcache',
     extensions: ['css', 'scss', 'sass'],
     emitError: true,
     emitWarning: true,
