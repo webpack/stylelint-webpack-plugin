@@ -96,7 +96,7 @@ The cache is enabled by default to decrease execution time.
 type cacheLocation = string;
 ```
 
-- Default: `node_modules/.cache/.stylelintcache`
+- Default: `node_modules/.cache/stylelint-webpack-plugin/.stylelintcache`
 
 Specify the path to the cache location. Can be a file or a directory.
 
