@@ -13,7 +13,8 @@
     "badstylelintrc",
     "indentifies",
     "stylelintignore",
-    "notcss"
+    "notcss",
+    "stylelintcache"
   ],
 
   "ignorePaths": [

@@ -26,7 +26,12 @@ describe('stylelint lint', () => {
 
     compiler.run((err) => {
       const files = [expect.stringMatching('test.scss')];
-      expect(mockLintFiles).toHaveBeenCalledWith({ configFile: null, files });
+      expect(mockLintFiles).toHaveBeenCalledWith({
+        cache: true,
+        cacheLocation: 'node_modules/.cache/stylelint-webpack-plugin/.stylelintcache',
+        configFile: null,
+        files,
+      });
       expect(err).toBeNull();
       done();
     });
@@ -40,7 +45,12 @@ describe('stylelint lint', () => {
         expect.stringMatching(/test[12]\.scss$/),
         expect.stringMatching(/test[12]\.scss$/),
       ];
-      expect(mockLintFiles).toHaveBeenCalledWith({ configFile: null, files });
+      expect(mockLintFiles).toHaveBeenCalledWith({
+        cache: true,
+        cacheLocation: 'node_modules/.cache/stylelint-webpack-plugin/.stylelintcache',
+        configFile: null,
+        files,
+      });
       expect(err).toBeNull();
       done();
     });

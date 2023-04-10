@@ -76,6 +76,30 @@ module.exports = {
 
 See [stylelint's options](https://stylelint.io/user-guide/usage/node-api#options) for the complete list of options available. These options are passed through to the `stylelint` directly.
 
+### `cache`
+
+- Type:
+
+```ts
+type cache = boolean;
+```
+
+- Default: `true`
+
+The cache is enabled by default to decrease execution time.
+
+### `cacheLocation`
+
+- Type:
+
+```ts
+type cacheLocation = string;
+```
+
+- Default: `node_modules/.cache/stylelint-webpack-plugin/.stylelintcache`
+
+Specify the path to the cache location. Can be a file or a directory.
+
 ### `configFile`
 
 - Type:
