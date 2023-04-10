@@ -1,4 +1,3 @@
-/// <reference types="stylelint" />
 export = getStylelint;
 /**
  * @param {string|undefined} key

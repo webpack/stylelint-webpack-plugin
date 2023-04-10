@@ -14,6 +14,7 @@ export default (context, pluginConf = {}, webpackConf = {}) => {
     },
     plugins: [
       new StylelintPlugin({
+        cache: false,
         configFile: join(testDir, '.stylelintrc'),
         ...pluginConf,
       }),

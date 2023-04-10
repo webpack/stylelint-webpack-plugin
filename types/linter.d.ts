@@ -1,4 +1,3 @@
-/// <reference types="stylelint" />
 export = linter;
 /**
  * @param {string|undefined} key
