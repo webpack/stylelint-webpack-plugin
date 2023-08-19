@@ -14,7 +14,7 @@
  }
  */
 export function arrify<T>(
-  value: T
+  value: T,
 ): T extends null | undefined
   ? []
   : T extends string
@@ -37,7 +37,7 @@ export function parseFiles(files: string | string[], context: string): string[];
  */
 export function parseFoldersToGlobs(
   patterns: string | string[],
-  extensions?: string | string[]
+  extensions?: string | string[],
 ): string[];
 /**
  *

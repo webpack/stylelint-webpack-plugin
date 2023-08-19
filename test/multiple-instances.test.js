@@ -12,7 +12,7 @@ describe('multiple instances', () => {
           new StylelintPlugin({ exclude: 'error.scss' }),
           new StylelintPlugin({ exclude: 'error.scss' }),
         ],
-      }
+      },
     );
 
     compiler.run((err, stats) => {
@@ -32,7 +32,7 @@ describe('multiple instances', () => {
           new StylelintPlugin({ exclude: 'good.scss' }),
           new StylelintPlugin({ exclude: 'error.scss' }),
         ],
-      }
+      },
     );
 
     compiler.run((err, stats) => {
@@ -52,7 +52,7 @@ describe('multiple instances', () => {
           new StylelintPlugin({ exclude: 'error.scss' }),
           new StylelintPlugin({ exclude: 'good.scss' }),
         ],
-      }
+      },
     );
 
     compiler.run((err, stats) => {

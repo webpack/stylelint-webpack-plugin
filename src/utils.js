@@ -53,7 +53,7 @@ function arrify(value) {
  */
 function parseFiles(files, context) {
   return arrify(files).map((/** @type {string} */ file) =>
-    normalizePath(resolve(context, file))
+    normalizePath(resolve(context, file)),
   );
 }
 
@@ -79,7 +79,7 @@ function parseFoldersToGlobs(patterns, extensions = []) {
           /[/\\]*?$/u,
           `/**${
             extensionsGlob ? `/*.${prefix + extensionsGlob + postfix}` : ''
-          }`
+          }`,
         );
       }
     } catch (_) {

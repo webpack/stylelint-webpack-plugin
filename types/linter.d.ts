@@ -8,7 +8,7 @@ export = linter;
 declare function linter(
   key: string | undefined,
   options: Options,
-  compilation: Compilation
+  compilation: Compilation,
 ): {
   stylelint: Stylelint;
   isPathIgnored: getStylelint.isPathIgnored;
