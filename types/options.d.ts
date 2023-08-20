@@ -56,5 +56,5 @@ export function getOptions(pluginOptions: Options): Partial<PluginOptions>;
  * @returns {Partial<StylelintOptions>}
  */
 export function getStylelintOptions(
-  pluginOptions: Options
+  pluginOptions: Options,
 ): Partial<StylelintOptions>;

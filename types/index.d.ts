@@ -16,7 +16,7 @@ declare class StylelintWebpackPlugin {
     compiler: Compiler,
     options: Options,
     wanted: string[],
-    exclude: string[]
+    exclude: string[],
   ): Promise<void>;
   startTime: number;
   prevTimestamps: Map<any, any>;

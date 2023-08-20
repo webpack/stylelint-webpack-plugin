@@ -16,14 +16,14 @@ test('parseFiles should return relative files from context', () => {
   expect(
     parseFiles(
       ['**/*', '../package-a/src/**/', '../package-b/src/**/'],
-      'main/src'
-    )
+      'main/src',
+    ),
   ).toEqual(
     expect.arrayContaining([
       expect.stringContaining('main/src/**/*'),
       expect.stringContaining('main/package-a/src/**'),
       expect.stringContaining('main/package-b/src/**'),
-    ])
+    ]),
   );
 });
 
@@ -45,8 +45,8 @@ test('parseFoldersToGlobs should return globs for folders', () => {
   expect(
     parseFoldersToGlobs(
       [withoutSlash, withSlash, '/some/file.scss'],
-      ['scss', 'css', 'sass']
-    )
+      ['scss', 'css', 'sass'],
+    ),
   ).toMatchInlineSnapshot(`
     [
       "/path/to/code/**/*.{scss,css,sass}",

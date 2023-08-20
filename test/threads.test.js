@@ -38,10 +38,10 @@ describe('Threading', () => {
     try {
       const [good, bad] = await Promise.all([
         threaded.lintFiles(
-          normalizePath(join(__dirname, 'fixtures/good/test.scss'))
+          normalizePath(join(__dirname, 'fixtures/good/test.scss')),
         ),
         threaded.lintFiles(
-          normalizePath(join(__dirname, 'fixtures/error/test.scss'))
+          normalizePath(join(__dirname, 'fixtures/error/test.scss')),
         ),
       ]);
       expect(good[0].errored).toBe(false);

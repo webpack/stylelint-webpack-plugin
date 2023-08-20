@@ -52,7 +52,7 @@ function linter(key, options, compilation) {
   try {
     ({ stylelint, isPathIgnored, lintFiles, cleanup, threads } = getStylelint(
       key,
-      options
+      options,
     ));
   } catch (e) {
     throw new StylelintError(e.message);
@@ -78,7 +78,7 @@ function linter(key, options, compilation) {
         // @ts-ignore
         compilation.errors.push(new StylelintError(e.message));
         return [];
-      })
+      }),
     );
   }
 
@@ -86,7 +86,7 @@ function linter(key, options, compilation) {
     // Filter out ignored files.
     let results = removeIgnoredWarnings(
       // Get the current results, resetting the rawResults to empty
-      await flatten(rawResults.splice(0, rawResults.length))
+      await flatten(rawResults.splice(0, rawResults.length)),
     );
 
     await cleanup();
@@ -118,7 +118,7 @@ function linter(key, options, compilation) {
     const { errors, warnings } = formatResults(
       formatter,
       parseResults(options, results),
-      returnValue
+      returnValue,
     );
 
     return {
@@ -211,7 +211,7 @@ function parseResults(options, results) {
 
   results.forEach((file) => {
     const fileErrors = file.warnings.filter(
-      (message) => options.emitError && message.severity === 'error'
+      (message) => options.emitError && message.severity === 'error',
     );
 
     if (fileErrors.length > 0) {
@@ -222,7 +222,7 @@ function parseResults(options, results) {
     }
 
     const fileWarnings = file.warnings.filter(
-      (message) => options.emitWarning && message.severity === 'warning'
+      (message) => options.emitWarning && message.severity === 'warning',
     );
 
     if (fileWarnings.length > 0) {

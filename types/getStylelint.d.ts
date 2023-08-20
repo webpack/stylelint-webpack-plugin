@@ -6,7 +6,7 @@ export = getStylelint;
  */
 declare function getStylelint(
   key: string | undefined,
-  { threads, ...options }: Options
+  { threads, ...options }: Options,
 ): Linter;
 declare namespace getStylelint {
   export {
@@ -45,7 +45,7 @@ type Formatter = import('stylelint').Formatter;
 type FormatterType = import('stylelint').FormatterType;
 type isPathIgnored = (
   stylelint: Stylelint,
-  filePath: string
+  filePath: string,
 ) => Promise<boolean>;
 type AsyncTask = () => Promise<void>;
 type LintTask = (files: string | string[]) => Promise<LintResult[]>;

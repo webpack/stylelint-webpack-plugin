@@ -57,7 +57,7 @@ class StylelintWebpackPlugin {
     // execute the linter on the build
     if (!this.options.lintDirtyModulesOnly) {
       compiler.hooks.run.tapPromise(this.key, (c) =>
-        this.run(c, options, wanted, exclude)
+        this.run(c, options, wanted, exclude),
       );
     }
 
@@ -109,7 +109,7 @@ class StylelintWebpackPlugin {
         ({ stylelint, lint, isPathIgnored, report, threads } = linter(
           this.key,
           options,
-          compilation
+          compilation,
         ));
       } catch (e) {
         compilation.errors.push(e);
@@ -125,7 +125,7 @@ class StylelintWebpackPlugin {
               ? Array.from(compiler.modifiedFiles).filter(
                   (file) =>
                     isMatch(file, wanted, { dot: true }) &&
-                    !isMatch(file, exclude, { dot: true })
+                    !isMatch(file, exclude, { dot: true }),
                 )
               : globby.sync(wanted, { dot: true, ignore: exclude })
             ).map(async (file) => {
@@ -134,7 +134,7 @@ class StylelintWebpackPlugin {
               } catch (e) {
                 return file;
               }
-            })
+            }),
           )
         ).filter((file) => file !== false);
 
