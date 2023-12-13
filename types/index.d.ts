@@ -36,8 +36,8 @@ declare namespace StylelintWebpackPlugin {
   export { Compiler, Module, Options, FileSystemInfoEntry };
 }
 type Compiler = import('webpack').Compiler;
-type Options = import('./options').Options;
 type Module = import('webpack').Module;
+type Options = import('./options').Options;
 type FileSystemInfoEntry = Partial<
   | {
       timestamp: number;
