@@ -3,25 +3,19 @@ import { join } from 'path';
 import pack from './utils/pack';
 
 describe('context', () => {
-  it('absolute', (done) => {
+  it('absolute', async () => {
     const compiler = pack('good', {
       context: join(__dirname, 'fixtures/good'),
     });
-
-    compiler.run((err, stats) => {
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(false);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(false);
   });
 
-  it('relative', (done) => {
+  it('relative', async () => {
     const compiler = pack('good', { context: '../good/' });
-
-    compiler.run((err, stats) => {
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(false);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(false);
   });
 });

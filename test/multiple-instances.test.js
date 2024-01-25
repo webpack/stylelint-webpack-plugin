@@ -3,7 +3,7 @@ import StylelintPlugin from '../src';
 import pack from './utils/pack';
 
 describe('multiple instances', () => {
-  it("should don't fail", (done) => {
+  it("should don't fail", async () => {
     const compiler = pack(
       'multiple',
       {},
@@ -15,15 +15,12 @@ describe('multiple instances', () => {
       },
     );
 
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(false);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(false);
   });
 
-  it('should fail on first instance', (done) => {
+  it('should fail on first instance', async () => {
     const compiler = pack(
       'multiple',
       {},
@@ -35,15 +32,12 @@ describe('multiple instances', () => {
       },
     );
 
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(true);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(true);
   });
 
-  it('should fail on second instance', (done) => {
+  it('should fail on second instance', async () => {
     const compiler = pack(
       'multiple',
       {},
@@ -55,11 +49,8 @@ describe('multiple instances', () => {
       },
     );
 
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(true);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(true);
   });
 });

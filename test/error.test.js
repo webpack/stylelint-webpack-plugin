@@ -5,29 +5,21 @@ describe('error', () => {
     jest.restoreAllMocks();
   });
 
-  it('should return error if file is bad', (done) => {
+  it('should return error if file is bad', async () => {
     const compiler = pack('error');
-
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(true);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(true);
   });
 
-  it('should propagate stylelint exceptions as errors', (done) => {
+  it('should propagate stylelint exceptions as errors', async () => {
     jest.mock('stylelint', () => {
       throw new Error('Oh no!');
     });
 
     const compiler = pack('good');
-
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(true);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(true);
   });
 });
