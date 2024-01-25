@@ -7,7 +7,7 @@
     "strict": true,
     "useUnknownInCatchVariables": false,
     "types": ["node"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*"],
 }
