@@ -8,15 +8,11 @@ import getStylelint from '../src/getStylelint';
 import pack from './utils/pack';
 
 describe('Threading', () => {
-  it("should don't throw error if file is ok with threads", (done) => {
+  it("should don't throw error if file is ok with threads", async () => {
     const compiler = pack('good', { threads: 2 });
-
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(false);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(false);
   });
 
   test('Threaded interface should look like non-threaded interface', async () => {
