@@ -1,25 +1,17 @@
 import pack from './utils/pack';
 
 describe('quiet', () => {
-  it('should not emit warnings if quiet is set', (done) => {
+  it('should not emit warnings if quiet is set', async () => {
     const compiler = pack('warning', { quiet: true });
-
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(false);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(false);
   });
 
-  it('should emit errors, but not emit warnings if quiet is set', (done) => {
+  it('should emit errors, but not emit warnings if quiet is set', async () => {
     const compiler = pack('full-of-problems', { quiet: true });
-
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(true);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(true);
   });
 });

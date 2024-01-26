@@ -21,40 +21,34 @@ describe('stylelint lint', () => {
     mockLintFiles.mockClear();
   });
 
-  it('should lint one file', (done) => {
+  it('should lint one file', async () => {
     const compiler = pack('lint-one', { configFile: null });
-
-    compiler.run((err) => {
-      const files = [expect.stringMatching('test.scss')];
-      expect(mockLintFiles).toHaveBeenCalledWith({
-        cache: false,
-        cacheLocation:
-          'node_modules/.cache/stylelint-webpack-plugin/.stylelintcache',
-        configFile: null,
-        files,
-      });
-      expect(err).toBeNull();
-      done();
+    const stats = await compiler.runAsync();
+    expect(stats.hasErrors()).toBe(false);
+    const files = [expect.stringMatching('test.scss')];
+    expect(mockLintFiles).toHaveBeenCalledWith({
+      cache: false,
+      cacheLocation:
+        'node_modules/.cache/stylelint-webpack-plugin/.stylelintcache',
+      configFile: null,
+      files,
     });
   });
 
-  it('should lint two files', (done) => {
+  it('should lint two files', async () => {
     const compiler = pack('lint-two', { configFile: null });
-
-    compiler.run((err) => {
-      const files = [
-        expect.stringMatching(/test[12]\.scss$/),
-        expect.stringMatching(/test[12]\.scss$/),
-      ];
-      expect(mockLintFiles).toHaveBeenCalledWith({
-        cache: false,
-        cacheLocation:
-          'node_modules/.cache/stylelint-webpack-plugin/.stylelintcache',
-        configFile: null,
-        files,
-      });
-      expect(err).toBeNull();
-      done();
+    const stats = await compiler.runAsync();
+    expect(stats.hasErrors()).toBe(false);
+    const files = [
+      expect.stringMatching(/test[12]\.scss$/),
+      expect.stringMatching(/test[12]\.scss$/),
+    ];
+    expect(mockLintFiles).toHaveBeenCalledWith({
+      cache: false,
+      cacheLocation:
+        'node_modules/.cache/stylelint-webpack-plugin/.stylelintcache',
+      configFile: null,
+      files,
     });
   });
 });

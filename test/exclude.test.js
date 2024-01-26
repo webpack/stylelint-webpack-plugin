@@ -1,36 +1,24 @@
 import pack from './utils/pack';
 
 describe('exclude', () => {
-  it('should exclude with globs', (done) => {
+  it('should exclude with globs', async () => {
     const compiler = pack('exclude', { exclude: ['*test*'] });
-
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(false);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(false);
   });
 
-  it('should exclude files', (done) => {
+  it('should exclude files', async () => {
     const compiler = pack('exclude', { exclude: ['test.scss'] });
-
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(false);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(false);
   });
 
-  it('should exclude folders', (done) => {
+  it('should exclude folders', async () => {
     const compiler = pack('exclude-folder', { exclude: ['folder'] });
-
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(false);
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(false);
   });
 });

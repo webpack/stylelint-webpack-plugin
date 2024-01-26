@@ -3,51 +3,35 @@ import { formatters } from 'stylelint';
 import pack from './utils/pack';
 
 describe('formatter', () => {
-  it('should use default formatter', (done) => {
+  it('should use default formatter', async () => {
     const compiler = pack('error');
-
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(true);
-      expect(stats.compilation.errors[0].message).toBeTruthy();
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(true);
+    expect(stats.compilation.errors[0].message).toBeTruthy();
   });
 
-  it('should use default formatter when invalid', (done) => {
+  it('should use default formatter when invalid', async () => {
     const compiler = pack('error', { formatter: 'invalid' });
-
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(true);
-      expect(stats.compilation.errors[0].message).toBeTruthy();
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(true);
+    expect(stats.compilation.errors[0].message).toBeTruthy();
   });
 
-  it('should use string formatter', (done) => {
+  it('should use string formatter', async () => {
     const compiler = pack('error', { formatter: 'json' });
-
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(true);
-      expect(stats.compilation.errors[0].message).toBeTruthy();
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(true);
+    expect(stats.compilation.errors[0].message).toBeTruthy();
   });
 
-  it('should use function formatter', (done) => {
+  it('should use function formatter', async () => {
     const compiler = pack('error', { formatter: formatters.verbose });
-
-    compiler.run((err, stats) => {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(true);
-      expect(stats.compilation.errors[0].message).toBeTruthy();
-      done();
-    });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(true);
+    expect(stats.compilation.errors[0].message).toBeTruthy();
   });
 });
