@@ -55,7 +55,7 @@ jobs:
         uses: wagoid/commitlint-github-action@v5
 
   test:
-    name: Test - ${{ matrix.os }} - Node v${{ matrix.node-version }}, Webpack ${{ matrix.webpack-version }}
+    name: Test - ${{ matrix.os }} - Node v${{ matrix.node-version }}, Stylelint ${{ matrix.stylelint-version }}, Webpack ${{ matrix.webpack-version }}
 
     strategy:
       matrix:
@@ -63,6 +63,9 @@ jobs:
         node-version: [18.x, 20.x, 21.x]
         stylelint-version: [13.x, 14.x, 15.x, 16.x]
         webpack-version: [latest]
+        exclude:
+        - stylelint-version: 16.x
+          node-version: 18.x
 
     runs-on: ${{ matrix.os }}
 
