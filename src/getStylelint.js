@@ -17,10 +17,9 @@ const cache = {};
 /** @typedef {import('stylelint').Formatter} Formatter */
 /** @typedef {import('stylelint').FormatterType} FormatterType */
 /** @typedef {import('./options').Options} Options */
-/** @typedef {(stylelint: Stylelint, filePath: string) => Promise<boolean>} isPathIgnored */
 /** @typedef {() => Promise<void>} AsyncTask */
 /** @typedef {(files: string|string[]) => Promise<LintResult[]>} LintTask */
-/** @typedef {{stylelint: Stylelint, isPathIgnored: isPathIgnored, lintFiles: LintTask, cleanup: AsyncTask, threads: number }} Linter */
+/** @typedef {{stylelint: Stylelint, lintFiles: LintTask, cleanup: AsyncTask, threads: number }} Linter */
 /** @typedef {JestWorker & {lintFiles: LintTask}} Worker */
 
 /**
@@ -31,23 +30,8 @@ function loadStylelint(options) {
   const stylelintOptions = getStylelintOptions(options);
   const stylelint = setup(options, stylelintOptions);
 
-  /** @type {isPathIgnored} */
-  let isPathIgnored;
-
-  try {
-    isPathIgnored = require(`${options.stylelintPath}/lib/isPathIgnored`);
-  } catch (e) {
-    try {
-      // @ts-ignore
-      isPathIgnored = require('stylelint/lib/isPathIgnored');
-    } catch (_) {
-      isPathIgnored = () => Promise.resolve(false);
-    }
-  }
-
   return {
     stylelint,
-    isPathIgnored,
     lintFiles,
     cleanup: async () => {},
     threads: 1,

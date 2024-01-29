@@ -29,7 +29,7 @@ describe('watch', () => {
   });
 
   it('should watch with unique messages', (done) => {
-    writeFileSync(target, "#stuff { display: 'block'; }\n");
+    writeFileSync(target, '#foo { background: black; }\n');
     writeFileSync(target2, '');
 
     let next = firstPass;
@@ -47,8 +47,8 @@ describe('watch', () => {
       expect(message).not.toEqual(expect.stringMatching('leaf.scss'));
 
       next = secondPass;
-      writeFileSync(target2, "#stuff { display: 'block'; }\n");
-      writeFileSync(target, "@import './leaf.scss';\n");
+      writeFileSync(target2, '#bar { background: black; }\n');
+      writeFileSync(target, '#foo { background: black; }\n');
     }
 
     function secondPass(err, stats) {
@@ -62,7 +62,7 @@ describe('watch', () => {
       expect(message).toEqual(expect.stringMatching('leaf.scss'));
 
       next = thirdPass;
-      writeFileSync(target2, '#stuff { display: "block"; }\n');
+      writeFileSync(target2, '#bar { background: #000000; }\n');
     }
 
     function thirdPass(err, stats) {
@@ -76,7 +76,7 @@ describe('watch', () => {
       expect(message).not.toEqual(expect.stringMatching('leaf.scss'));
 
       next = finish;
-      writeFileSync(target, '@import "./leaf.scss";\n');
+      writeFileSync(target, '#bar { background: #000000; }\n');
     }
 
     function finish(err, stats) {

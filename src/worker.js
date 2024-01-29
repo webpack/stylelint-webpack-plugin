@@ -31,6 +31,7 @@ async function lintFiles(files) {
   const { results } = await stylelint.lint({
     ...linterOptions,
     files,
+    quietDeprecationWarnings: true,
   });
 
   // Reset result to work with worker

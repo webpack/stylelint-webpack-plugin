@@ -90,14 +90,8 @@ class StylelintWebpackPlugin {
     }
 
     compiler.hooks.thisCompilation.tap(this.key, (compilation) => {
-      /** @type {import('./getStylelint').Stylelint} */
-      let stylelint;
-
       /** @type {import('./linter').Linter} */
       let lint;
-
-      /** @type {import('./linter').isPathIgnored} */
-      let isPathIgnored;
 
       /** @type {import('./linter').Reporter} */
       let report;
@@ -106,11 +100,7 @@ class StylelintWebpackPlugin {
       let threads;
 
       try {
-        ({ stylelint, lint, isPathIgnored, report, threads } = linter(
-          this.key,
-          options,
-          compilation,
-        ));
+        ({ lint, report, threads } = linter(this.key, options, compilation));
       } catch (e) {
         compilation.errors.push(e);
         return;
@@ -119,24 +109,13 @@ class StylelintWebpackPlugin {
       compilation.hooks.finishModules.tapPromise(this.key, async () => {
         /** @type {string[]} */
         // @ts-ignore
-        const files = (
-          await Promise.all(
-            (compiler.modifiedFiles
-              ? Array.from(compiler.modifiedFiles).filter(
-                  (file) =>
-                    isMatch(file, wanted, { dot: true }) &&
-                    !isMatch(file, exclude, { dot: true }),
-                )
-              : globby.sync(wanted, { dot: true, ignore: exclude })
-            ).map(async (file) => {
-              try {
-                return (await isPathIgnored(stylelint, file)) ? false : file;
-              } catch (e) {
-                return file;
-              }
-            }),
-          )
-        ).filter((file) => file !== false);
+        const files = compiler.modifiedFiles
+          ? Array.from(compiler.modifiedFiles).filter(
+              (file) =>
+                isMatch(file, wanted, { dot: true }) &&
+                !isMatch(file, exclude, { dot: true }),
+            )
+          : globby.sync(wanted, { dot: true, ignore: exclude });
 
         if (threads > 1) {
           for (const file of files) {

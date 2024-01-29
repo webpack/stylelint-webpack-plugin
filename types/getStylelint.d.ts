@@ -17,7 +17,6 @@ declare namespace getStylelint {
     Formatter,
     FormatterType,
     Options,
-    isPathIgnored,
     AsyncTask,
     LintTask,
     Linter,
@@ -27,7 +26,6 @@ declare namespace getStylelint {
 type Options = import('./options').Options;
 type Linter = {
   stylelint: Stylelint;
-  isPathIgnored: isPathIgnored;
   lintFiles: LintTask;
   cleanup: AsyncTask;
   threads: number;
@@ -43,10 +41,6 @@ type LinterOptions = import('stylelint').LinterOptions;
 type LinterResult = import('stylelint').LinterResult;
 type Formatter = import('stylelint').Formatter;
 type FormatterType = import('stylelint').FormatterType;
-type isPathIgnored = (
-  stylelint: Stylelint,
-  filePath: string,
-) => Promise<boolean>;
 type AsyncTask = () => Promise<void>;
 type LintTask = (files: string | string[]) => Promise<LintResult[]>;
 type Worker = JestWorker & {
