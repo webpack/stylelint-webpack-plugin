@@ -3,7 +3,7 @@ export = linter;
  * @param {string|undefined} key
  * @param {Options} options
  * @param {Compilation} compilation
- * @returns {{stylelint: Stylelint, isPathIgnored: isPathIgnored, lint: Linter, report: Reporter, threads: number}}
+ * @returns {{stylelint: Stylelint, lint: Linter, report: Reporter, threads: number}}
  */
 declare function linter(
   key: string | undefined,
@@ -11,7 +11,6 @@ declare function linter(
   compilation: Compilation,
 ): {
   stylelint: Stylelint;
-  isPathIgnored: getStylelint.isPathIgnored;
   lint: Linter;
   report: Reporter;
   threads: number;
@@ -25,7 +24,6 @@ declare namespace linter {
     LinterResult,
     Formatter,
     FormatterType,
-    isPathIgnored,
     Options,
     GenerateReport,
     Report,
@@ -39,13 +37,11 @@ type Compilation = import('webpack').Compilation;
 type Stylelint = import('./getStylelint').Stylelint;
 type Linter = (files: string | string[]) => void;
 type Reporter = () => Promise<Report>;
-import getStylelint = require('./getStylelint');
 type Compiler = import('webpack').Compiler;
 type LintResult = import('./getStylelint').LintResult;
 type LinterResult = import('./getStylelint').LinterResult;
 type Formatter = import('./getStylelint').Formatter;
 type FormatterType = import('./getStylelint').FormatterType;
-type isPathIgnored = import('./getStylelint').isPathIgnored;
 type GenerateReport = (compilation: Compilation) => Promise<void>;
 type Report = {
   errors?: StylelintError;

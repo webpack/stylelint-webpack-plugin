@@ -11,7 +11,6 @@ const { arrify } = require('./utils');
 /** @typedef {import('./getStylelint').LinterResult} LinterResult */
 /** @typedef {import('./getStylelint').Formatter} Formatter */
 /** @typedef {import('./getStylelint').FormatterType} FormatterType */
-/** @typedef {import('./getStylelint').isPathIgnored} isPathIgnored */
 /** @typedef {import('./options').Options} Options */
 /** @typedef {(compilation: Compilation) => Promise<void>} GenerateReport */
 /** @typedef {{errors?: StylelintError, warnings?: StylelintError, generateReportAsset?: GenerateReport}} Report */
@@ -26,14 +25,11 @@ const resultStorage = new WeakMap();
  * @param {string|undefined} key
  * @param {Options} options
  * @param {Compilation} compilation
- * @returns {{stylelint: Stylelint, isPathIgnored: isPathIgnored, lint: Linter, report: Reporter, threads: number}}
+ * @returns {{lint: Linter, report: Reporter, threads: number}}
  */
 function linter(key, options, compilation) {
   /** @type {Stylelint} */
   let stylelint;
-
-  /** @type {isPathIgnored} */
-  let isPathIgnored;
 
   /** @type {(files: string|string[]) => Promise<LintResult[]>} */
   let lintFiles;
@@ -50,18 +46,13 @@ function linter(key, options, compilation) {
   const crossRunResultStorage = getResultStorage(compilation);
 
   try {
-    ({ stylelint, isPathIgnored, lintFiles, cleanup, threads } = getStylelint(
-      key,
-      options,
-    ));
+    ({ stylelint, lintFiles, cleanup, threads } = getStylelint(key, options));
   } catch (e) {
     throw new StylelintError(e.message);
   }
 
   return {
-    stylelint,
     lint,
-    isPathIgnored,
     report,
     threads,
   };
@@ -102,7 +93,7 @@ function linter(key, options, compilation) {
       return {};
     }
 
-    const formatter = loadFormatter(stylelint, options.formatter);
+    const formatter = await loadFormatter(stylelint, options.formatter);
 
     /** @type {LinterResult} */
     const returnValue = {
@@ -161,7 +152,10 @@ function linter(key, options, compilation) {
       }
 
       const content = outputReport.formatter;
-      loadFormatter(stylelint, outputReport.formatter)(results, returnValue);
+      (await loadFormatter(stylelint, outputReport.formatter))(
+        results,
+        returnValue,
+      );
       formatter(results, returnValue);
 
       let { filePath } = outputReport;
@@ -242,7 +236,7 @@ function parseResults(options, results) {
 /**
  * @param {Stylelint} stylelint
  * @param {FormatterType=} formatter
- * @returns {Formatter}
+ * @returns {Promise<Formatter>|Formatter}
  */
 function loadFormatter(stylelint, formatter) {
   if (typeof formatter === 'function') {

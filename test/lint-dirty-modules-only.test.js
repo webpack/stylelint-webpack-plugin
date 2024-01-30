@@ -31,7 +31,7 @@ describe('lint dirty modules only', () => {
 
       next = secondPass;
 
-      writeFileSync(target, "#stuff { display: 'block'; }\n");
+      writeFileSync(target, '#stuff { background: black; }\n');
     }
 
     function secondPass(err, stats) {
@@ -41,7 +41,7 @@ describe('lint dirty modules only', () => {
       const { errors } = stats.compilation;
       expect(errors.length).toBe(1);
       const [{ message }] = errors;
-      expect(message).toEqual(expect.stringMatching('string-quotes'));
+      expect(message).toEqual(expect.stringMatching('color-named'));
       done();
     }
   });

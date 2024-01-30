@@ -36,7 +36,11 @@
     },
     "formatter": {
       "description": "Specify the formatter that you would like to use to format your results.",
-      "anyOf": [{ "type": "string" }, { "instanceof": "Function" }]
+      "anyOf": [
+        { "type": "string" },
+        { "instanceof": "Function" },
+        { "instanceof": "Promise" }
+      ]
     },
     "lintDirtyModulesOnly": {
       "description": "Lint only changed files, skip lint on start.",

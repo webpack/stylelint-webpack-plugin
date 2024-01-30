@@ -11,10 +11,6 @@ describe('stylelint lint', () => {
         lint: mockLintFiles,
       };
     });
-
-    jest.mock('stylelint/lib/isPathIgnored', () => {
-      throw new Error();
-    });
   });
 
   beforeEach(() => {
@@ -32,6 +28,7 @@ describe('stylelint lint', () => {
         'node_modules/.cache/stylelint-webpack-plugin/.stylelintcache',
       configFile: null,
       files,
+      quietDeprecationWarnings: true,
     });
   });
 
@@ -49,6 +46,7 @@ describe('stylelint lint', () => {
         'node_modules/.cache/stylelint-webpack-plugin/.stylelintcache',
       configFile: null,
       files,
+      quietDeprecationWarnings: true,
     });
   });
 });

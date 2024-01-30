@@ -68,7 +68,10 @@ describe('Threading', () => {
 
       await lintFiles('foo');
 
-      expect(mockLintFiles).toHaveBeenCalledWith({ files: 'foo' });
+      expect(mockLintFiles).toHaveBeenCalledWith({
+        files: 'foo',
+        quietDeprecationWarnings: true,
+      });
     });
   });
 });

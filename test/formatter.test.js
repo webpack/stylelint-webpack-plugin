@@ -28,7 +28,7 @@ describe('formatter', () => {
   });
 
   it('should use function formatter', async () => {
-    const compiler = pack('error', { formatter: formatters.verbose });
+    const compiler = pack('error', { formatter: await formatters.verbose });
     const stats = await compiler.runAsync();
     expect(stats.hasWarnings()).toBe(false);
     expect(stats.hasErrors()).toBe(true);
