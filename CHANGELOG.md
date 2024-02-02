@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v4.1.0...v5.0.0) (2024-02-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* minimum supported Node.js version is 18 (#345)
+
+### Features
+
+* support stylelint v16 ([#346](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/346)) ([a40857c](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/a40857c7004a2637482ef43fc4a9540f92e67d59))
+
+
+### build
+
+* minimum supported Node.js version is 18 ([#345](https://github.com/webpack-contrib/stylelint-webpack-plugin/issues/345)) ([1ee4588](https://github.com/webpack-contrib/stylelint-webpack-plugin/commit/1ee4588efaef953ab287edf359937b1eda325ae2))
+
 ### [4.1.1](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v4.1.0...v4.1.1) (2023-04-10)
 
 
