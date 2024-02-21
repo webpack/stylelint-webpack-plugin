@@ -3,14 +3,13 @@ export = linter;
  * @param {string|undefined} key
  * @param {Options} options
  * @param {Compilation} compilation
- * @returns {{stylelint: Stylelint, lint: Linter, report: Reporter, threads: number}}
+ * @returns {{lint: Linter, report: Reporter, threads: number}}
  */
 declare function linter(
   key: string | undefined,
   options: Options,
   compilation: Compilation,
 ): {
-  stylelint: Stylelint;
   lint: Linter;
   report: Reporter;
   threads: number;
@@ -34,10 +33,10 @@ declare namespace linter {
 }
 type Options = import('./options').Options;
 type Compilation = import('webpack').Compilation;
-type Stylelint = import('./getStylelint').Stylelint;
 type Linter = (files: string | string[]) => void;
 type Reporter = () => Promise<Report>;
 type Compiler = import('webpack').Compiler;
+type Stylelint = import('./getStylelint').Stylelint;
 type LintResult = import('./getStylelint').LintResult;
 type LinterResult = import('./getStylelint').LinterResult;
 type Formatter = import('./getStylelint').Formatter;
