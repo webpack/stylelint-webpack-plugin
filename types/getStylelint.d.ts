@@ -33,7 +33,7 @@ type Linter = {
 type Stylelint = {
   lint: (options: LinterOptions) => Promise<LinterResult>;
   formatters: {
-    [k: string]: import('stylelint').Formatter;
+    [k: string]: Formatter;
   };
 };
 type LintResult = import('stylelint').LintResult;

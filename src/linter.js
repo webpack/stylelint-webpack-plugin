@@ -131,6 +131,7 @@ function linter(key, options, compilation) {
       const save = (name, content) =>
         /** @type {Promise<void>} */ (
           new Promise((finish, bail) => {
+            if (!compiler.outputFileSystem) return;
             const { mkdir, writeFile } = compiler.outputFileSystem;
             // ensure directory exists
             // @ts-ignore - the types for `outputFileSystem` are missing the 3 arg overload

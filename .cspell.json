@@ -14,7 +14,9 @@
     "indentifies",
     "stylelintignore",
     "notcss",
-    "stylelintcache"
+    "stylelintcache",
+    "eslintcache",
+    "autocrlf"
   ],
 
   "ignorePaths": [
