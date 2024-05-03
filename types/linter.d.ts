@@ -48,6 +48,6 @@ type Report = {
   generateReportAsset?: GenerateReport;
 };
 type LintResultMap = {
-  [files: string]: import('stylelint').LintResult;
+  [files: string]: LintResult;
 };
 import StylelintError = require('./StylelintError');
