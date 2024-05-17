@@ -152,12 +152,12 @@ function linter(key, options, compilation) {
         return;
       }
 
-      const content = outputReport.formatter;
-      (await loadFormatter(stylelint, outputReport.formatter))(
-        results,
-        returnValue,
-      );
-      formatter(results, returnValue);
+      const content = outputReport.formatter
+        ? (await loadFormatter(stylelint, outputReport.formatter))(
+            results,
+            returnValue,
+          )
+        : formatter(results, returnValue);
 
       let { filePath } = outputReport;
       if (!isAbsolute(filePath)) {
