@@ -29,7 +29,7 @@ describe('output report', () => {
     expect(stats.hasErrors()).toBe(true);
     expect(existsSync(filePath)).toBe(true);
     expect(JSON.parse(readFileSync(filePath, 'utf8'))).toMatchObject([
-      { source: expect.stringContaining('error/test.scss') },
+      { source: expect.stringContaining('test.scss') },
     ]);
   });
 });
