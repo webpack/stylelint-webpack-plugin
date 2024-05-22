@@ -1,6 +1,6 @@
 import { join } from 'path';
 
-import { existsSync } from 'fs-extra';
+import { existsSync, readFileSync } from 'fs-extra';
 
 import pack from './utils/pack';
 
@@ -28,5 +28,8 @@ describe('output report', () => {
     expect(stats.hasWarnings()).toBe(false);
     expect(stats.hasErrors()).toBe(true);
     expect(existsSync(filePath)).toBe(true);
+    expect(JSON.parse(readFileSync(filePath, 'utf8'))).toMatchObject([
+      { source: expect.stringContaining('test.scss') },
+    ]);
   });
 });
