@@ -36,7 +36,7 @@ or
 pnpm add -D stylelint-webpack-plugin
 ```
 
-> **Note**:
+> [!NOTE]
 >
 > You also need to install `stylelint >= 13` from npm, if you haven't already:
 
@@ -56,7 +56,7 @@ or
 pnpm add -D stylelint
 ```
 
-> **Note**:
+> [!NOTE]
 >
 > If you are using Stylelint 13 rather than 14+, you might also need to install `@types/stylelint` as a dev dependency if getting stylelint related type errors.
 
