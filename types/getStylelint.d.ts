@@ -23,13 +23,6 @@ declare namespace getStylelint {
     Worker,
   };
 }
-type Options = import('./options').Options;
-type Linter = {
-  stylelint: Stylelint;
-  lintFiles: LintTask;
-  cleanup: AsyncTask;
-  threads: number;
-};
 type Stylelint = {
   lint: (options: LinterOptions) => Promise<LinterResult>;
   formatters: {
@@ -41,8 +34,15 @@ type LinterOptions = import('stylelint').LinterOptions;
 type LinterResult = import('stylelint').LinterResult;
 type Formatter = import('stylelint').Formatter;
 type FormatterType = import('stylelint').FormatterType;
+type Options = import('./options').Options;
 type AsyncTask = () => Promise<void>;
 type LintTask = (files: string | string[]) => Promise<LintResult[]>;
+type Linter = {
+  stylelint: Stylelint;
+  lintFiles: LintTask;
+  cleanup: AsyncTask;
+  threads: number;
+};
 type Worker = JestWorker & {
   lintFiles: LintTask;
 };
