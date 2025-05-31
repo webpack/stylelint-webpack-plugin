@@ -12,9 +12,9 @@
 
 # stylelint-webpack-plugin
 
-> This version of stylelint-webpack-plugin only works with webpack 5. For the webpack 4, see the [2.x branch](https://github.com/webpack-contrib/stylelint-webpack-plugin/tree/2.x).
+> This version of `stylelint-webpack-plugin` only works with webpack 5. For webpack 4, see the [2.x branch](https://github.com/webpack-contrib/stylelint-webpack-plugin/tree/2.x).
 
-This plugin uses [`stylelint`](https://stylelint.io/) that helps you avoid errors and enforce conventions in your styles.
+This plugin uses [`stylelint`](https://stylelint.io/), which helps you avoid errors and enforce conventions in your styles.
 
 ## Getting Started
 
@@ -58,9 +58,9 @@ pnpm add -D stylelint
 
 > [!NOTE]
 >
-> If you are using Stylelint 13 rather than 14+, you might also need to install `@types/stylelint` as a dev dependency if getting stylelint related type errors.
+> If you are using Stylelint 13 rather than 14+, you might also need to install `@types/stylelint` as a dev dependency if you encounter Stylelint-related type errors.
 
-Then add the plugin to your webpack config. For example:
+Then add the plugin to your webpack configuration. For example:
 
 ```js
 const StylelintPlugin = require('stylelint-webpack-plugin');
@@ -74,7 +74,7 @@ module.exports = {
 
 ## Options
 
-See [stylelint's options](https://stylelint.io/user-guide/usage/node-api#options) for the complete list of options available. These options are passed through to the `stylelint` directly.
+See [stylelint's options](https://stylelint.io/user-guide/usage/node-api#options) for the complete list of available options . These options are passed directly to `stylelint`.
 
 ### `cache`
 
@@ -98,7 +98,7 @@ type cacheLocation = string;
 
 - Default: `node_modules/.cache/stylelint-webpack-plugin/.stylelintcache`
 
-Specify the path to the cache location. Can be a file or a directory.
+Specify the path to the cache location. This can be a file or a directory.
 
 ### `configFile`
 
@@ -150,7 +150,7 @@ type extensions = string | Array<string>;
 
 - Default: `['css', 'scss', 'sass']`
 
-Specify extensions that should be checked.
+Specify the extensions that should be checked.
 
 ### `files`
 
@@ -162,7 +162,7 @@ type files = string | Array<string>;
 
 - Default: `null`
 
-Specify directories, files, or globs. Must be relative to `options.context`. Directories are traversed recursively looking for files matching `options.extensions`. File and glob patterns ignore `options.extensions`.
+Specify directories, files, or globs. Must be relative to `options.context`. Directories are traversed recursively, looking for files matching `options.extensions`. File and glob patterns ignore `options.extensions`.
 
 ### `fix`
 
@@ -188,7 +188,7 @@ type formatter = string | (
 
 - Default: `'string'`
 
-Specify the formatter that you would like to use to format your results. See [formatter option](https://stylelint.io/user-guide/usage/options#formatter).
+Specify the formatter you would like to use to format your results. See the [formatter option](https://stylelint.io/user-guide/usage/options#formatter).
 
 ### `lintDirtyModulesOnly`
 
@@ -200,7 +200,7 @@ type lintDirtyModulesOnly = boolean;
 
 - Default: `false`
 
-Lint only changed files, skip lint on start.
+Lint only changed files; skip linting on start.
 
 ### `stylelintPath`
 
@@ -224,12 +224,15 @@ type threads = boolean | number;
 
 - Default: `false`
 
-Set to true for an auto-selected pool size based on number of cpus. Set to a number greater than 1 to set an explicit pool size. Set to false, 1, or less to disable and only run in main process.
+Set to `true` for an auto-selected pool size based on number of CPUs. Set to a number greater than 1 to set an explicit pool size.
+
+Set to `false`, 1, or less to disable and run only in main process.
 
 ### Errors and Warning
 
-**By default the plugin will auto adjust error reporting depending on stylelint errors/warnings counts.**
-You can still force this behavior by using `emitError` **or** `emitWarning` options:
+**By default, the plugin will automatically adjust error reporting depending on the number of Stylelint errors/warnings.**
+
+You can still force this behavior by using the `emitError` **or** `emitWarning` options:
 
 #### `emitError`
 
@@ -241,7 +244,7 @@ type emitError = boolean;
 
 - Default: `true`
 
-The errors found will always be emitted, to disable set to `false`.
+The errors found will always be emitted. To disable, set to `false`.
 
 #### `emitWarning`
 
@@ -253,7 +256,7 @@ type emitWarning = boolean;
 
 - Default: `true`
 
-The warnings found will always be emitted, to disable set to `false`.
+The warnings found will always be emitted. To disable, set to `false`.
 
 #### `failOnError`
 
@@ -265,7 +268,7 @@ type failOnError = boolean;
 
 - Default: `true`
 
-Will cause the module build to fail if there are any errors, to disable set to `false`.
+Will cause the module build to fail if there are any errors. To disable, set to `false`.
 
 #### `failOnWarning`
 
@@ -277,7 +280,7 @@ type failOnWarning = boolean;
 
 - Default: `false`
 
-Will cause the module build to fail if there are any warnings, if set to `true`.
+Will cause the module build to fail if there are any warnings, when set to `true`.
 
 #### `quiet`
 
@@ -289,7 +292,7 @@ type quiet = boolean;
 
 - Default: `false`
 
-Will process and report errors only and ignore warnings, if set to `true`.
+Will process and report errors only, and ignore warnings, when set to `true`.
 
 #### `outputReport`
 
@@ -311,9 +314,11 @@ type outputReport =
 
 - Default: `false`
 
-Write the output of the errors to a file, for example a `json` file for use for reporting.
+Writes the output of the errors to a file - for example, a `json` file for use for reporting.
+
 The `filePath` is relative to the webpack config: `output.path`.
-You can pass in a different formatter for the output file, if none is passed in the default/configured formatter will be used.
+
+You can pass in a different formatter for the output file. If none is passed in the default/configured formatter will be used.
 
 ```js
 {
@@ -325,6 +330,13 @@ You can pass in a different formatter for the output file, if none is passed in 
 ## Changelog
 
 [Changelog](CHANGELOG.md)
+
+## Contributing
+
+We welcome all contributions!
+If you're new here, please take a moment to review our contributing guidelines before submitting issues or pull requests.
+
+[CONTRIBUTING](./.github/CONTRIBUTING.md)
 
 ## License
 
