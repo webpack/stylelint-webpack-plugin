@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "globby": "^11.1.0",
-    "jest-worker": "^30.0.0",
+    "jest-worker": "^29.7.0",
     "micromatch": "^4.0.5",
     "normalize-path": "^3.0.0",
     "schema-utils": "^4.2.0"
