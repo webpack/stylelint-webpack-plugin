@@ -7,10 +7,10 @@ module.exports = (api) => {
   return {
     presets: [
       [
-        '@babel/preset-env',
+        "@babel/preset-env",
         {
           targets: {
-            node: '18.12.0',
+            node: "18.12.0",
           },
         },
       ],

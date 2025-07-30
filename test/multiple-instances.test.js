@@ -1,16 +1,16 @@
-import StylelintPlugin from '../src';
+import StylelintPlugin from "../src";
 
-import pack from './utils/pack';
+import pack from "./utils/pack";
 
-describe('multiple instances', () => {
+describe("multiple instances", () => {
   it("should don't fail", async () => {
     const compiler = pack(
-      'multiple',
+      "multiple",
       {},
       {
         plugins: [
-          new StylelintPlugin({ exclude: 'error.scss' }),
-          new StylelintPlugin({ exclude: 'error.scss' }),
+          new StylelintPlugin({ exclude: "error.scss" }),
+          new StylelintPlugin({ exclude: "error.scss" }),
         ],
       },
     );
@@ -20,14 +20,14 @@ describe('multiple instances', () => {
     expect(stats.hasErrors()).toBe(false);
   });
 
-  it('should fail on first instance', async () => {
+  it("should fail on first instance", async () => {
     const compiler = pack(
-      'multiple',
+      "multiple",
       {},
       {
         plugins: [
-          new StylelintPlugin({ exclude: 'good.scss' }),
-          new StylelintPlugin({ exclude: 'error.scss' }),
+          new StylelintPlugin({ exclude: "good.scss" }),
+          new StylelintPlugin({ exclude: "error.scss" }),
         ],
       },
     );
@@ -37,14 +37,14 @@ describe('multiple instances', () => {
     expect(stats.hasErrors()).toBe(true);
   });
 
-  it('should fail on second instance', async () => {
+  it("should fail on second instance", async () => {
     const compiler = pack(
-      'multiple',
+      "multiple",
       {},
       {
         plugins: [
-          new StylelintPlugin({ exclude: 'error.scss' }),
-          new StylelintPlugin({ exclude: 'good.scss' }),
+          new StylelintPlugin({ exclude: "error.scss" }),
+          new StylelintPlugin({ exclude: "good.scss" }),
         ],
       },
     );

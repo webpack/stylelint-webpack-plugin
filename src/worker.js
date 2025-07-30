@@ -1,11 +1,7 @@
 /** @typedef {import('./getStylelint').Stylelint} Stylelint */
 /** @typedef {import('./getStylelint').LinterOptions} StylelintOptions */
+/** @typedef {import('./getStylelint').LintResult} LintResult */
 /** @typedef {import('./options').Options} Options */
-
-Object.assign(module.exports, {
-  lintFiles,
-  setup,
-});
 
 /** @type {Stylelint} */
 let stylelint;
@@ -14,18 +10,20 @@ let stylelint;
 let linterOptions;
 
 /**
- * @param {Options} options
- * @param {Partial<StylelintOptions>} stylelintOptions
+ * @param {Options} options the worker options
+ * @param {Partial<StylelintOptions>} stylelintOptions the stylelint options
+ * @returns {Stylelint} stylelint instance
  */
 function setup(options, stylelintOptions) {
-  stylelint = require(options.stylelintPath || 'stylelint');
+  stylelint = require(options.stylelintPath || "stylelint");
   linterOptions = stylelintOptions;
 
   return stylelint;
 }
 
 /**
- * @param {string | string[]} files
+ * @param {string | string[]} files files
+ * @returns {Promise<LintResult[]>} results
  */
 async function lintFiles(files) {
   const { results } = await stylelint.lint({
@@ -35,14 +33,16 @@ async function lintFiles(files) {
   });
 
   // Reset result to work with worker
-  return results.map((result) => {
-    return {
-      source: result.source,
-      errored: result.errored,
-      ignored: result.ignored,
-      warnings: result.warnings,
-      deprecations: result.deprecations,
-      invalidOptionWarnings: result.invalidOptionWarnings,
-    };
-  });
+  return results.map((result) => ({
+    source: result.source,
+    errored: result.errored,
+    ignored: result.ignored,
+    warnings: result.warnings,
+    deprecations: result.deprecations,
+    invalidOptionWarnings: result.invalidOptionWarnings,
+    parseErrors: result.parseErrors,
+  }));
 }
+
+module.exports.lintFiles = lintFiles;
+module.exports.setup = setup;

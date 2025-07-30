@@ -63,7 +63,7 @@ pnpm add -D stylelint
 Then add the plugin to your webpack configuration. For example:
 
 ```js
-const StylelintPlugin = require('stylelint-webpack-plugin');
+const StylelintPlugin = require("stylelint-webpack-plugin");
 
 module.exports = {
   // ...
@@ -133,7 +133,7 @@ A string indicating the root of your files.
 - Type:
 
 ```ts
-type exclude = string | Array<string>;
+type exclude = string | string[];
 ```
 
 - Default: `['node_modules', compiler.options.output.path]`
@@ -145,7 +145,7 @@ Specify the files and/or directories to exclude. Must be relative to `options.co
 - Type:
 
 ```ts
-type extensions = string | Array<string>;
+type extensions = string | string[];
 ```
 
 - Default: `['css', 'scss', 'sass']`
@@ -157,7 +157,7 @@ Specify the extensions that should be checked.
 - Type:
 
 ```ts
-type files = string | Array<string>;
+type files = string | string[];
 ```
 
 - Default: `null`
@@ -181,9 +181,9 @@ If `true`, `stylelint` will fix as many errors as possible. The fixes are made t
 - Type:
 
 ```ts
-type formatter = string | (
-  results: Array<import('stylelint').LintResult>
-) => string
+type formatter =
+  | string
+  | ((results: import("stylelint").LintResult[]) => string);
 ```
 
 - Default: `'string'`
@@ -304,10 +304,7 @@ type outputReport =
   | {
       filePath?: string | undefined;
       formatter?:
-        | (
-            | string
-            | ((results: Array<import('stylelint').LintResult>) => string)
-          )
+        | (string | ((results: import("stylelint").LintResult[]) => string))
         | undefined;
     };
 ```
@@ -321,10 +318,10 @@ The `filePath` is relative to the webpack config: `output.path`.
 You can pass in a different formatter for the output file. If none is passed in the default/configured formatter will be used.
 
 ```js
-{
-  filePath: 'path/to/file';
-  formatter: 'json';
-}
+const outputReport = {
+  filePath: "path/to/file",
+  formatter: "json",
+};
 ```
 
 ## Changelog

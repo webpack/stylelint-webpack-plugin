@@ -1,23 +1,23 @@
-const { isAbsolute, join } = require('path');
+const { isAbsolute, join } = require("node:path");
 
-const globby = require('globby');
-const { isMatch } = require('micromatch');
+const globby = require("globby");
+const { isMatch } = require("micromatch");
 
-const { getOptions } = require('./options');
-const linter = require('./linter');
-const { arrify, parseFiles, parseFoldersToGlobs } = require('./utils');
+const linter = require("./linter");
+const { getOptions } = require("./options");
+const { arrify, parseFiles, parseFoldersToGlobs } = require("./utils");
 
 /** @typedef {import('webpack').Compiler} Compiler */
 /** @typedef {import('webpack').Module} Module */
 /** @typedef {import('./options').Options} Options */
-/** @typedef {Partial<{timestamp:number} | number>} FileSystemInfoEntry */
+/** @typedef {Partial<{ timestamp:number } | number>} FileSystemInfoEntry */
 
-const STYLELINT_PLUGIN = 'StylelintWebpackPlugin';
+const STYLELINT_PLUGIN = "StylelintWebpackPlugin";
 let counter = 0;
 
 class StylelintWebpackPlugin {
   /**
-   * @param {Options} options
+   * @param {Options=} options options
    */
   constructor(options = {}) {
     this.key = STYLELINT_PLUGIN;
@@ -28,7 +28,7 @@ class StylelintWebpackPlugin {
   }
 
   /**
-   * @param {Compiler} compiler
+   * @param {Compiler} compiler compiler
    * @returns {void}
    */
   apply(compiler) {
@@ -38,7 +38,7 @@ class StylelintWebpackPlugin {
 
     const context = this.getContext(compiler);
     const excludeDefault = [
-      '**/node_modules/**',
+      "**/node_modules/**",
       String(compiler.options.output.path),
     ];
 
@@ -47,7 +47,7 @@ class StylelintWebpackPlugin {
       context,
       exclude: parseFiles(this.options.exclude || excludeDefault, context),
       extensions: arrify(this.options.extensions),
-      files: parseFiles(this.options.files || '', context),
+      files: parseFiles(this.options.files || "", context),
     };
 
     const wanted = parseFoldersToGlobs(options.files, options.extensions);
@@ -56,35 +56,34 @@ class StylelintWebpackPlugin {
     // If `lintDirtyModulesOnly` is disabled,
     // execute the linter on the build
     if (!this.options.lintDirtyModulesOnly) {
-      compiler.hooks.run.tapPromise(this.key, (c) =>
-        this.run(c, options, wanted, exclude),
+      compiler.hooks.run.tapPromise(this.key, (compiler) =>
+        this.run(compiler, options, wanted, exclude),
       );
     }
 
     let isFirstRun = this.options.lintDirtyModulesOnly;
-    compiler.hooks.watchRun.tapPromise(this.key, (c) => {
+    compiler.hooks.watchRun.tapPromise(this.key, (compiler) => {
       if (isFirstRun) {
         isFirstRun = false;
 
         return Promise.resolve();
       }
 
-      return this.run(c, options, wanted, exclude);
+      return this.run(compiler, options, wanted, exclude);
     });
   }
 
   /**
-   * @param {Compiler} compiler
-   * @param {Options} options
-   * @param {string[]} wanted
-   * @param {string[]} exclude
+   * @param {Compiler} compiler compiler
+   * @param {Options} options options
+   * @param {string[]} wanted wanted files
+   * @param {string[]} exclude exclude files
    */
   async run(compiler, options, wanted, exclude) {
     // Do not re-hook
     /* istanbul ignore if */
     if (
-      // @ts-ignore
-      compiler.hooks.thisCompilation.taps.find(({ name }) => name === this.key)
+      compiler.hooks.thisCompilation.taps.some(({ name }) => name === this.key)
     ) {
       return;
     }
@@ -101,16 +100,15 @@ class StylelintWebpackPlugin {
 
       try {
         ({ lint, report, threads } = linter(this.key, options, compilation));
-      } catch (e) {
-        compilation.errors.push(e);
+      } catch (err) {
+        compilation.errors.push(err);
         return;
       }
 
       compilation.hooks.finishModules.tapPromise(this.key, async () => {
         /** @type {string[]} */
-        // @ts-ignore
         const files = compiler.modifiedFiles
-          ? Array.from(compiler.modifiedFiles).filter(
+          ? [...compiler.modifiedFiles].filter(
               (file) =>
                 isMatch(file, wanted, { dot: true }) &&
                 !isMatch(file, exclude, { dot: true }),
@@ -126,25 +124,21 @@ class StylelintWebpackPlugin {
         }
       });
 
-      // await and interpret results
-      compilation.hooks.additionalAssets.tapPromise(this.key, processResults);
-
+      /**
+       * @returns {Promise<void>}
+       */
       async function processResults() {
         const { errors, warnings, generateReportAsset } = await report();
 
         if (warnings && !options.failOnWarning) {
-          // @ts-ignore
           compilation.warnings.push(warnings);
         } else if (warnings && options.failOnWarning) {
-          // @ts-ignore
           compilation.errors.push(warnings);
         }
 
         if (errors && options.failOnError) {
-          // @ts-ignore
           compilation.errors.push(errors);
         } else if (errors && !options.failOnError) {
-          // @ts-ignore
           compilation.warnings.push(errors);
         }
 
@@ -152,13 +146,15 @@ class StylelintWebpackPlugin {
           await generateReportAsset(compilation);
         }
       }
+
+      // await and interpret results
+      compilation.hooks.additionalAssets.tapPromise(this.key, processResults);
     });
   }
 
   /**
-   *
-   * @param {Compiler} compiler
-   * @returns {string}
+   * @param {Compiler} compiler compiler
+   * @returns {string} context
    */
   getContext(compiler) {
     if (!this.options.context) {

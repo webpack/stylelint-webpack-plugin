@@ -1,6 +1,6 @@
-import webpack from 'webpack';
+import webpack from "webpack";
 
-import conf from './conf';
+import conf from "./conf";
 
 export default (context, pluginConf = {}, webpackConf = {}) => {
   const compiler = webpack(conf(context, pluginConf, webpackConf));

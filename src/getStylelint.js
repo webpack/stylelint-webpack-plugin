@@ -1,13 +1,12 @@
-const { cpus } = require('os');
+const { cpus } = require("node:os");
 
-const { Worker: JestWorker } = require('jest-worker');
+const { Worker: JestWorker } = require("jest-worker");
 
-// @ts-ignore
-const { setup, lintFiles } = require('./worker');
-const { jsonStringifyReplacerSortKeys } = require('./utils');
-const { getStylelintOptions } = require('./options');
+const { getStylelintOptions } = require("./options");
+const { jsonStringifyReplacerSortKeys } = require("./utils");
+const { lintFiles, setup } = require("./worker");
 
-/** @type {{[key: string]: any}} */
+/** @type {{ [key: string]: Linter }} */
 const cache = {};
 
 /** @typedef {{lint: (options: LinterOptions) => Promise<LinterResult>, formatters: { [k: string]: Formatter }}} Stylelint */
@@ -16,6 +15,7 @@ const cache = {};
 /** @typedef {import('stylelint').LinterResult} LinterResult */
 /** @typedef {import('stylelint').Formatter} Formatter */
 /** @typedef {import('stylelint').FormatterType} FormatterType */
+/** @typedef {import('stylelint').RuleMeta} RuleMeta */
 /** @typedef {import('./options').Options} Options */
 /** @typedef {() => Promise<void>} AsyncTask */
 /** @typedef {(files: string|string[]) => Promise<LintResult[]>} LintTask */
@@ -23,8 +23,8 @@ const cache = {};
 /** @typedef {JestWorker & {lintFiles: LintTask}} Worker */
 
 /**
- * @param {Options} options
- * @returns {Linter}
+ * @param {Options} options linter options
+ * @returns {Linter} linter
  */
 function loadStylelint(options) {
   const stylelintOptions = getStylelintOptions(options);
@@ -39,14 +39,23 @@ function loadStylelint(options) {
 }
 
 /**
- * @param {string|undefined} key
- * @param {number} poolSize
- * @param {Options} options
- * @returns {Linter}
+ * @param {string | undefined} key a cache key
+ * @param {Options} options options
+ * @returns {string} a stringified cache key
+ */
+function getCacheKey(key, options) {
+  return JSON.stringify({ key, options }, jsonStringifyReplacerSortKeys);
+}
+
+/**
+ * @param {string|undefined} key a cache key
+ * @param {number} poolSize number of workers
+ * @param {Options} options options
+ * @returns {Linter} linter
  */
 function loadStylelintThreaded(key, poolSize, options) {
   const cacheKey = getCacheKey(key, options);
-  const source = require.resolve('./worker');
+  const source = require.resolve("./worker");
   const workerOptions = {
     enableWorkerThreads: true,
     numWorkers: poolSize,
@@ -55,7 +64,9 @@ function loadStylelintThreaded(key, poolSize, options) {
 
   const local = loadStylelint(options);
 
-  let worker = /** @type {Worker?} */ (new JestWorker(source, workerOptions));
+  let worker =
+    /** @type {Worker | null} */
+    (new JestWorker(source, workerOptions));
 
   /** @type {Linter} */
   const context = {
@@ -79,13 +90,13 @@ function loadStylelintThreaded(key, poolSize, options) {
 }
 
 /**
- * @param {string|undefined} key
- * @param {Options} options
- * @returns {Linter}
+ * @param {string|undefined} key a cache key
+ * @param {Options} options options
+ * @returns {Linter} linter
  */
 function getStylelint(key, { threads, ...options }) {
   const max =
-    typeof threads !== 'number' ? (threads ? cpus().length - 1 : 1) : threads;
+    typeof threads !== "number" ? (threads ? cpus().length - 1 : 1) : threads;
 
   const cacheKey = getCacheKey(key, { threads, ...options });
   if (!cache[cacheKey]) {
@@ -95,15 +106,6 @@ function getStylelint(key, { threads, ...options }) {
         : loadStylelint(options);
   }
   return cache[cacheKey];
-}
-
-/**
- * @param {string|undefined} key
- * @param {Options} options
- * @returns {string}
- */
-function getCacheKey(key, options) {
-  return JSON.stringify({ key, options }, jsonStringifyReplacerSortKeys);
 }
 
 module.exports = getStylelint;

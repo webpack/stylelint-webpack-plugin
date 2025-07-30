@@ -1,11 +1,11 @@
-import StylelintWebpackPlugin from '../src';
+import StylelintWebpackPlugin from "../src";
 
-import pack from './utils/pack';
+import pack from "./utils/pack";
 
-describe('empty', () => {
-  it('no error when no files matching', async () => {
+describe("empty", () => {
+  it("no error when no files matching", async () => {
     const compiler = pack(
-      'empty',
+      "empty",
       {},
       {
         plugins: [new StylelintWebpackPlugin()],
