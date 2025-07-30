@@ -11,8 +11,6 @@ const { arrify, parseFiles, parseFoldersToGlobs } = require("./utils");
 /** @typedef {import('webpack').Module} Module */
 /** @typedef {import('./options').Options} Options */
 /** @typedef {Partial<{ timestamp:number } | number>} FileSystemInfoEntry */
-// eslint-disable-next-line jsdoc/no-restricted-syntax
-/** @typedef {any} EXPECTED_ANY */
 
 const STYLELINT_PLUGIN = "StylelintWebpackPlugin";
 let counter = 0;

@@ -32,7 +32,7 @@ declare class StylelintWebpackPlugin {
   getContext(compiler: Compiler): string;
 }
 declare namespace StylelintWebpackPlugin {
-  export { Compiler, Module, Options, FileSystemInfoEntry, EXPECTED_ANY };
+  export { Compiler, Module, Options, FileSystemInfoEntry };
 }
 type Compiler = import("webpack").Compiler;
 type Module = import("webpack").Module;
@@ -43,4 +43,3 @@ type FileSystemInfoEntry = Partial<
     }
   | number
 >;
-type EXPECTED_ANY = any;

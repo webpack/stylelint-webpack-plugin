@@ -7,7 +7,7 @@ export type ArrifyResult<T> = T extends null | undefined
       : T extends Iterable<infer T_1>
         ? T_1[]
         : [T];
-export type EXPECTED_ANY = import("./index").EXPECTED_ANY;
+export type EXPECTED_ANY = any;
 /**
  * @template T
  * @typedef {T extends (null | undefined)
@@ -40,7 +40,7 @@ export function jsonStringifyReplacerSortKeys(
 /**
  * @param {string | string[]} files files
  * @param {string} context context
- * @returns {string[]} normlized paths
+ * @returns {string[]} normalized paths
  */
 export function parseFiles(files: string | string[], context: string): string[];
 /**

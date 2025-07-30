@@ -1,4 +1,5 @@
-/** @typedef {import('./index').EXPECTED_ANY} EXPECTED_ANY */
+// eslint-disable-next-line jsdoc/no-restricted-syntax
+/** @typedef {any} EXPECTED_ANY */
 
 const { statSync } = require("node:fs");
 const { resolve } = require("node:path");
@@ -49,7 +50,7 @@ function arrify(value) {
 /**
  * @param {string | string[]} files files
  * @param {string} context context
- * @returns {string[]} normlized paths
+ * @returns {string[]} normalized paths
  */
 function parseFiles(files, context) {
   return arrify(files).map((/** @type {string} */ file) =>
