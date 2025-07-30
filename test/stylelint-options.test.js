@@ -1,21 +1,21 @@
-import { getStylelintOptions } from '../src/options';
+import { getStylelintOptions } from "../src/options";
 
-describe('eslint options', () => {
-  it('should filter plugin options', () => {
+describe("eslint options", () => {
+  it("should filter plugin options", () => {
     const options = {
-      formatter: 'json',
+      formatter: "json",
       emitError: false,
     };
     expect(getStylelintOptions(options)).toStrictEqual({
-      formatter: 'json',
+      formatter: "json",
     });
   });
 
-  it('should keep the stylelint options', () => {
+  it("should keep the stylelint options", () => {
     const options = {
-      stylelintPath: 'some/place/where/stylelint/lives',
-      formatter: 'json',
-      files: ['file.scss'],
+      stylelintPath: "some/place/where/stylelint/lives",
+      formatter: "json",
+      files: ["file.scss"],
       emitError: false,
       emitWarning: false,
       failOnError: true,
@@ -24,8 +24,8 @@ describe('eslint options', () => {
       outputReport: true,
     };
     expect(getStylelintOptions(options)).toStrictEqual({
-      formatter: 'json',
-      files: ['file.scss'],
+      formatter: "json",
+      files: ["file.scss"],
     });
   });
 });

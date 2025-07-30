@@ -9,15 +9,15 @@ module.exports = {
     return {
       results: [
         {
-          source: '',
+          source: "",
           errored: true,
           warnings: [
             {
               line: 1,
               column: 11,
-              rule: 'fake-error',
-              severity: 'error',
-              text: 'Fake error',
+              rule: "fake-error",
+              severity: "error",
+              text: "Fake error",
             },
           ],
         },

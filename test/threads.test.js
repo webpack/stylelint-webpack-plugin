@@ -1,23 +1,23 @@
-import { join } from 'path';
+import { join } from "node:path";
 
-// @ts-ignore
-import normalizePath from 'normalize-path';
+// @ts-expect-error no types
+import normalizePath from "normalize-path";
 
-import getStylelint from '../src/getStylelint';
+import getStylelint from "../src/getStylelint";
 
-import pack from './utils/pack';
+import pack from "./utils/pack";
 
-describe('Threading', () => {
+describe("Threading", () => {
   it("should don't throw error if file is ok with threads", async () => {
-    const compiler = pack('good', { threads: 2 });
+    const compiler = pack("good", { threads: 2 });
     const stats = await compiler.runAsync();
     expect(stats.hasWarnings()).toBe(false);
     expect(stats.hasErrors()).toBe(false);
   });
 
-  test('Threaded interface should look like non-threaded interface', async () => {
-    const single = getStylelint('single', {});
-    const threaded = getStylelint('threaded', { threads: 2 });
+  it("threaded interface should look like non-threaded interface", async () => {
+    const single = getStylelint("single", {});
+    const threaded = getStylelint("threaded", { threads: 2 });
     for (const key of Object.keys(single)) {
       expect(typeof single[key]).toEqual(typeof threaded[key]);
     }
@@ -29,15 +29,15 @@ describe('Threading', () => {
     threaded.cleanup();
   });
 
-  test('Threaded should lint files', async () => {
-    const threaded = getStylelint('bar', { threads: true });
+  it("threaded should lint files", async () => {
+    const threaded = getStylelint("bar", { threads: true });
     try {
       const [good, bad] = await Promise.all([
         threaded.lintFiles(
-          normalizePath(join(__dirname, 'fixtures/good/test.scss')),
+          normalizePath(join(__dirname, "fixtures/good/test.scss")),
         ),
         threaded.lintFiles(
-          normalizePath(join(__dirname, 'fixtures/error/test.scss')),
+          normalizePath(join(__dirname, "fixtures/error/test.scss")),
         ),
       ]);
       expect(good[0].errored).toBe(false);
@@ -47,29 +47,28 @@ describe('Threading', () => {
     }
   });
 
-  describe('worker coverage', () => {
+  describe("worker coverage", () => {
     beforeEach(() => {
       jest.resetModules();
     });
 
-    test('worker can start', async () => {
-      const { setup, lintFiles } = require('../src/worker');
+    it("worker can start", async () => {
+      const { lintFiles, setup } = require("../src/worker");
+
       const mockThread = { parentPort: { on: jest.fn() }, workerData: {} };
       const mockLintFiles = jest.fn().mockReturnValue({
         results: [],
       });
 
-      jest.mock('worker_threads', () => mockThread);
-      jest.mock('stylelint', () => {
-        return { lint: mockLintFiles };
-      });
+      jest.mock("worker_threads", () => mockThread);
+      jest.mock("stylelint", () => ({ lint: mockLintFiles }));
 
       setup({});
 
-      await lintFiles('foo');
+      await lintFiles("foo");
 
       expect(mockLintFiles).toHaveBeenCalledWith({
-        files: 'foo',
+        files: "foo",
         quietDeprecationWarnings: true,
       });
     });

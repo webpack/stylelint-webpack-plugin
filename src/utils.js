@@ -1,55 +1,55 @@
-const { resolve } = require('path');
-const { statSync } = require('fs');
+/** @typedef {import('./index').EXPECTED_ANY} EXPECTED_ANY */
 
-const normalizePath = require('normalize-path');
+const { statSync } = require("node:fs");
+const { resolve } = require("node:path");
+
+const normalizePath = require("normalize-path");
 
 /**
  * @template T
- * @param {T} value
- * @return {
-   T extends (null | undefined)
-     ? []
-     : T extends string
-       ? [string]
-       : T extends readonly unknown[]
-         ? T
-         : T extends Iterable<infer T>
-           ? T[]
-           : [T]
- }
+ * @typedef {T extends (null | undefined)
+ * ? []
+ * : T extends string
+ * ? [string]
+ * : T extends readonly unknown[]
+ * ? T
+ * : T extends Iterable<infer T>
+ * ? T[]
+ * : [T]} ArrifyResult
  */
+
 /* istanbul ignore next */
+/**
+ * @template T
+ * @param {T} value value
+ * @returns {ArrifyResult<T>} array of values
+ */
 function arrify(value) {
-  // eslint-disable-next-line no-undefined
   if (value === null || value === undefined) {
-    // @ts-ignore
-    return [];
+    return /** @type {ArrifyResult<T>} */ ([]);
   }
 
   if (Array.isArray(value)) {
-    // @ts-ignore
-    return value;
+    return /** @type {ArrifyResult<T>} */ (value);
   }
 
-  if (typeof value === 'string') {
-    // @ts-ignore
-    return [value];
+  if (typeof value === "string") {
+    return /** @type {ArrifyResult<T>} */ ([value]);
   }
 
-  // @ts-ignore
-  if (typeof value[Symbol.iterator] === 'function') {
-    // @ts-ignore
+  // @ts-expect-error need better types
+  if (typeof value[Symbol.iterator] === "function") {
+    // @ts-expect-error need better types
     return [...value];
   }
 
-  // @ts-ignore
-  return [value];
+  return /** @type {ArrifyResult<T>} */ ([value]);
 }
 
 /**
- * @param {string|string[]} files
- * @param {string} context
- * @returns {string[]}
+ * @param {string | string[]} files files
+ * @param {string} context context
+ * @returns {string[]} normlized paths
  */
 function parseFiles(files, context) {
   return arrify(files).map((/** @type {string} */ file) =>
@@ -58,16 +58,16 @@ function parseFiles(files, context) {
 }
 
 /**
- * @param {string|string[]} patterns
- * @param {string|string[]} extensions
- * @returns {string[]}
+ * @param {string | string[]} patterns patterns
+ * @param {string | string[]} extensions extensions
+ * @returns {string[]} globs
  */
 function parseFoldersToGlobs(patterns, extensions = []) {
   const extensionsList = arrify(extensions);
-  const [prefix, postfix] = extensionsList.length > 1 ? ['{', '}'] : ['', ''];
+  const [prefix, postfix] = extensionsList.length > 1 ? ["{", "}"] : ["", ""];
   const extensionsGlob = extensionsList
-    .map((/** @type {string} */ extension) => extension.replace(/^\./u, ''))
-    .join(',');
+    .map((/** @type {string} */ extension) => extension.replace(/^\./u, ""))
+    .join(",");
 
   return arrify(patterns).map((/** @type {string} */ pattern) => {
     try {
@@ -78,11 +78,11 @@ function parseFoldersToGlobs(patterns, extensions = []) {
         return pattern.replace(
           /[/\\]*?$/u,
           `/**${
-            extensionsGlob ? `/*.${prefix + extensionsGlob + postfix}` : ''
+            extensionsGlob ? `/*.${prefix + extensionsGlob + postfix}` : ""
           }`,
         );
       }
-    } catch (_) {
+    } catch {
       // Return the pattern as is on error.
     }
     return pattern;
@@ -90,29 +90,29 @@ function parseFoldersToGlobs(patterns, extensions = []) {
 }
 
 /**
- *
  * @param {string} _ key, but unused
- * @param {any} value
+ * @param {EXPECTED_ANY} value value
+ * @returns {{ [x: string]: EXPECTED_ANY }} result
  */
 const jsonStringifyReplacerSortKeys = (_, value) => {
   /**
-   * @param {{ [x: string]: any; }} sorted
-   * @param {string | number} key
+   * @param {{ [x: string]: EXPECTED_ANY }} sorted sorted
+   * @param {string | number} key key
+   * @returns {{ [x: string]: EXPECTED_ANY }} result
    */
   const insert = (sorted, key) => {
-    // eslint-disable-next-line no-param-reassign
     sorted[key] = value[key];
     return sorted;
   };
 
-  return value instanceof Object && !(value instanceof Array)
+  return value instanceof Object && !Array.isArray(value)
     ? Object.keys(value).sort().reduce(insert, {})
     : value;
 };
 
 module.exports = {
   arrify,
+  jsonStringifyReplacerSortKeys,
   parseFiles,
   parseFoldersToGlobs,
-  jsonStringifyReplacerSortKeys,
 };

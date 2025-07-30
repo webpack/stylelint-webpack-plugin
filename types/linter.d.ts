@@ -1,9 +1,9 @@
 export = linter;
 /**
- * @param {string|undefined} key
- * @param {Options} options
- * @param {Compilation} compilation
- * @returns {{lint: Linter, report: Reporter, threads: number}}
+ * @param {string | undefined} key a cache key
+ * @param {Options} options options
+ * @param {Compilation} compilation compilation
+ * @returns {{ lint: Linter, report: Reporter, threads: number }} the linter with additional functions
  */
 declare function linter(
   key: string | undefined,
@@ -23,6 +23,7 @@ declare namespace linter {
     LinterResult,
     Formatter,
     FormatterType,
+    RuleMeta,
     Options,
     GenerateReport,
     Report,
@@ -31,14 +32,15 @@ declare namespace linter {
     LintResultMap,
   };
 }
-type Compiler = import('webpack').Compiler;
-type Compilation = import('webpack').Compilation;
-type Stylelint = import('./getStylelint').Stylelint;
-type LintResult = import('./getStylelint').LintResult;
-type LinterResult = import('./getStylelint').LinterResult;
-type Formatter = import('./getStylelint').Formatter;
-type FormatterType = import('./getStylelint').FormatterType;
-type Options = import('./options').Options;
+type Compiler = import("webpack").Compiler;
+type Compilation = import("webpack").Compilation;
+type Stylelint = import("./getStylelint").Stylelint;
+type LintResult = import("./getStylelint").LintResult;
+type LinterResult = import("./getStylelint").LinterResult;
+type Formatter = import("./getStylelint").Formatter;
+type FormatterType = import("./getStylelint").FormatterType;
+type RuleMeta = import("./getStylelint").RuleMeta;
+type Options = import("./options").Options;
 type GenerateReport = (compilation: Compilation) => Promise<void>;
 type Report = {
   errors?: StylelintError;
@@ -50,4 +52,4 @@ type Linter = (files: string | string[]) => void;
 type LintResultMap = {
   [files: string]: LintResult;
 };
-import StylelintError = require('./StylelintError');
+import StylelintError = require("./StylelintError");

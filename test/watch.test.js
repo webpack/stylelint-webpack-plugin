@@ -1,14 +1,15 @@
-import { join } from 'path';
+import { join } from "node:path";
 
-import { writeFileSync, removeSync } from 'fs-extra';
+import { removeSync, writeFileSync } from "fs-extra";
 
-import pack from './utils/pack';
+import pack from "./utils/pack";
 
-const target = join(__dirname, 'fixtures', 'watch', 'entry.scss');
-const target2 = join(__dirname, 'fixtures', 'watch', 'leaf.scss');
+const target = join(__dirname, "fixtures", "watch", "entry.scss");
+const target2 = join(__dirname, "fixtures", "watch", "leaf.scss");
 
-describe('watch', () => {
+describe("watch", () => {
   let watch;
+
   afterEach(() => {
     if (watch) {
       watch.close();
@@ -17,8 +18,8 @@ describe('watch', () => {
     removeSync(target2);
   });
 
-  it('should watch', (done) => {
-    const compiler = pack('good');
+  it("should watch", (done) => {
+    const compiler = pack("good");
 
     watch = compiler.watch({}, (err, stats) => {
       expect(err).toBeNull();
@@ -28,41 +29,20 @@ describe('watch', () => {
     });
   });
 
-  it('should watch with unique messages', (done) => {
-    writeFileSync(target, '#foo { background: black; }\n');
-    writeFileSync(target2, '');
+  it("should watch with unique messages", (done) => {
+    writeFileSync(target, "#foo { background: black; }\n");
+    writeFileSync(target2, "");
 
+    // eslint-disable-next-line no-use-before-define
     let next = firstPass;
-    const compiler = pack('watch');
+    const compiler = pack("watch");
     watch = compiler.watch({}, (err, stats) => next(err, stats));
 
-    function firstPass(err, stats) {
+    function finish(err, stats) {
       expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(true);
-      const { errors } = stats.compilation;
-      expect(errors.length).toBe(1);
-      const [{ message }] = errors;
-      expect(message).toEqual(expect.stringMatching('entry.scss'));
-      expect(message).not.toEqual(expect.stringMatching('leaf.scss'));
-
-      next = secondPass;
-      writeFileSync(target2, '#bar { background: black; }\n');
-      writeFileSync(target, '#foo { background: black; }\n');
-    }
-
-    function secondPass(err, stats) {
-      expect(err).toBeNull();
-      expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(true);
-      const { errors } = stats.compilation;
-      expect(errors.length).toBe(1);
-      const [{ message }] = errors;
-      expect(message).toEqual(expect.stringMatching('entry.scss'));
-      expect(message).toEqual(expect.stringMatching('leaf.scss'));
-
-      next = thirdPass;
-      writeFileSync(target2, '#bar { background: #000000; }\n');
+      expect(stats.hasErrors()).toBe(false);
+      done();
     }
 
     function thirdPass(err, stats) {
@@ -70,20 +50,42 @@ describe('watch', () => {
       expect(stats.hasWarnings()).toBe(false);
       expect(stats.hasErrors()).toBe(true);
       const { errors } = stats.compilation;
-      expect(errors.length).toBe(1);
+      expect(errors).toHaveLength(1);
       const [{ message }] = errors;
-      expect(message).toEqual(expect.stringMatching('entry.scss'));
-      expect(message).not.toEqual(expect.stringMatching('leaf.scss'));
+      expect(message).toEqual(expect.stringMatching("entry.scss"));
+      expect(message).not.toEqual(expect.stringMatching("leaf.scss"));
 
       next = finish;
-      writeFileSync(target, '#bar { background: #000000; }\n');
+      writeFileSync(target, "#bar { background: #000000; }\n");
     }
 
-    function finish(err, stats) {
+    function secondPass(err, stats) {
       expect(err).toBeNull();
       expect(stats.hasWarnings()).toBe(false);
-      expect(stats.hasErrors()).toBe(false);
-      done();
+      expect(stats.hasErrors()).toBe(true);
+      const { errors } = stats.compilation;
+      expect(errors).toHaveLength(1);
+      const [{ message }] = errors;
+      expect(message).toEqual(expect.stringMatching("entry.scss"));
+      expect(message).toEqual(expect.stringMatching("leaf.scss"));
+
+      next = thirdPass;
+      writeFileSync(target2, "#bar { background: #000000; }\n");
+    }
+
+    function firstPass(err, stats) {
+      expect(err).toBeNull();
+      expect(stats.hasWarnings()).toBe(false);
+      expect(stats.hasErrors()).toBe(true);
+      const { errors } = stats.compilation;
+      expect(errors).toHaveLength(1);
+      const [{ message }] = errors;
+      expect(message).toEqual(expect.stringMatching("entry.scss"));
+      expect(message).not.toEqual(expect.stringMatching("leaf.scss"));
+
+      next = secondPass;
+      writeFileSync(target2, "#bar { background: black; }\n");
+      writeFileSync(target, "#foo { background: black; }\n");
     }
   });
 });
