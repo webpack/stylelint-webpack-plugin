@@ -61,10 +61,11 @@ class StylelintWebpackPlugin {
       );
     }
 
-    let isFirstRun = this.options.lintDirtyModulesOnly;
+    let hasCompilerRunByDirtyModule = this.options.lintDirtyModulesOnly;
+
     compiler.hooks.watchRun.tapPromise(this.key, (compiler) => {
-      if (isFirstRun) {
-        isFirstRun = false;
+      if (hasCompilerRunByDirtyModule) {
+        hasCompilerRunByDirtyModule = false;
 
         return Promise.resolve();
       }
@@ -81,12 +82,11 @@ class StylelintWebpackPlugin {
    */
   async run(compiler, options, wanted, exclude) {
     // Do not re-hook
-    /* istanbul ignore if */
-    if (
-      compiler.hooks.thisCompilation.taps.some(({ name }) => name === this.key)
-    ) {
-      return;
-    }
+    const isCompilerHooked = compiler.hooks.compilation.taps.find(
+      ({ name }) => name === this.key,
+    );
+
+    if (isCompilerHooked) return;
 
     compiler.hooks.thisCompilation.tap(this.key, (compilation) => {
       /** @type {import('./linter').Linter} */
