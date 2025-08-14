@@ -82,7 +82,7 @@ class StylelintWebpackPlugin {
    */
   async run(compiler, options, wanted, exclude) {
     // Do not re-hook
-    const isCompilerHooked = compiler.hooks.compilation.taps.find(
+    const isCompilerHooked = compiler.hooks.thisCompilation.taps.find(
       ({ name }) => name === this.key,
     );
 
