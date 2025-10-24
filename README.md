@@ -12,7 +12,7 @@
 
 # stylelint-webpack-plugin
 
-> This version of `stylelint-webpack-plugin` only works with webpack 5. For webpack 4, see the [2.x branch](https://github.com/webpack-contrib/stylelint-webpack-plugin/tree/2.x).
+> This version of `stylelint-webpack-plugin` only works with webpack 5. For webpack 4, see the [2.x branch](https://github.com/webpack/stylelint-webpack-plugin/tree/2.x).
 
 This plugin uses [`stylelint`](https://stylelint.io/), which helps you avoid errors and enforce conventions in your styles.
 
@@ -343,10 +343,10 @@ If you're new here, please take a moment to review our contributing guidelines b
 [npm-url]: https://npmjs.com/package/stylelint-webpack-plugin
 [node]: https://img.shields.io/node/v/stylelint-webpack-plugin.svg
 [node-url]: https://nodejs.org
-[tests]: https://github.com/webpack-contrib/stylelint-webpack-plugin/workflows/stylelint-webpack-plugin/badge.svg
-[tests-url]: https://github.com/webpack-contrib/stylelint-webpack-plugin/actions
-[cover]: https://codecov.io/gh/webpack-contrib/stylelint-webpack-plugin/branch/master/graph/badge.svg
-[cover-url]: https://codecov.io/gh/webpack-contrib/stylelint-webpack-plugin
+[tests]: https://github.com/webpack/stylelint-webpack-plugin/workflows/stylelint-webpack-plugin/badge.svg
+[tests-url]: https://github.com/webpack/stylelint-webpack-plugin/actions
+[cover]: https://codecov.io/gh/webpack/stylelint-webpack-plugin/branch/main/graph/badge.svg
+[cover-url]: https://codecov.io/gh/webpack/stylelint-webpack-plugin
 [discussion]: https://img.shields.io/github/discussions/webpack/webpack
 [discussion-url]: https://github.com/webpack/webpack/discussions
 [size]: https://packagephobia.now.sh/badge?p=stylelint-webpack-plugin
