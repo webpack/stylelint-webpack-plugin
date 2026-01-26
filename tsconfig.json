@@ -8,8 +8,7 @@
     "strict": true,
     "useUnknownInCatchVariables": false,
     "types": ["node"],
-    "resolveJsonModule": true,
-    "skipLibCheck": true
+    "resolveJsonModule": true
   },
   "include": ["./src/**/*"]
 }
