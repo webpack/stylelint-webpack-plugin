@@ -94,16 +94,16 @@
     "postcss-scss": "^4.0.9",
     "prettier": "^3.3.2",
     "standard-version": "^9.5.0",
-    "stylelint": "^16.6.1",
+    "stylelint": "^17.0.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.38.0",
     "webpack": "^5.92.1"
   },
   "peerDependencies": {
-    "stylelint": "^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0",
+    "stylelint": "^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0",
     "webpack": "^5.0.0"
   },
   "engines": {
-    "node": ">= 18.12.0"
+    "node": ">= 20.19.0"
   }
 }

@@ -4,7 +4,11 @@ const { Worker: JestWorker } = require("jest-worker");
 
 const { getStylelintOptions } = require("./options");
 const { jsonStringifyReplacerSortKeys } = require("./utils");
-const { lintFiles, setup } = require("./worker");
+const {
+  getStylelint: getStylelintInstance,
+  lintFiles,
+  setup,
+} = require("./worker");
 
 /** @type {{ [key: string]: Linter }} */
 const cache = {};
@@ -19,7 +23,7 @@ const cache = {};
 /** @typedef {import('./options').Options} Options */
 /** @typedef {() => Promise<void>} AsyncTask */
 /** @typedef {(files: string|string[]) => Promise<LintResult[]>} LintTask */
-/** @typedef {{stylelint: Stylelint, lintFiles: LintTask, cleanup: AsyncTask, threads: number }} Linter */
+/** @typedef {{getStylelint: () => Promise<Stylelint>, lintFiles: LintTask, cleanup: AsyncTask, threads: number }} Linter */
 /** @typedef {JestWorker & {lintFiles: LintTask}} Worker */
 
 /**
@@ -28,10 +32,10 @@ const cache = {};
  */
 function loadStylelint(options) {
   const stylelintOptions = getStylelintOptions(options);
-  const stylelint = setup(options, stylelintOptions);
+  setup(options, stylelintOptions);
 
   return {
-    stylelint,
+    getStylelint: getStylelintInstance,
     lintFiles,
     cleanup: async () => {},
     threads: 1,

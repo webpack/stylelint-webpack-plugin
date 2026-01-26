@@ -40,7 +40,7 @@ type Options = import("./options").Options;
 type AsyncTask = () => Promise<void>;
 type LintTask = (files: string | string[]) => Promise<LintResult[]>;
 type Linter = {
-  stylelint: Stylelint;
+  getStylelint: () => Promise<Stylelint>;
   lintFiles: LintTask;
   cleanup: AsyncTask;
   threads: number;

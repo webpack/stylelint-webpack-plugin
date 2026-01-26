@@ -1,4 +1,4 @@
-module.exports = {
+const stylelint = {
   formatters: {
     string(results) {
       return JSON.stringify(results);
@@ -25,3 +25,7 @@ module.exports = {
     };
   },
 };
+
+module.exports = stylelint;
+// Also export as default for ESM compatibility with dynamic import()
+module.exports.default = stylelint;

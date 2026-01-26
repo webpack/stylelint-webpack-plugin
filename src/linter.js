@@ -1,7 +1,7 @@
 const { dirname, isAbsolute, join } = require("node:path");
 
 const StylelintError = require("./StylelintError");
-const getStylelint = require("./getStylelint");
+const getStylelintModule = require("./getStylelint");
 const { arrify } = require("./utils");
 
 /** @typedef {import('webpack').Compiler} Compiler */
@@ -57,24 +57,30 @@ async function flatten(results) {
 }
 
 /**
- * @param {Stylelint} stylelint stylelint
+ * @param {() => Promise<Stylelint>} getStylelint stylelint getter
  * @param {FormatterType=} formatter formatter
- * @returns {Promise<Formatter> | Formatter} resolved formatter
+ * @returns {Promise<Formatter>} resolved formatter
  */
-function loadFormatter(stylelint, formatter) {
+async function loadFormatter(getStylelint, formatter) {
   if (typeof formatter === "function") {
     return formatter;
   }
 
+  const stylelint = await getStylelint();
+
   if (typeof formatter === "string") {
     try {
-      return stylelint.formatters[formatter];
+      const fmt = stylelint.formatters[formatter];
+      // Handle both sync (v13-v15) and promise-based (v16+) formatters
+      return fmt instanceof Promise ? await fmt : fmt;
     } catch {
       // Load the default formatter.
     }
   }
 
-  return stylelint.formatters.string;
+  const defaultFmt = stylelint.formatters.string;
+  // Handle both sync (v13-v15) and promise-based (v16+) formatters
+  return defaultFmt instanceof Promise ? await defaultFmt : defaultFmt;
 }
 
 /* istanbul ignore next */
@@ -164,8 +170,8 @@ function parseResults(options, results) {
  * @returns {{ lint: Linter, report: Reporter, threads: number }} the linter with additional functions
  */
 function linter(key, options, compilation) {
-  /** @type {Stylelint} */
-  let stylelint;
+  /** @type {() => Promise<Stylelint>} */
+  let getStylelint;
 
   /** @type {(files: string | string[]) => Promise<LintResult[]>} */
   let lintFiles;
@@ -182,7 +188,10 @@ function linter(key, options, compilation) {
   const crossRunResultStorage = getResultStorage(compilation);
 
   try {
-    ({ stylelint, lintFiles, cleanup, threads } = getStylelint(key, options));
+    ({ getStylelint, lintFiles, cleanup, threads } = getStylelintModule(
+      key,
+      options,
+    ));
   } catch (err) {
     throw new StylelintError(err.message);
   }
@@ -225,15 +234,14 @@ function linter(key, options, compilation) {
       return {};
     }
 
-    const formatter = await loadFormatter(stylelint, options.formatter);
+    const formatter = await loadFormatter(getStylelint, options.formatter);
 
     /** @type {LinterResult} */
-    // @ts-expect-error need better types
     const returnValue = {
       cwd: /** @type {string} */ (options.cwd),
       errored: false,
       results: [],
-      output: "",
+      report: "",
       reportedDisables: [],
       ruleMetadata: getRuleMetadata(results),
     };
@@ -282,7 +290,7 @@ function linter(key, options, compilation) {
       }
 
       const content = outputReport.formatter
-        ? (await loadFormatter(stylelint, outputReport.formatter))(
+        ? (await loadFormatter(getStylelint, outputReport.formatter))(
             results,
             returnValue,
           )

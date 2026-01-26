@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "moduleResolution": "node",
+    "module": "node16",
+    "moduleResolution": "node16",
     "allowJs": true,
     "checkJs": true,
     "strict": true,
     "useUnknownInCatchVariables": false,
     "types": ["node"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
   "include": ["./src/**/*"]
 }

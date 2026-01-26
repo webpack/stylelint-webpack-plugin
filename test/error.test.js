@@ -1,3 +1,5 @@
+import { join } from "node:path";
+
 import pack from "./utils/pack";
 
 describe("error", () => {
@@ -12,12 +14,21 @@ describe("error", () => {
     expect(stats.hasErrors()).toBe(true);
   });
 
-  it("should propagate stylelint exceptions as errors", async () => {
-    jest.mock("stylelint", () => {
-      throw new Error("Oh no!");
-    });
+  it("should propagate stylelint lint exceptions as errors", async () => {
+    // Mock that throws when lint() is called
+    const mockStylelintPath = join(__dirname, "mock/stylelint-error");
 
-    const compiler = pack("good");
+    const compiler = pack("good", { stylelintPath: mockStylelintPath });
+    const stats = await compiler.runAsync();
+    expect(stats.hasWarnings()).toBe(false);
+    expect(stats.hasErrors()).toBe(true);
+  });
+
+  it("should propagate stylelint load exceptions as errors", async () => {
+    // Mock that throws when the module is loaded
+    const mockStylelintPath = join(__dirname, "mock/stylelint-load-error");
+
+    const compiler = pack("good", { stylelintPath: mockStylelintPath });
     const stats = await compiler.runAsync();
     expect(stats.hasWarnings()).toBe(false);
     expect(stats.hasErrors()).toBe(true);
