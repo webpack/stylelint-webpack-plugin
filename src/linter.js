@@ -170,31 +170,15 @@ function parseResults(options, results) {
  * @returns {{ lint: Linter, report: Reporter, threads: number }} the linter with additional functions
  */
 function linter(key, options, compilation) {
-  /** @type {() => Promise<Stylelint>} */
-  let getStylelint;
-
-  /** @type {(files: string | string[]) => Promise<LintResult[]>} */
-  let lintFiles;
-
-  /** @type {() => Promise<void>} */
-  let cleanup;
-
-  /** @type number */
-  let threads;
-
   /** @type {Promise<LintResult[]>[]} */
   const rawResults = [];
 
   const crossRunResultStorage = getResultStorage(compilation);
 
-  try {
-    ({ getStylelint, lintFiles, cleanup, threads } = getStylelintModule(
-      key,
-      options,
-    ));
-  } catch (err) {
-    throw new StylelintError(err.message);
-  }
+  const { getStylelint, lintFiles, cleanup, threads } = getStylelintModule(
+    key,
+    options,
+  );
 
   /**
    * @param {string | string[]} files files
