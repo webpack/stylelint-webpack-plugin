@@ -3,22 +3,39 @@
 /** @typedef {import('./getStylelint').LintResult} LintResult */
 /** @typedef {import('./options').Options} Options */
 
-/** @type {Stylelint} */
-let stylelint;
+/** @type {string} */
+let stylelintPath = "stylelint";
 
 /** @type {Partial<StylelintOptions>} */
 let linterOptions;
 
+/** @type {Promise<Stylelint> | null} */
+let stylelintPromise = null;
+
+/**
+ * Lazily load stylelint on first use
+ * @returns {Promise<Stylelint>} stylelint instance
+ */
+async function getStylelint() {
+  if (!stylelintPromise) {
+    stylelintPromise = (async () => {
+      const mod = await import(stylelintPath);
+      // Handle both CJS (v13-v16) and ESM (v17) exports
+      return mod.default || mod;
+    })();
+  }
+  return stylelintPromise;
+}
+
 /**
  * @param {Options} options the worker options
  * @param {Partial<StylelintOptions>} stylelintOptions the stylelint options
- * @returns {Stylelint} stylelint instance
  */
 function setup(options, stylelintOptions) {
-  stylelint = require(options.stylelintPath || "stylelint");
+  stylelintPath = options.stylelintPath || "stylelint";
   linterOptions = stylelintOptions;
-
-  return stylelint;
+  // Reset cached stylelint in case path changed
+  stylelintPromise = null;
 }
 
 /**
@@ -26,6 +43,7 @@ function setup(options, stylelintOptions) {
  * @returns {Promise<LintResult[]>} results
  */
 async function lintFiles(files) {
+  const stylelint = await getStylelint();
   const { results } = await stylelint.lint({
     ...linterOptions,
     files,
@@ -44,5 +62,6 @@ async function lintFiles(files) {
   }));
 }
 
+module.exports.getStylelint = getStylelint;
 module.exports.lintFiles = lintFiles;
 module.exports.setup = setup;

@@ -53,21 +53,21 @@ describe("Threading", () => {
     });
 
     it("worker can start", async () => {
+      const mockStylelintPath = join(__dirname, "mock/stylelint-recorder");
+
+      // Clear any previous calls
+      const mock = require(mockStylelintPath);
+
+      mock._reset();
+
+      // Now require the worker (fresh copy due to resetModules)
       const { lintFiles, setup } = require("../src/worker");
 
-      const mockThread = { parentPort: { on: jest.fn() }, workerData: {} };
-      const mockLintFiles = jest.fn().mockReturnValue({
-        results: [],
-      });
-
-      jest.mock("worker_threads", () => mockThread);
-      jest.mock("stylelint", () => ({ lint: mockLintFiles }));
-
-      setup({});
+      setup({ stylelintPath: mockStylelintPath });
 
       await lintFiles("foo");
 
-      expect(mockLintFiles).toHaveBeenCalledWith({
+      expect(mock._calls[0]).toMatchObject({
         files: "foo",
         quietDeprecationWarnings: true,
       });

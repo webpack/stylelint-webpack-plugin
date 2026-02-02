@@ -1,26 +1,29 @@
+import { join } from "node:path";
+
 import pack from "./utils/pack";
 
 describe("stylelint lint", () => {
-  const mockLintFiles = jest.fn().mockReturnValue({
-    results: [],
-  });
-
-  beforeAll(() => {
-    jest.mock("stylelint", () => ({
-      lint: mockLintFiles,
-    }));
-  });
+  const mockStylelintPath = join(__dirname, "mock/stylelint-recorder");
 
   beforeEach(() => {
-    mockLintFiles.mockClear();
+    // Clear recorded calls before each test
+    const mock = require(mockStylelintPath);
+
+    mock._reset();
   });
 
   it("should lint one file", async () => {
-    const compiler = pack("lint-one", { configFile: null });
+    const compiler = pack("lint-one", {
+      configFile: null,
+      stylelintPath: mockStylelintPath,
+    });
     const stats = await compiler.runAsync();
     expect(stats.hasErrors()).toBe(false);
+
+    const mock = require(mockStylelintPath);
+
     const files = [expect.stringMatching("test.scss")];
-    expect(mockLintFiles).toHaveBeenCalledWith({
+    expect(mock._calls[0]).toMatchObject({
       cache: false,
       cacheLocation:
         "node_modules/.cache/stylelint-webpack-plugin/.stylelintcache",
@@ -31,14 +34,20 @@ describe("stylelint lint", () => {
   });
 
   it("should lint two files", async () => {
-    const compiler = pack("lint-two", { configFile: null });
+    const compiler = pack("lint-two", {
+      configFile: null,
+      stylelintPath: mockStylelintPath,
+    });
     const stats = await compiler.runAsync();
     expect(stats.hasErrors()).toBe(false);
+
+    const mock = require(mockStylelintPath);
+
     const files = [
       expect.stringMatching(/test[12]\.scss$/),
       expect.stringMatching(/test[12]\.scss$/),
     ];
-    expect(mockLintFiles).toHaveBeenCalledWith({
+    expect(mock._calls[0]).toMatchObject({
       cache: false,
       cacheLocation:
         "node_modules/.cache/stylelint-webpack-plugin/.stylelintcache",

@@ -1,5 +1,3 @@
-import { formatters } from "stylelint";
-
 import pack from "./utils/pack";
 
 describe("formatter", () => {
@@ -28,7 +26,13 @@ describe("formatter", () => {
   });
 
   it("should use function formatter", async () => {
-    const compiler = pack("error", { formatter: await formatters.verbose });
+    // Use dynamic import for ESM-only stylelint v17
+    // eslint-disable-next-line import/no-unresolved
+    const stylelintModule = await import("stylelint");
+    const stylelint = stylelintModule.default || stylelintModule;
+    const verboseFormatter = await stylelint.formatters.verbose;
+
+    const compiler = pack("error", { formatter: verboseFormatter });
     const stats = await compiler.runAsync();
     expect(stats.hasWarnings()).toBe(false);
     expect(stats.hasErrors()).toBe(true);

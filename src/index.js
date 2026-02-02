@@ -89,21 +89,7 @@ class StylelintWebpackPlugin {
     if (isCompilerHooked) return;
 
     compiler.hooks.thisCompilation.tap(this.key, (compilation) => {
-      /** @type {import('./linter').Linter} */
-      let lint;
-
-      /** @type {import('./linter').Reporter} */
-      let report;
-
-      /** @type number */
-      let threads;
-
-      try {
-        ({ lint, report, threads } = linter(this.key, options, compilation));
-      } catch (err) {
-        compilation.errors.push(err);
-        return;
-      }
+      const { lint, report, threads } = linter(this.key, options, compilation);
 
       compilation.hooks.finishModules.tapPromise(this.key, async () => {
         /** @type {string[]} */

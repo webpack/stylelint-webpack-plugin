@@ -16,7 +16,8 @@
     "notcss",
     "stylelintcache",
     "eslintcache",
-    "autocrlf"
+    "autocrlf",
+    "nodenext"
   ],
 
   "ignorePaths": [
