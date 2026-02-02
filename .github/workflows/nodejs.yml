@@ -62,8 +62,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         node-version: [18.x, 20.x, 22.x, 24.x]
-        stylelint-version: [13.x, 14.x, 15.x, 16.x]
+        stylelint-version: [13.x, 14.x, 15.x, 16.x, 17.x]
         webpack-version: [latest]
+        exclude:
+          - node-version: 18.x
+            stylelint-version: 17.x
 
     runs-on: ${{ matrix.os }}
 
