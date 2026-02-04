@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/webpack/stylelint-webpack-plugin/compare/v5.0.1...v5.1.0) (2026-02-04)
+
+
+### Bug Fixes
+
+* fix: remove skipLibCheck
+
+* fix: upgrade stylelint version
+
+* fix: npm audit
+
+* refactor: coverage and dead code
+
+* ci: add stylelint 17.x
+
+### Features
+
+* add stylelint v17 support ([#377](https://github.com/webpack/stylelint-webpack-plugin/issues/377)) ([27d4787](https://github.com/webpack/stylelint-webpack-plugin/commit/27d478787b02a6bec2a010c37a907771feefa623)), closes [#376](https://github.com/webpack/stylelint-webpack-plugin/issues/376)
+
 ### [5.0.1](https://github.com/webpack-contrib/stylelint-webpack-plugin/compare/v5.0.0...v5.0.1) (2024-05-24)
 
 

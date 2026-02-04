@@ -1,6 +1,6 @@
 {
   "name": "stylelint-webpack-plugin",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "description": "A Stylelint plugin for webpack",
   "keywords": [
     "stylelint",
