@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.24.7",
-    "@babel/core": "^7.24.7",
+    "@babel/core": "^7.29.6",
     "@babel/preset-env": "^7.24.7",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
@@ -97,7 +97,7 @@
     "stylelint": "^17.1.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.38.0",
-    "webpack": "^5.92.1"
+    "webpack": "^5.104.1"
   },
   "peerDependencies": {
     "stylelint": "^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0",
