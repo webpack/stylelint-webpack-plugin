@@ -12,9 +12,56 @@
 
 # stylelint-webpack-plugin
 
+> [!IMPORTANT]
+>
+> This plugin has been merged into [`lint-webpack-plugin`](https://github.com/webpack/lint-webpack-plugin), which runs Stylelint, ESLint and further linters from a single plugin. `stylelint-webpack-plugin` still works and is documented below, but new features go to `lint-webpack-plugin` — see [Migrating](#migrating-to-lint-webpack-plugin).
+
 > This version of `stylelint-webpack-plugin` only works with webpack 5. For webpack 4, see the [2.x branch](https://github.com/webpack/stylelint-webpack-plugin/tree/2.x).
 
 This plugin uses [`stylelint`](https://stylelint.io/), which helps you avoid errors and enforce conventions in your styles.
+
+## Migrating to `lint-webpack-plugin`
+
+Install [`lint-webpack-plugin`](https://www.npmjs.com/package/lint-webpack-plugin) and move the options you were passing into an entry of its `linters` option:
+
+```diff
+-const StylelintPlugin = require("stylelint-webpack-plugin");
++const LintPlugin = require("lint-webpack-plugin");
+
+ module.exports = {
+   plugins: [
+-    new StylelintPlugin({ extensions: ["css"], threads: true }),
++    new LintPlugin({
++      linters: [{ use: "stylelint", extensions: ["css"], threads: true }],
++    }),
+   ],
+ };
+```
+
+Options shared by every linter — `files`, `exclude`, `emitError`, `emitWarning`, `failOnError`, `failOnWarning`, `quiet`, `outputReport` — may also be set at the top level, where they apply to each entry that does not override them. That is how one plugin instance replaces both this plugin and `eslint-webpack-plugin`:
+
+```js
+const LintPlugin = require("lint-webpack-plugin");
+
+module.exports = {
+  plugins: [
+    new LintPlugin({
+      context: "src",
+      failOnError: true,
+      linters: [
+        { use: "eslint", extensions: ["js"] },
+        { use: "stylelint", extensions: ["css", "scss"] },
+      ],
+    }),
+  ],
+};
+```
+
+Three things differ there, all covered in its [migration guide](https://github.com/webpack/lint-webpack-plugin#from-stylelint-webpack-plugin):
+
+- It requires `stylelint >= 17`, where this plugin accepts `13` and later.
+- Errors are always reported as webpack errors and warnings as webpack warnings; `failOnError` and `failOnWarning` decide whether the build fails, not how a problem is reported.
+- `failOnError` defaults to `false` in `development` mode instead of being `true` everywhere.
 
 ## Getting Started
 
